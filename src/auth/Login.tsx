@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Shield } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -9,7 +8,26 @@ export default function Login() {
   const [modeReinitialisation, setModeReinitialisation] = useState<boolean>(false);
   const [messageEnvoi, setMessageEnvoi] = useState<string>("");
   const [erreur, setErreur] = useState<string>("");
-  const navigate = useNavigate();
+  const [erreurMotDePasse, setErreurMotDePasse] = useState<string>("");
+
+  const validerMotDePasse = (motDePasse: string) => {
+    if (motDePasse.length < 8) {
+      return "Le mot de passe doit contenir au moins 8 caractères";
+    }
+    if (!/[A-Z]/.test(motDePasse)) {
+      return "Le mot de passe doit contenir au moins une lettre majuscule";
+    }
+    if (!/[a-z]/.test(motDePasse)) {
+      return "Le mot de passe doit contenir au moins une lettre minuscule";
+    }
+    if (!/\d/.test(motDePasse)) {
+      return "Le mot de passe doit contenir au moins un chiffre";
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(motDePasse)) {
+      return "Le mot de passe doit contenir au moins un caractère spécial";
+    }
+    return "";
+  };
 
   const gererConnexion = () => {
     setErreur("");
@@ -18,9 +36,19 @@ export default function Login() {
       return;
     }
     
-    // Simulation de connexion simple
-    console.log("Connexion avec:", { email, motDePasse });
-    setErreur("Fonctionnalité de connexion non implémentée");
+    const validationMotDePasse = validerMotDePasse(motDePasse);
+    if (validationMotDePasse) {
+      setErreurMotDePasse(validationMotDePasse);
+      return;
+    }
+    
+    if(email === "admin@gmail.com" && motDePasse === "Admin123@") {
+      window.location.href = "/admin";
+    } else if(email === "user@gmail.com" && motDePasse === "User123@") {
+      window.location.href = "/user";
+    } else {
+      setErreur("Email ou mot de passe incorrect");
+    }
   };
 
   const gererReinitialisation = () => {
@@ -32,7 +60,7 @@ export default function Login() {
     setMessageEnvoi("Un code de réinitialisation OTP a été envoyé à votre adresse email.");
     console.log("Réinitialisation pour:", email);
     // Rediriger vers la page OTP
-    navigate("/otp");
+    window.location.href = "/otp";
   };
 
   const basculerAffichageMotDePasse = () => {
@@ -43,6 +71,7 @@ export default function Login() {
     setModeReinitialisation(!modeReinitialisation);
     setMessageEnvoi("");
     setErreur("");
+    setErreurMotDePasse("");
   };
 
   return (
@@ -57,7 +86,7 @@ export default function Login() {
         <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:shadow-blue-200/50">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl mb-4 shadow-lg animate-pulse">
-              <Sparkles className="w-8 h-8 text-white" />
+              <Shield className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-2">
               OCR
@@ -97,7 +126,10 @@ export default function Login() {
                     id="motdepasse"
                     type={afficherMotDePasse ? "text" : "password"}
                     value={motDePasse}
-                    onChange={(e) => setMotDePasse(e.target.value)}
+                    onChange={(e) => {
+                      setMotDePasse(e.target.value);
+                      setErreurMotDePasse(validerMotDePasse(e.target.value));
+                    }}
                     className="w-full pl-12 pr-12 py-4 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:bg-gray-50"
                     placeholder="••••••••"
                     required
@@ -110,6 +142,11 @@ export default function Login() {
                     {afficherMotDePasse ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
+                {erreurMotDePasse && (
+                  <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs animate-pulse">
+                    {erreurMotDePasse}
+                  </div>
+                )}
               </div>
             )}
 

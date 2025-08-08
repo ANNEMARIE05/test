@@ -9,7 +9,7 @@ interface User {
     motDePasse: string;
   }
 export default function Email() {
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [selectedUser] = useState<User | null>(null);
     const [showUserDetails, setShowUserDetails] = useState(false);
 
     return (

@@ -7,7 +7,7 @@ import UserDashboard from "./dashboards/user/Dashboard";
 
 export default function App() {
   const handleLogout = () => {
-    // Logique de déconnexion à implémenter
+    window.location.href = "/login";
     console.log("Déconnexion");
   };
 

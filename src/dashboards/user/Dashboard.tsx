@@ -6,7 +6,8 @@ import {
   Settings,
   User,
   MessageCircle,
-  X
+  X,
+  Code
 } from "lucide-react";
 import Layout from '../../components/Layout';
 import type { SidebarItem } from '../../components/Sidebar';
@@ -16,6 +17,7 @@ import Historique from './pagesUser/Historique';
 import Parametre from './pagesUser/Parametre';
 import Profile from './pagesUser/Profile';
 import Assistance from './pagesUser/Assistance';
+import Apis from './pagesUser/Apis';
 
 interface UserDashboardProps {
   onLogout: () => void;
@@ -27,11 +29,12 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
 
   const userSidebarItems: SidebarItem[] = [
     { id: 'dashboard', label: 'Tableau de bord', icon: <BarChart3 className="w-5 h-5" /> },
-    { id: 'documents', label: 'Mes documents', icon: <FileText className="w-5 h-5" /> },
+    { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-5 h-5" /> },
     { id: 'history', label: 'Historique', icon: <History className="w-5 h-5" /> },
     { id: 'settings', label: 'Paramètres', icon: <Settings className="w-5 h-5" /> },
     { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
     { id: 'assistance', label: 'Assistance', icon: <MessageCircle className="w-5 h-5" /> },
+    { id: 'apis', label: 'Gestion d\'APIs', icon: <Code className="w-5 h-5" /> },
   ];
 
   const renderContent = () => {
@@ -66,6 +69,11 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
           <Assistance />
         );
 
+      case 'apis':
+        return (
+          <Apis />
+        );
+
       default:
         return null;
     }
@@ -74,12 +82,13 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
   const getHeaderTitle = () => {
     const titles: { [key: string]: string } = {
       dashboard: 'Tableau de bord',
-      documents: 'Mes documents',
+      documents: 'Gestion documents',
       upload: 'Upload document',
       history: 'Historique',
       settings: 'Paramètres',
       profile: 'Profile',
-      assistance: 'Assistance'
+      assistance: 'Assistance',
+      apis: 'Gestion d\'APIs'
     };
     return titles[activeSection] || 'Dashboard';
   };
@@ -97,10 +106,10 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
       {renderContent()}
       
       {/* Chatbot Icon */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-2 right-6 z-50">
         <button
           onClick={() => setShowChatbot(!showChatbot)}
-          className="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+          className="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 animate-bounce"
         >
           <MessageCircle className="w-6 h-6" />
         </button>
@@ -110,7 +119,7 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
       {showChatbot && (
         <div className="fixed bottom-24 right-6 w-80 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Assistant OCR</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Chatbot OCR</h3>
             <button
               onClick={() => setShowChatbot(false)}
               className="text-gray-500 hover:text-gray-700"

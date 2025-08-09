@@ -43,9 +43,11 @@ export default function Login() {
     }
     
     if(email === "admin@gmail.com" && motDePasse === "Admin123@") {
-      window.location.href = "/admin";
+      localStorage.setItem("redirectAfterOTP", "/admin");
+      window.location.href = "/otp";
     } else if(email === "user@gmail.com" && motDePasse === "User123@") {
-      window.location.href = "/user";
+      localStorage.setItem("redirectAfterOTP", "/user");
+      window.location.href = "/otp";
     } else {
       setErreur("Email ou mot de passe incorrect");
     }
@@ -59,7 +61,7 @@ export default function Login() {
     
     setMessageEnvoi("Un code de réinitialisation OTP a été envoyé à votre adresse email.");
     console.log("Réinitialisation pour:", email);
-    // Rediriger vers la page OTP
+    localStorage.setItem("redirectAfterOTP", "/reinitialisation");
     window.location.href = "/otp";
   };
 

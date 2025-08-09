@@ -26,7 +26,6 @@ interface UsageLog {
 export default function Apis() {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [usageLogs, setUsageLogs] = useState<UsageLog[]>([]);
-  const [showQuotaAlert, setShowQuotaAlert] = useState(false);
   const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -136,7 +135,6 @@ export default function Apis() {
 
   const checkQuotaAlerts = () => {
     const alerts = apiKeys.filter(key => (key.quota.used / key.quota.limit) > 0.8);
-    setShowQuotaAlert(alerts.length > 0);
     return alerts;
   };
 

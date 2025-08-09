@@ -92,7 +92,9 @@ export default function PageOTP() {
         
         // Redirection après 2 secondes
         setTimeout(() => {
-          window.location.href = "/reinitialisation";
+          const target = localStorage.getItem("redirectAfterOTP") || "/";
+          localStorage.removeItem("redirectAfterOTP");
+          window.location.href = target;
         }, 2000);
       } else {
         setErreurCode("Code incorrect. Veuillez réessayer.");

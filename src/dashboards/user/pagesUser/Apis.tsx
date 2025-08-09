@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface ApiKey {
   id: string;
@@ -26,9 +26,9 @@ interface UsageLog {
 export default function Apis() {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [usageLogs, setUsageLogs] = useState<UsageLog[]>([]);
-  const [showQuotaAlert, setShowQuotaAlert] = useState(false);
-  const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
+  const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // Initialize data on component mount
   useEffect(() => {
@@ -134,11 +134,29 @@ export default function Apis() {
     );
   };
 
-  const checkQuotaAlerts = () => {
-    const alerts = apiKeys.filter(key => (key.quota.used / key.quota.limit) > 0.8);
-    setShowQuotaAlert(alerts.length > 0);
-    return alerts;
+  const toggleLogs = (keyId: string) => {
+    const newExpandedKeys = new Set(expandedKeys);
+    if (newExpandedKeys.has(keyId)) {
+      newExpandedKeys.delete(keyId);
+    } else {
+      newExpandedKeys.add(keyId);
+    }
+    setExpandedKeys(newExpandedKeys);
   };
+
+  const copyToClipboard = async (text: string, keyId: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedKey(keyId);
+      setTimeout(() => setCopiedKey(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const quotaAlerts = useMemo(() => {
+    return apiKeys.filter(key => (key.quota.used / key.quota.limit) > 0.8);
+  }, [apiKeys]);
 
   const getQuotaPercentage = (used: number, limit: number) => (used / limit) * 100;
   const getQuotaColor = (percentage: number) => {
@@ -163,7 +181,7 @@ export default function Apis() {
       </div>
 
       {/* Alertes de quota */}
-      {checkQuotaAlerts().length > 0 && (
+      {quotaAlerts.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -176,7 +194,7 @@ export default function Apis() {
               <div className="mt-2 text-sm text-red-700">
                 <p>Les clés API suivantes approchent de leur limite de quota :</p>
                 <ul className="list-disc list-inside mt-1">
-                  {checkQuotaAlerts().map(key => (
+                {quotaAlerts.map(key => (
                     <li key={key.id}>{key.name} ({Math.round(getQuotaPercentage(key.quota.used, key.quota.limit))}% utilisé)</li>
                   ))}
                 </ul>
@@ -202,132 +220,141 @@ export default function Apis() {
         ) : (
           <div className="space-y-4">
             {apiKeys.map(apiKey => (
-              <div key={apiKey.id} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3">
-                      <h4 className="text-lg font-medium text-gray-900">{apiKey.name}</h4>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        apiKey.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {apiKey.status}
-                      </span>
-                    </div>
-                    
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600">Clé: <code className="bg-gray-100 px-2 py-1 rounded">{apiKey.key}</code></p>
-                      <p className="text-sm text-gray-600">Créée le: {apiKey.createdAt}</p>
-                    </div>
-
-                    {/* Permissions */}
-                    <div className="mt-3">
-                      <h5 className="text-sm font-medium text-gray-900 mb-2">Permissions:</h5>
-                      <div className="flex flex-wrap gap-2">
-                        {apiKey.permissions.map(permission => (
-                          <span key={permission} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                            {permission}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Quota */}
-                    <div className="mt-3">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-medium text-gray-900">Quota</span>
-                        <span className={`text-sm font-medium ${getQuotaColor(getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit))}`}>
-                          {apiKey.quota.used} / {apiKey.quota.limit}
+              <div key={apiKey.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                <div className="p-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3">
+                        <h4 className="text-lg font-medium text-gray-900">{apiKey.name}</h4>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          apiKey.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {apiKey.status}
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className={`h-2 rounded-full ${
-                            getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit) > 90 ? 'bg-red-500' :
-                            getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit) > 75 ? 'bg-yellow-500' : 'bg-green-500'
-                          }`}
-                          style={{ width: `${Math.min(getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit), 100)}%` }}
-                        ></div>
+                      
+                      <div className="mt-2">
+                        <div className="flex items-center space-x-2">
+                          <p className="text-sm text-gray-600">Clé: <code className="bg-gray-100 px-2 py-1 rounded">{apiKey.key}</code></p>
+                          <button
+                            onClick={() => copyToClipboard(apiKey.key, apiKey.id)}
+                            className="text-blue-600 hover:text-blue-800 transition-colors"
+                            title="Copier la clé"
+                          >
+                            {copiedKey === apiKey.id ? (
+                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                        <p className="text-sm text-gray-600">Créée le: {apiKey.createdAt}</p>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">Réinitialisation le {apiKey.quota.resetDate}</p>
+
+                      {/* Permissions */}
+                      <div className="mt-3">
+                        <h5 className="text-sm font-medium text-gray-900 mb-2">Permissions:</h5>
+                        <div className="flex flex-wrap gap-2">
+                          {apiKey.permissions.map(permission => (
+                            <span key={permission} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                              {permission}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Quota */}
+                      <div className="mt-3">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-sm font-medium text-gray-900">Quota</span>
+                          <span className={`text-sm font-medium ${getQuotaColor(getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit))}`}>
+                            {apiKey.quota.used} / {apiKey.quota.limit}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full ${
+                              getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit) > 90 ? 'bg-red-500' :
+                              getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit) > 75 ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}
+                            style={{ width: `${Math.min(getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit), 100)}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Réinitialisation le {apiKey.quota.resetDate}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col space-y-2">
+                      <button
+                        onClick={() => regenerateApiKey(apiKey.id)}
+                        className="px-3 py-1 text-sm bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors"
+                      >
+                        Régénérer
+                      </button>
+                      <button
+                        onClick={() => toggleLogs(apiKey.id)}
+                        className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                      >
+                        {expandedKeys.has(apiKey.id) ? 'Masquer les logs' : 'Voir les logs'}
+                      </button>
                     </div>
                   </div>
-
-                  <div className="flex flex-col space-y-2">
-                    <button
-                      onClick={() => regenerateApiKey(apiKey.id)}
-                      className="px-3 py-1 text-sm bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors"
-                    >
-                      Régénérer
-                    </button>
-                    <button
-                      onClick={() => setSelectedKey(apiKey)}
-                      className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
-                    >
-                      Voir les logs
-                    </button>
-                  </div>
                 </div>
+
+                {/* Logs d'utilisation intégrés */}
+                {expandedKeys.has(apiKey.id) && (
+                  <div className="border-t border-gray-200 bg-gray-50 p-4">
+                    <h5 className="text-sm font-medium text-gray-900 mb-3">Logs d'utilisation - {apiKey.name}</h5>
+                    
+                    {usageLogs.length === 0 ? (
+                      <div className="text-center py-4">
+                        <p className="text-gray-500 text-sm">Aucun log d'utilisation trouvé</p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                          <thead className="bg-gray-100">
+                            <tr>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Endpoint</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temps (ms)</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quota</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {usageLogs.map(log => (
+                              <tr key={log.id}>
+                                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{log.endpoint}</td>
+                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                  {new Date(log.timestamp).toLocaleString()}
+                                </td>
+                                <td className="px-4 py-2 whitespace-nowrap">
+                                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                    log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                  }`}>
+                                    {log.status}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{log.responseTime}</td>
+                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{log.quotaUsed}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
-
-      {/* Logs d'utilisation */}
-      {selectedKey && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Logs d'utilisation - {selectedKey.name}</h3>
-            <button
-              onClick={() => setSelectedKey(null)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          
-          {usageLogs.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">Aucun log d'utilisation trouvé</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Endpoint</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temps (ms)</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quota</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {usageLogs.map(log => (
-                    <tr key={log.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{log.endpoint}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {log.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{log.responseTime}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{log.quotaUsed}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

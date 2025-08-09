@@ -5,7 +5,6 @@ interface UserProfile {
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
   role: string;
   createdAt: string;
   lastLogin?: string;
@@ -30,7 +29,6 @@ export default function Profile() {
     firstName: 'Jean',
     lastName: 'Dupont',
     email: 'jean.dupont@example.com',
-    phone: '+33 6 12 34 56 78',
     role: 'Utilisateur',
     createdAt: '2024-01-15',
     lastLogin: '2024-03-20'
@@ -40,7 +38,6 @@ export default function Profile() {
     firstName: userProfile.firstName,
     lastName: userProfile.lastName,
     email: userProfile.email,
-    phone: userProfile.phone || ''
   });
 
   const handleEdit = () => {
@@ -49,7 +46,6 @@ export default function Profile() {
       firstName: userProfile.firstName,
       lastName: userProfile.lastName,
       email: userProfile.email,
-      phone: userProfile.phone || ''
     });
   };
 
@@ -187,17 +183,6 @@ export default function Profile() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Téléphone
-              </label>
-              <input
-                type="tel"
-                value={editForm.phone}
-                onChange={(e) => setEditForm(prev => ({ ...prev, phone: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
             <div className="flex space-x-3 pt-4">
               <button
                 onClick={handleSave}
@@ -240,15 +225,6 @@ export default function Profile() {
               <input
                 type="email"
                 value={userProfile.email}
-                readOnly
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-              <input
-                type="tel"
-                value={userProfile.phone || 'Non renseigné'}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default"
               />

@@ -7,7 +7,8 @@ import {
   User,
   MessageCircle,
   X,
-  Code
+  Code,
+  Send
 } from "lucide-react";
 import Layout from '../../components/Layout';
 import type { SidebarItem } from '../../components/Sidebar';
@@ -31,10 +32,10 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
     { id: 'dashboard', label: 'Tableau de bord', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-5 h-5" /> },
     { id: 'history', label: 'Historique', icon: <History className="w-5 h-5" /> },
-    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-5 h-5" /> },
-    { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
-    { id: 'assistance', label: 'Assistance', icon: <MessageCircle className="w-5 h-5" /> },
     { id: 'apis', label: 'Gestion d\'APIs', icon: <Code className="w-5 h-5" /> },
+    { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
+    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-5 h-5" /> },
+    { id: 'assistance', label: 'Assistance', icon: <MessageCircle className="w-5 h-5" /> },
   ];
 
   const renderContent = () => {
@@ -109,7 +110,7 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
       <div className="fixed bottom-2 right-6 z-50">
         <button
           onClick={() => setShowChatbot(!showChatbot)}
-          className="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 animate-bounce"
+          className={`w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 ${!showChatbot ? 'animate-bounce' : ''}`}
         >
           <MessageCircle className="w-6 h-6" />
         </button>
@@ -158,7 +159,7 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Envoyer
+                <Send className="w-4 h-4" />
               </button>
             </div>
           </div>

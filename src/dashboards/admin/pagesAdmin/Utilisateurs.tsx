@@ -25,7 +25,14 @@ export default function Utilisateurs() {
     const [showUserDetails, setShowUserDetails] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
+    const [newUser, setNewUser] = useState<Omit<User, 'id' | 'documentsConsommes'>>({
+      nom: '',
+      email: '',
+      role: 'Utilisateur',
+      motDePasse: ''
+    });
     const [searchTerm, setSearchTerm] = useState('');
 
     const [users, setUsers] = useState<User[]>([
@@ -91,6 +98,22 @@ export default function Utilisateurs() {
           setEditingUser(null);
         }
       };
+
+      const handleCreateUser = () => {
+        const userToCreate: User = {
+          ...newUser,
+          id: (users.length + 1).toString(),
+          documentsConsommes: 0
+        };
+        setUsers([...users, userToCreate]);
+        setNewUser({
+          nom: '',
+          email: '',
+          role: 'Utilisateur',
+          motDePasse: ''
+        });
+        setShowCreateModal(false);
+      };
     
       const handleDeleteUser = (user: User) => {
         setSelectedUser(user);
@@ -117,9 +140,12 @@ export default function Utilisateurs() {
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestion utilisateurs</h2>
               <p className="text-gray-600">Gérez les utilisateurs de la plateforme</p>
             </div>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button 
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
               <Plus className="w-4 h-4" />
-              <span>Ajouter un utilisateur</span>
+              <span>Créer un utilisateur</span>
             </button>
           </div>
 
@@ -307,8 +333,8 @@ export default function Utilisateurs() {
                     <input
                       type="number"
                       value={editingUser.documentsConsommes}
-                      onChange={(e) => setEditingUser({...editingUser, documentsConsommes: parseInt(e.target.value)})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
                     />
                   </div>
                 </div>
@@ -325,6 +351,82 @@ export default function Utilisateurs() {
                   >
                     <Save className="w-4 h-4" />
                     <span>Sauvegarder</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Create User Modal */}
+          {showCreateModal && (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">Créer un utilisateur</h3>
+                  <button
+                    onClick={() => setShowCreateModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="px-6 py-4 space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                    <input
+                      type="text"
+                      value={newUser.nom}
+                      onChange={(e) => setNewUser({...newUser, nom: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Entrez le nom"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input
+                      type="email"
+                      value={newUser.email}
+                      onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Entrez l'email"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+                    <input
+                      type="password"
+                      value={newUser.motDePasse}
+                      onChange={(e) => setNewUser({...newUser, motDePasse: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Entrez le mot de passe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                    <select
+                      value={newUser.role}
+                      onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="Utilisateur">Utilisateur</option>
+                      <option value="Modérateur">Modérateur</option>
+                      <option value="Administrateur">Administrateur</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                  <button
+                    onClick={() => setShowCreateModal(false)}
+                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleCreateUser}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Créer</span>
                   </button>
                 </div>
               </div>

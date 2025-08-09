@@ -1,6 +1,5 @@
 import { 
   MessageCircle,
-  X,
   Send,
   Plus,
   ArrowLeft,

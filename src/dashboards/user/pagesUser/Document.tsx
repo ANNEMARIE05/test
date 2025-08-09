@@ -222,7 +222,7 @@ export default function Document() {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-4">Documents traités</h3>
                     <div className="space-y-4">
-                        {processedDocuments.map((doc, index) => (
+                        {processedDocuments.map((doc) => (
                             <div key={doc.id} className="border border-gray-200 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center space-x-3">

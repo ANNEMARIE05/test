@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface ApiKey {
   id: string;
@@ -26,7 +26,6 @@ interface UsageLog {
 export default function Apis() {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [usageLogs, setUsageLogs] = useState<UsageLog[]>([]);
-  const [showQuotaAlert, setShowQuotaAlert] = useState(false);
   const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -134,11 +133,9 @@ export default function Apis() {
     );
   };
 
-  const checkQuotaAlerts = () => {
-    const alerts = apiKeys.filter(key => (key.quota.used / key.quota.limit) > 0.8);
-    setShowQuotaAlert(alerts.length > 0);
-    return alerts;
-  };
+  const quotaAlerts = useMemo(() => {
+    return apiKeys.filter(key => (key.quota.used / key.quota.limit) > 0.8);
+  }, [apiKeys]);
 
   const getQuotaPercentage = (used: number, limit: number) => (used / limit) * 100;
   const getQuotaColor = (percentage: number) => {
@@ -163,7 +160,7 @@ export default function Apis() {
       </div>
 
       {/* Alertes de quota */}
-      {checkQuotaAlerts().length > 0 && (
+      {quotaAlerts.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -176,7 +173,7 @@ export default function Apis() {
               <div className="mt-2 text-sm text-red-700">
                 <p>Les clés API suivantes approchent de leur limite de quota :</p>
                 <ul className="list-disc list-inside mt-1">
-                  {checkQuotaAlerts().map(key => (
+                  {quotaAlerts.map(key => (
                     <li key={key.id}>{key.name} ({Math.round(getQuotaPercentage(key.quota.used, key.quota.limit))}% utilisé)</li>
                   ))}
                 </ul>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Smartphone, RefreshCw, ArrowLeft, CheckCircle } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 export default function PageOTP() {
   const [codeOTP, setCodeOTP] = useState<string[]>(["", "", "", "", "", ""]);
@@ -10,6 +11,8 @@ export default function PageOTP() {
   const [codeValide, setCodeValide] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [afficherMessageValidation, setAfficherMessageValidation] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const nextTarget = searchParams.get("next") ?? "/reinitialisation";
 
   // Formatage du temps restant
   const formaterTemps = (secondes: number) => {
@@ -92,7 +95,7 @@ export default function PageOTP() {
         
         // Redirection après 2 secondes
         setTimeout(() => {
-          window.location.href = "/reinitialisation";
+          window.location.href = nextTarget;
         }, 2000);
       } else {
         setErreurCode("Code incorrect. Veuillez réessayer.");

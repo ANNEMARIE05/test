@@ -43,9 +43,9 @@ export default function Login() {
     }
     
     if(email === "admin@gmail.com" && motDePasse === "Admin123@") {
-      window.location.href = "/admin";
+      window.location.href = "/otp?next=" + encodeURIComponent("/admin");
     } else if(email === "user@gmail.com" && motDePasse === "User123@") {
-      window.location.href = "/user";
+      window.location.href = "/otp?next=" + encodeURIComponent("/user");
     } else {
       setErreur("Email ou mot de passe incorrect");
     }

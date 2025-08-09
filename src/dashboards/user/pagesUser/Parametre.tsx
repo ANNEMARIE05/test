@@ -3,9 +3,6 @@ import { useState } from 'react';
 export default function Parametre() {
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
     const [emailNotifications, setEmailNotifications] = useState(true);
-    const [pushNotifications, setPushNotifications] = useState(true);
-    const [language, setLanguage] = useState('fr');
-    const [theme, setTheme] = useState('light');
 
     const handleTwoFactorToggle = () => {
         setTwoFactorEnabled(!twoFactorEnabled);

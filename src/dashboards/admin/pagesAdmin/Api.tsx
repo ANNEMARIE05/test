@@ -14,13 +14,26 @@ import {
   Key,
   AlertTriangle,
   CheckCircle,
-  Clock
+  Clock,
+  BarChart3,
+  FileText,
+  Settings
 } from "lucide-react";
 
 interface ApiPermission {
   lecture: boolean;
   soumission: boolean;
   accesResultats: boolean;
+}
+
+interface ApiKeyUsage {
+  timestamp: string;
+  endpoint: string;
+  method: string;
+  status: number;
+  responseTime: number;
+  ipAddress: string;
+  userAgent: string;
 }
 
 interface ApiKey {
@@ -36,6 +49,7 @@ interface ApiKey {
     erreurs: number;
     dernierAcces: string;
   };
+  usageLog: ApiKeyUsage[];
 }
 
 interface ApiEndpoint {
@@ -54,6 +68,9 @@ export default function Api() {
     const [showApiKeys, setShowApiKeys] = useState(false);
     const [copiedKey, setCopiedKey] = useState<string | null>(null);
     const [showKey, setShowKey] = useState<{[key: string]: boolean}>({});
+    const [selectedKeyForPermissions, setSelectedKeyForPermissions] = useState<string | null>(null);
+    const [showUsageLog, setShowUsageLog] = useState<string | null>(null);
+    const [editingPermissions, setEditingPermissions] = useState<{[key: string]: boolean}>({});
 
     const apis: ApiEndpoint[] = [
         {
@@ -80,7 +97,36 @@ export default function Api() {
                 requetes: 15420,
                 erreurs: 23,
                 dernierAcces: '2024-01-20T10:30:00Z'
-              }
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-20T10:30:00Z',
+                  endpoint: '/api/ocr/document',
+                  method: 'POST',
+                  status: 200,
+                  responseTime: 145,
+                  ipAddress: '192.168.1.100',
+                  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T10:25:00Z',
+                  endpoint: '/api/ocr/document',
+                  method: 'POST',
+                  status: 400,
+                  responseTime: 89,
+                  ipAddress: '192.168.1.100',
+                  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T10:20:00Z',
+                  endpoint: '/api/ocr/document',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 23,
+                  ipAddress: '192.168.1.100',
+                  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+              ]
             },
             {
               id: 'key2',
@@ -98,7 +144,18 @@ export default function Api() {
                 requetes: 1250,
                 erreurs: 5,
                 dernierAcces: '2024-01-19T15:45:00Z'
-              }
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-19T15:45:00Z',
+                  endpoint: '/api/ocr/document',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 67,
+                  ipAddress: '192.168.1.101',
+                  userAgent: 'PostmanRuntime/7.32.3'
+                }
+              ]
             }
           ]
         },
@@ -126,7 +183,27 @@ export default function Api() {
                 requetes: 8920,
                 erreurs: 12,
                 dernierAcces: '2024-01-20T09:15:00Z'
-              }
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-20T09:15:00Z',
+                  endpoint: '/api/users',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 45,
+                  ipAddress: '192.168.1.102',
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T09:10:00Z',
+                  endpoint: '/api/users',
+                  method: 'POST',
+                  status: 201,
+                  responseTime: 67,
+                  ipAddress: '192.168.1.102',
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+                }
+              ]
             }
           ]
         },
@@ -146,7 +223,84 @@ export default function Api() {
           statut: 'Actif',
           tempsReponse: '78ms',
           utilisation: 45,
-          clesApi: []
+          clesApi: [
+            {
+              id: 'key4',
+              nom: 'Clé Email Service',
+              cle: 'sk_email_abcdef1234567890',
+              permissions: {
+                lecture: true,
+                soumission: true,
+                accesResultats: false
+              },
+              dateCreation: '2024-01-05',
+              dateExpiration: '2024-12-31',
+              statut: 'active',
+              utilisation: {
+                requetes: 3450,
+                erreurs: 8,
+                dernierAcces: '2024-01-20T11:20:00Z'
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-20T11:20:00Z',
+                  endpoint: '/api/email/send',
+                  method: 'POST',
+                  status: 200,
+                  responseTime: 78,
+                  ipAddress: '192.168.1.103',
+                  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T11:15:00Z',
+                  endpoint: '/api/email/templates',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 45,
+                  ipAddress: '192.168.1.103',
+                  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T11:10:00Z',
+                  endpoint: '/api/email/send',
+                  method: 'POST',
+                  status: 400,
+                  responseTime: 23,
+                  ipAddress: '192.168.1.103',
+                  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+                }
+              ]
+            },
+            {
+              id: 'key5',
+              nom: 'Clé Email Test',
+              cle: 'sk_email_test_1234567890abcdef',
+              permissions: {
+                lecture: true,
+                soumission: false,
+                accesResultats: false
+              },
+              dateCreation: '2024-01-12',
+              dateExpiration: '2024-02-12',
+              statut: 'active',
+              utilisation: {
+                requetes: 890,
+                erreurs: 2,
+                dernierAcces: '2024-01-19T16:30:00Z'
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-19T16:30:00Z',
+                  endpoint: '/api/email/templates',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 52,
+                  ipAddress: '192.168.1.104',
+                  userAgent: 'PostmanRuntime/7.32.3'
+                }
+              ]
+            }
+          ]
         }
       ];
 
@@ -170,8 +324,31 @@ export default function Api() {
         console.log(`Régénération de la clé ${keyId} pour l'API ${apiId}`);
       };
 
-      const getStatusColor = (statut: string) => {
-        switch (statut) {
+      const updatePermissions = (apiId: string, keyId: string, permissions: ApiPermission) => {
+        // Logique pour mettre à jour les permissions
+        console.log(`Mise à jour des permissions pour la clé ${keyId} de l'API ${apiId}:`, permissions);
+        setEditingPermissions({...editingPermissions, [keyId]: false});
+      };
+
+      const getMethodColor = (method: string) => {
+        switch (method) {
+          case 'GET': return 'bg-green-100 text-green-800';
+          case 'POST': return 'bg-blue-100 text-blue-800';
+          case 'PUT': return 'bg-yellow-100 text-yellow-800';
+          case 'DELETE': return 'bg-red-100 text-red-800';
+          default: return 'bg-gray-100 text-gray-800';
+        }
+      };
+
+      const getStatusColor = (status: number | string) => {
+        if (typeof status === 'number') {
+          if (status >= 200 && status < 300) return 'text-green-600';
+          if (status >= 400 && status < 500) return 'text-yellow-600';
+          if (status >= 500) return 'text-red-600';
+          return 'text-gray-600';
+        }
+        // For API key status
+        switch (status) {
           case 'active': return 'bg-green-100 text-green-800';
           case 'expiree': return 'bg-yellow-100 text-yellow-800';
           case 'revoquee': return 'bg-red-100 text-red-800';
@@ -373,39 +550,100 @@ export default function Api() {
                       </div>
                     </div>
 
-                    {/* Permissions */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                      <div className="flex items-center space-x-2">
-                        <input 
-                          type="checkbox" 
-                          checked={apiKey.permissions.lecture}
-                          readOnly
-                          className="rounded border-gray-300"
-                        />
-                        <span className="text-sm text-gray-700">Lecture seule</span>
+                    {/* Permissions Section */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="font-medium text-gray-900 flex items-center space-x-2">
+                          <Settings className="w-4 h-4" />
+                          <span>Permissions</span>
+                        </h5>
+                        <button
+                          onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: !editingPermissions[apiKey.id]})}
+                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center space-x-1"
+                        >
+                          <Edit className="w-3 h-3" />
+                          <span>{editingPermissions[apiKey.id] ? 'Annuler' : 'Modifier'}</span>
+                        </button>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <input 
-                          type="checkbox" 
-                          checked={apiKey.permissions.soumission}
-                          readOnly
-                          className="rounded border-gray-300"
-                        />
-                        <span className="text-sm text-gray-700">Soumission</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input 
-                          type="checkbox" 
-                          checked={apiKey.permissions.accesResultats}
-                          readOnly
-                          className="rounded border-gray-300"
-                        />
-                        <span className="text-sm text-gray-700">Accès aux résultats</span>
-                      </div>
+                      
+                      {editingPermissions[apiKey.id] ? (
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="flex items-center space-x-2">
+                              <input 
+                                type="checkbox" 
+                                defaultChecked={apiKey.permissions.lecture}
+                                className="rounded border-gray-300"
+                              />
+                              <span className="text-sm text-gray-700">Lecture seule</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <input 
+                                type="checkbox" 
+                                defaultChecked={apiKey.permissions.soumission}
+                                className="rounded border-gray-300"
+                              />
+                              <span className="text-sm text-gray-700">Soumission</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <input 
+                                type="checkbox" 
+                                defaultChecked={apiKey.permissions.accesResultats}
+                                className="rounded border-gray-300"
+                              />
+                              <span className="text-sm text-gray-700">Accès aux résultats</span>
+                            </div>
+                          </div>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => updatePermissions(selectedApi, apiKey.id, apiKey.permissions)}
+                              className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                            >
+                              Sauvegarder
+                            </button>
+                            <button
+                              onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: false})}
+                              className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
+                            >
+                              Annuler
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="checkbox" 
+                              checked={apiKey.permissions.lecture}
+                              readOnly
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm text-gray-700">Lecture seule</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="checkbox" 
+                              checked={apiKey.permissions.soumission}
+                              readOnly
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm text-gray-700">Soumission</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="checkbox" 
+                              checked={apiKey.permissions.accesResultats}
+                              readOnly
+                              className="rounded border-gray-300"
+                            />
+                            <span className="text-sm text-gray-700">Accès aux résultats</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Usage Statistics */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm mb-4">
                       <div className="flex items-center space-x-2">
                         <Activity className="w-4 h-4 text-blue-600" />
                         <span className="text-gray-700">{apiKey.utilisation.requetes.toLocaleString()} requêtes</span>
@@ -423,6 +661,69 @@ export default function Api() {
                         <span className="text-gray-700">Expire le {formatDate(apiKey.dateExpiration)}</span>
                       </div>
                     </div>
+
+                    {/* Usage Log Button */}
+                    <div className="flex items-center justify-between">
+                      <button
+                        onClick={() => setShowUsageLog(showUsageLog === apiKey.id ? null : apiKey.id)}
+                        className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm"
+                      >
+                        <FileText className="w-4 h-4" />
+                        <span>Voir le journal d'utilisation ({apiKey.usageLog?.length || 0} entrées)</span>
+                      </button>
+                    </div>
+
+                    {/* Usage Log Display */}
+                    {showUsageLog === apiKey.id && apiKey.usageLog && (
+                      <div className="mt-4 border-t pt-4">
+                        <h6 className="font-medium text-gray-900 mb-3 flex items-center space-x-2">
+                          <BarChart3 className="w-4 h-4" />
+                          <span>Journal d'utilisation</span>
+                        </h6>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Date/Heure</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Endpoint</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Méthode</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Statut</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Temps (ms)</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">IP</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                              {apiKey.usageLog.map((log, index) => (
+                                <tr key={index} className="hover:bg-gray-50">
+                                  <td className="px-3 py-2 text-gray-700">
+                                    {formatDateTime(log.timestamp)}
+                                  </td>
+                                  <td className="px-3 py-2 text-gray-700 font-mono text-xs">
+                                    {log.endpoint}
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
+                                      {log.method}
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    <span className={`font-medium ${getStatusColor(log.status)}`}>
+                                      {log.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-2 text-gray-700">
+                                    {log.responseTime}ms
+                                  </td>
+                                  <td className="px-3 py-2 text-gray-700 font-mono text-xs">
+                                    {log.ipAddress}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
 

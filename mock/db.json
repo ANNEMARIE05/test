@@ -1,0 +1,11 @@
+{
+    "users": [
+      { "id": 1, "name": "Alice", "email": "alice@mail.com" },
+      { "id": 2, "name": "Bob", "email": "bob@mail.com" }
+    ],
+    "products": [
+      { "id": 1, "name": "Chaise artisanale", "price": 120 },
+      { "id": 2, "name": "Table en bois", "price": 350 }
+    ]
+  }
+  

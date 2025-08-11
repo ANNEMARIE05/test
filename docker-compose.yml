@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  frontend-dev:
+    build:
+      context: .
+      target: dev
+    container_name: react-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - mock-api
+
+  frontend-prod:
+    build:
+      context: .
+      target: prod
+    container_name: react-prod
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+
+  mock-api:
+    image: clue/json-server
+    container_name: mock-api
+    ports:
+      - "3001:80"
+    volumes:
+      - ./mock/db.json:/data/db.json

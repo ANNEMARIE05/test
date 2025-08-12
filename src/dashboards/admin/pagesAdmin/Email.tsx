@@ -27,17 +27,17 @@ export default function Email() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestion d'email</h2>
-            <p className="text-gray-600">Configurez les paramètres email</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Gestion d'email</h2>
+            <p className="text-sm sm:text-base text-gray-600">Configurez les paramètres email</p>
           </div>
 
           {/* Génération d'email automatique */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Génération d'email automatique</h3>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Génération d'email automatique</h3>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="grid grid-cols-1 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">URL du portail</label>
                   <input
@@ -71,16 +71,16 @@ export default function Email() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Instructions personnalisées</label>
                 <textarea
-                  rows={4}
+                  rows={3}
                   defaultValue="Bienvenue sur notre plateforme OCR ! Voici vos identifiants de connexion et les instructions pour commencer à utiliser le service."
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              <div className="flex gap-3">
-                <button className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                <button className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base">
                   Générer et envoyer l'email
                 </button>
-                <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base">
                   Prévisualiser l'email
                 </button>
               </div>
@@ -88,129 +88,99 @@ export default function Email() {
           </div>
 
           {/* Historique des emails */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Historique des emails</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Destinataire
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Sujet
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Statut
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">jean.dupont@example.com</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">Bienvenue sur OCR Platform</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">2024-01-15 10:30</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                        Envoyé
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {/* Pas de bouton pour les emails envoyés */}
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">marie.martin@example.com</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">Document traité avec succès</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">2024-01-15 09:15</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                        Envoyé
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {/* Pas de bouton pour les emails envoyés */}
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">pierre.durand@example.com</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">Accès à la plateforme OCR</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">2024-01-15 08:45</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                        Non traité
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button 
-                        onClick={handleRenvoyerAcces}
-                        className="px-3 py-1 text-xs bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                      >
-                        Renvoyer les accès
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">sophie.leroy@example.com</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">Nouveaux identifiants</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">2024-01-15 07:20</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                        Non traité
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button 
-                        onClick={handleRenvoyerAcces}
-                        className="px-3 py-1 text-xs bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                      >
-                        Renvoyer les accès
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Historique des emails</h3>
+            <div className="space-y-4">
+              {/* Email 1 */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                  <div className="mb-2 sm:mb-0">
+                    <h4 className="font-medium text-gray-900">jean.dupont@example.com</h4>
+                    <p className="text-sm text-gray-600">Bienvenue sur OCR Platform</p>
+                  </div>
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 self-start sm:self-auto">
+                    Envoyé
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 mb-3">
+                  <p>Date: 2024-01-15 10:30</p>
+                </div>
+              </div>
+
+              {/* Email 2 */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                  <div className="mb-2 sm:mb-0">
+                    <h4 className="font-medium text-gray-900">marie.martin@example.com</h4>
+                    <p className="text-sm text-gray-600">Document traité avec succès</p>
+                  </div>
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 self-start sm:self-auto">
+                    Envoyé
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 mb-3">
+                  <p>Date: 2024-01-15 09:15</p>
+                </div>
+              </div>
+
+              {/* Email 3 */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                  <div className="mb-2 sm:mb-0">
+                    <h4 className="font-medium text-gray-900">pierre.durand@example.com</h4>
+                    <p className="text-sm text-gray-600">Accès à la plateforme OCR</p>
+                  </div>
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 self-start sm:self-auto">
+                    Non traité
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 mb-3">
+                  <p>Date: 2024-01-15 08:45</p>
+                </div>
+                <div className="flex justify-end">
+                  <button 
+                    onClick={handleRenvoyerAcces}
+                    className="px-3 py-1 text-xs bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                  >
+                    Renvoyer
+                  </button>
+                </div>
+              </div>
+
+              {/* Email 4 */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                  <div className="mb-2 sm:mb-0">
+                    <h4 className="font-medium text-gray-900">sophie.leroy@example.com</h4>
+                    <p className="text-sm text-gray-600">Nouveaux identifiants</p>
+                  </div>
+                  <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 self-start sm:self-auto">
+                    Non traité
+                  </span>
+                </div>
+                <div className="text-sm text-gray-500 mb-3">
+                  <p>Date: 2024-01-15 07:20</p>
+                </div>
+                <div className="flex justify-end">
+                  <button 
+                    onClick={handleRenvoyerAcces}
+                    className="px-3 py-1 text-xs bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                  >
+                    Renvoyer
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* User Details Modal */}
           {showUserDetails && selectedUser && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
-                <div className="px-6 py-4 border-b border-gray-200">
+              <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+                <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900">Détails de l'utilisateur</h3>
                 </div>
-                <div className="px-6 py-4 space-y-4">
+                <div className="px-4 sm:px-6 py-4 space-y-3 sm:space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
                     <p className="text-sm text-gray-900">{selectedUser.nom}</p>
@@ -238,7 +208,7 @@ export default function Email() {
                     <p className="text-sm text-gray-900">{selectedUser.documentsConsommes}</p>
                   </div>
                 </div>
-                <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+                <div className="px-4 sm:px-6 py-4 border-t border-gray-200 flex justify-end">
                   <button
                     onClick={() => setShowUserDetails(false)}
                     className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
@@ -253,14 +223,14 @@ export default function Email() {
           {/* Modal de confirmation pour renvoi d'accès */}
           {showMessage && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
-                <div className="px-6 py-4 border-b border-gray-200">
+              <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+                <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900">Confirmation</h3>
                 </div>
-                <div className="px-6 py-4">
+                <div className="px-4 sm:px-6 py-4">
                   <p className="text-sm text-gray-900">Les accès ont été renvoyés avec succès !</p>
                 </div>
-                <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+                <div className="px-4 sm:px-6 py-4 border-t border-gray-200 flex justify-end">
                   <button
                     onClick={() => setShowMessage(false)}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

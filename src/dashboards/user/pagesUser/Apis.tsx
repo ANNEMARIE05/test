@@ -175,24 +175,24 @@ export default function Apis() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestion d'APIs</h2>
-        <p className="text-gray-600">Configurez vos préférences et surveillez l'utilisation</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Gestion d'APIs</h2>
+        <p className="text-sm sm:text-base text-gray-600">Configurez vos préférences et surveillez l'utilisation</p>
       </div>
 
       {/* Alertes de quota */}
       {quotaAlerts.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
             </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Alerte de quota</h3>
-              <div className="mt-2 text-sm text-red-700">
+            <div className="ml-2 sm:ml-3">
+              <h3 className="text-xs sm:text-sm font-medium text-red-800">Alerte de quota</h3>
+              <div className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-700">
                 <p>Les clés API suivantes approchent de leur limite de quota :</p>
                 <ul className="list-disc list-inside mt-1">
                 {quotaAlerts.map(key => (
@@ -206,62 +206,64 @@ export default function Apis() {
       )}
 
       {/* Liste des clés API */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Clés API</h3>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 space-y-2 sm:space-y-0">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">Clés API</h3>
+          <button className="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base">
             Nouvelle clé API
           </button>
         </div>
         
         {apiKeys.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">Aucune clé API trouvée</p>
+          <div className="text-center py-6 sm:py-8">
+            <p className="text-gray-500 text-sm sm:text-base">Aucune clé API trouvée</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {apiKeys.map(apiKey => (
               <div key={apiKey.id} className="border border-gray-200 rounded-lg overflow-hidden">
-                <div className="p-4">
-                  <div className="flex justify-between items-start">
+                <div className="p-3 sm:p-4">
+                  <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start space-y-3 sm:space-y-4 lg:space-y-0">
                     <div className="flex-1">
-                      <div className="flex items-center space-x-3">
-                        <h4 className="text-lg font-medium text-gray-900">{apiKey.name}</h4>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-1 sm:space-y-0">
+                        <h4 className="text-base sm:text-lg font-medium text-gray-900">{apiKey.name}</h4>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full w-fit ${
                           apiKey.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                         }`}>
                           {apiKey.status}
                         </span>
                       </div>
                       
-                      <div className="mt-2">
-                        <div className="flex items-center space-x-2">
-                          <p className="text-sm text-gray-600">Clé: <code className="bg-gray-100 px-2 py-1 rounded">{apiKey.key}</code></p>
-                          <button
-                            onClick={() => copyToClipboard(apiKey.key, apiKey.id)}
-                            className="text-blue-600 hover:text-blue-800 transition-colors"
-                            title="Copier la clé"
-                          >
-                            {copiedKey === apiKey.id ? (
-                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            ) : (
-                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                              </svg>
-                            )}
-                          </button>
+                      <div className="mt-2 sm:mt-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-1 sm:space-y-0">
+                          <div className="flex items-center space-x-2 sm:space-x-0 sm:flex-col sm:items-start">
+                            <p className="text-xs sm:text-sm text-gray-600">Clé: <code className="bg-gray-100 px-1 sm:px-2 py-1 rounded break-all text-xs">{apiKey.key}</code></p>
+                            <button
+                              onClick={() => copyToClipboard(apiKey.key, apiKey.id)}
+                              className="text-blue-600 hover:text-blue-800 transition-colors w-fit"
+                              title="Copier la clé"
+                            >
+                              {copiedKey === apiKey.id ? (
+                                <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              ) : (
+                                <svg className="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                              )}
+                            </button>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600">Créée le: {apiKey.createdAt}</p>
+                        <p className="text-xs sm:text-sm text-gray-600">Créée le: {apiKey.createdAt}</p>
                       </div>
 
                       {/* Permissions */}
-                      <div className="mt-3">
-                        <h5 className="text-sm font-medium text-gray-900 mb-2">Permissions:</h5>
-                        <div className="flex flex-wrap gap-2">
+                      <div className="mt-2 sm:mt-3">
+                        <h5 className="text-xs sm:text-sm font-medium text-gray-900 mb-1 sm:mb-2">Permissions:</h5>
+                        <div className="flex flex-wrap gap-1 sm:gap-2">
                           {apiKey.permissions.map(permission => (
-                            <span key={permission} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                            <span key={permission} className="px-1 sm:px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
                               {permission}
                             </span>
                           ))}
@@ -269,16 +271,16 @@ export default function Apis() {
                       </div>
 
                       {/* Quota */}
-                      <div className="mt-3">
+                      <div className="mt-2 sm:mt-3">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm font-medium text-gray-900">Quota</span>
-                          <span className={`text-sm font-medium ${getQuotaColor(getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit))}`}>
+                          <span className="text-xs sm:text-sm font-medium text-gray-900">Quota</span>
+                          <span className={`text-xs sm:text-sm font-medium ${getQuotaColor(getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit))}`}>
                             {apiKey.quota.used} / {apiKey.quota.limit}
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
                           <div 
-                            className={`h-2 rounded-full ${
+                            className={`h-1.5 sm:h-2 rounded-full ${
                               getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit) > 90 ? 'bg-red-500' :
                               getQuotaPercentage(apiKey.quota.used, apiKey.quota.limit) > 75 ? 'bg-yellow-500' : 'bg-green-500'
                             }`}
@@ -289,16 +291,16 @@ export default function Apis() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col space-y-2">
+                    <div className="flex flex-row lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2">
                       <button
                         onClick={() => regenerateApiKey(apiKey.id)}
-                        className="px-3 py-1 text-sm bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors"
+                        className="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors"
                       >
                         Régénérer
                       </button>
                       <button
                         onClick={() => toggleLogs(apiKey.id)}
-                        className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                        className="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
                       >
                         {expandedKeys.has(apiKey.id) ? 'Masquer les logs' : 'Voir les logs'}
                       </button>
@@ -308,45 +310,77 @@ export default function Apis() {
 
                 {/* Logs d'utilisation intégrés */}
                 {expandedKeys.has(apiKey.id) && (
-                  <div className="border-t border-gray-200 bg-gray-50 p-4">
-                    <h5 className="text-sm font-medium text-gray-900 mb-3">Logs d'utilisation - {apiKey.name}</h5>
+                  <div className="border-t border-gray-200 bg-gray-50 p-3 sm:p-4">
+                    <h5 className="text-xs sm:text-sm font-medium text-gray-900 mb-2 sm:mb-3">Logs d'utilisation - {apiKey.name}</h5>
                     
                     {usageLogs.length === 0 ? (
-                      <div className="text-center py-4">
-                        <p className="text-gray-500 text-sm">Aucun log d'utilisation trouvé</p>
+                      <div className="text-center py-3 sm:py-4">
+                        <p className="text-gray-500 text-xs sm:text-sm">Aucun log d'utilisation trouvé</p>
                       </div>
                     ) : (
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-100">
-                            <tr>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Endpoint</th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temps (ms)</th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quota</th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            {usageLogs.map(log => (
-                              <tr key={log.id}>
-                                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{log.endpoint}</td>
-                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                                  {new Date(log.timestamp).toLocaleString()}
-                                </td>
-                                <td className="px-4 py-2 whitespace-nowrap">
-                                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                    log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                                  }`}>
-                                    {log.status}
-                                  </span>
-                                </td>
-                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{log.responseTime}</td>
-                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{log.quotaUsed}</td>
+                      <div>
+                        {/* Desktop Table View */}
+                        <div className="hidden md:block overflow-x-auto">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-100">
+                              <tr>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Endpoint</th>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temps (ms)</th>
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quota</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {usageLogs.map(log => (
+                                <tr key={log.id}>
+                                  <td className="px-4 py-2 text-sm font-medium text-gray-900 break-all">{log.endpoint}</td>
+                                  <td className="px-4 py-2 text-sm text-gray-500">
+                                    {new Date(log.timestamp).toLocaleString()}
+                                  </td>
+                                  <td className="px-4 py-2">
+                                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                      log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                    }`}>
+                                      {log.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-2 text-sm text-gray-500">{log.responseTime}</td>
+                                  <td className="px-4 py-2 text-sm text-gray-500">{log.quotaUsed}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Mobile Card View */}
+                        <div className="md:hidden space-y-2 sm:space-y-3">
+                          {usageLogs.map(log => (
+                            <div key={log.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 space-y-2">
+                              <div className="flex justify-between items-start">
+                                <div className="flex-1">
+                                  <h6 className="text-xs sm:text-sm font-medium text-gray-900 break-all">{log.endpoint}</h6>
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    {new Date(log.timestamp).toLocaleString()}
+                                  </p>
+                                </div>
+                                <span className={`px-1 sm:px-2 py-1 text-xs font-medium rounded-full ml-2 ${
+                                  log.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {log.status}
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                                <div className="text-xs text-gray-600">
+                                  <span className="font-medium">Temps:</span> {log.responseTime}ms
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  <span className="font-medium">Quota:</span> {log.quotaUsed}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

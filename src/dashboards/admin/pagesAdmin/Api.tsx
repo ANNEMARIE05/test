@@ -365,13 +365,13 @@ export default function Api() {
       };
 
       return (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Gestion d'API</h2>
-              <p className="text-gray-600">Configurez et surveillez les APIs et leurs clés</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Gestion d'API</h2>
+              <p className="text-sm sm:text-base text-gray-600">Configurez et surveillez les APIs et leurs clés</p>
             </div>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base">
               <Plus className="w-4 h-4" />
               <span>Ajouter une API</span>
             </button>
@@ -385,12 +385,71 @@ export default function Api() {
               placeholder="Rechercher une API..."
               value={searchApis}
               onChange={(e) => setSearchApis(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
             />
           </div>
 
-          {/* APIs Table */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          {/* APIs Table - Mobile Cards */}
+          <div className="block sm:hidden space-y-3">
+            {filteredApis.map((api) => (
+              <div key={api.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">{api.nom}</h3>
+                    <p className="text-xs text-gray-500 font-mono truncate">{api.url}</p>
+                  </div>
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ml-2 flex-shrink-0 ${
+                    api.statut === 'Actif' ? 'bg-green-100 text-green-800' :
+                    api.statut === 'Maintenance' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {api.statut}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
+                  <div>
+                    <span className="text-gray-500">Temps:</span>
+                    <span className="ml-1 text-gray-900">{api.tempsReponse}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Utilisation:</span>
+                    <span className="ml-1 text-gray-900">{api.utilisation}%</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-500">{api.clesApi.length} clés</span>
+                    <button 
+                      onClick={() => {
+                        setSelectedApi(selectedApi === api.id ? null : api.id);
+                        setShowApiKeys(!showApiKeys);
+                      }}
+                      className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                      title="Gérer les clés API"
+                    >
+                      <Key className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <button className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" title="Voir les logs">
+                      <Activity className="w-4 h-4" />
+                    </button>
+                    <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" title="Modifier">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Supprimer">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* APIs Table - Desktop */}
+          <div className="hidden sm:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
@@ -487,29 +546,29 @@ export default function Api() {
 
           {/* API Keys Management Section */}
           {selectedApi && showApiKeys && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                     Clés API - {apis.find(api => api.id === selectedApi)?.nom}
                   </h3>
-                  <p className="text-sm text-gray-600">Gérez les clés d'accès et les permissions</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Gérez les clés d'accès et les permissions</p>
                 </div>
-                <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <button className="flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
                   <Plus className="w-4 h-4" />
                   <span>Nouvelle clé API</span>
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {apis.find(api => api.id === selectedApi)?.clesApi.map((apiKey) => (
-                  <div key={apiKey.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-4">
+                  <div key={apiKey.id} className="border border-gray-200 rounded-lg p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-3 sm:mb-4">
                       <div className="flex items-center space-x-3">
-                        <Shield className="w-5 h-5 text-blue-600" />
-                        <div>
-                          <h4 className="font-medium text-gray-900">{apiKey.nom}</h4>
-                          <p className="text-sm text-gray-500">Créée le {formatDate(apiKey.dateCreation)}</p>
+                        <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <h4 className="font-medium text-gray-900 text-sm sm:text-base truncate">{apiKey.nom}</h4>
+                          <p className="text-xs text-gray-500">Créée le {formatDate(apiKey.dateCreation)}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -526,9 +585,9 @@ export default function Api() {
                     </div>
 
                     {/* API Key Display */}
-                    <div className="bg-gray-50 rounded-lg p-3 mb-4">
-                      <div className="flex items-center justify-between">
-                        <code className="text-sm font-mono text-gray-700">
+                    <div className="bg-gray-50 rounded-lg p-3 mb-3 sm:mb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+                        <code className="text-xs sm:text-sm font-mono text-gray-700 break-all">
                           {showKey[apiKey.id] ? apiKey.cle : '••••••••••••••••••••••••••••••••'}
                         </code>
                         <div className="flex items-center space-x-2">
@@ -551,15 +610,15 @@ export default function Api() {
                     </div>
 
                     {/* Permissions Section */}
-                    <div className="mb-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="font-medium text-gray-900 flex items-center space-x-2">
+                    <div className="mb-3 sm:mb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3">
+                        <h5 className="font-medium text-gray-900 flex items-center space-x-2 text-sm sm:text-base">
                           <Settings className="w-4 h-4" />
                           <span>Permissions</span>
                         </h5>
                         <button
                           onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: !editingPermissions[apiKey.id]})}
-                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center space-x-1"
+                          className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm flex items-center space-x-1 self-start sm:self-auto"
                         >
                           <Edit className="w-3 h-3" />
                           <span>{editingPermissions[apiKey.id] ? 'Annuler' : 'Modifier'}</span>
@@ -568,14 +627,14 @@ export default function Api() {
                       
                       {editingPermissions[apiKey.id] ? (
                         <div className="space-y-3">
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                             <div className="flex items-center space-x-2">
                               <input 
                                 type="checkbox" 
                                 defaultChecked={apiKey.permissions.lecture}
                                 className="rounded border-gray-300"
                               />
-                              <span className="text-sm text-gray-700">Lecture seule</span>
+                              <span className="text-xs sm:text-sm text-gray-700">Lecture seule</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <input 
@@ -583,7 +642,7 @@ export default function Api() {
                                 defaultChecked={apiKey.permissions.soumission}
                                 className="rounded border-gray-300"
                               />
-                              <span className="text-sm text-gray-700">Soumission</span>
+                              <span className="text-xs sm:text-sm text-gray-700">Soumission</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <input 
@@ -591,26 +650,26 @@ export default function Api() {
                                 defaultChecked={apiKey.permissions.accesResultats}
                                 className="rounded border-gray-300"
                               />
-                              <span className="text-sm text-gray-700">Accès aux résultats</span>
+                              <span className="text-xs sm:text-sm text-gray-700">Accès aux résultats</span>
                             </div>
                           </div>
-                          <div className="flex space-x-2">
+                          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                             <button
                               onClick={() => updatePermissions(selectedApi, apiKey.id, apiKey.permissions)}
-                              className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                              className="px-3 py-1 bg-green-600 text-white text-xs sm:text-sm rounded hover:bg-green-700"
                             >
                               Sauvegarder
                             </button>
                             <button
                               onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: false})}
-                              className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
+                              className="px-3 py-1 bg-gray-600 text-white text-xs sm:text-sm rounded hover:bg-gray-700"
                             >
                               Annuler
                             </button>
                           </div>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                           <div className="flex items-center space-x-2">
                             <input 
                               type="checkbox" 
@@ -618,7 +677,7 @@ export default function Api() {
                               readOnly
                               className="rounded border-gray-300"
                             />
-                            <span className="text-sm text-gray-700">Lecture seule</span>
+                            <span className="text-xs sm:text-sm text-gray-700">Lecture seule</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <input 
@@ -627,7 +686,7 @@ export default function Api() {
                               readOnly
                               className="rounded border-gray-300"
                             />
-                            <span className="text-sm text-gray-700">Soumission</span>
+                            <span className="text-xs sm:text-sm text-gray-700">Soumission</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <input 
@@ -636,29 +695,29 @@ export default function Api() {
                               readOnly
                               className="rounded border-gray-300"
                             />
-                            <span className="text-sm text-gray-700">Accès aux résultats</span>
+                            <span className="text-xs sm:text-sm text-gray-700">Accès aux résultats</span>
                           </div>
                         </div>
                       )}
                     </div>
 
                     {/* Usage Statistics */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm mb-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm mb-3 sm:mb-4">
                       <div className="flex items-center space-x-2">
-                        <Activity className="w-4 h-4 text-blue-600" />
-                        <span className="text-gray-700">{apiKey.utilisation.requetes.toLocaleString()} requêtes</span>
+                        <Activity className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                        <span className="text-gray-700 truncate">{apiKey.utilisation.requetes.toLocaleString()} requêtes</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <AlertTriangle className="w-4 h-4 text-red-600" />
+                        <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
                         <span className="text-gray-700">{apiKey.utilisation.erreurs} erreurs</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Clock className="w-4 h-4 text-gray-600" />
-                        <span className="text-gray-700">Dernier accès: {formatDateTime(apiKey.utilisation.dernierAcces)}</span>
+                      <div className="flex items-center space-x-2 col-span-2 sm:col-span-1">
+                        <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                        <span className="text-gray-700 truncate">Dernier: {formatDateTime(apiKey.utilisation.dernierAcces)}</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="w-4 h-4 text-gray-600" />
-                        <span className="text-gray-700">Expire le {formatDate(apiKey.dateExpiration)}</span>
+                      <div className="flex items-center space-x-2 col-span-2 sm:col-span-1">
+                        <Calendar className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                        <span className="text-gray-700 truncate">Expire: {formatDate(apiKey.dateExpiration)}</span>
                       </div>
                     </div>
 
@@ -666,55 +725,55 @@ export default function Api() {
                     <div className="flex items-center justify-between">
                       <button
                         onClick={() => setShowUsageLog(showUsageLog === apiKey.id ? null : apiKey.id)}
-                        className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm"
+                        className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-xs sm:text-sm"
                       >
                         <FileText className="w-4 h-4" />
-                        <span>Voir le journal d'utilisation ({apiKey.usageLog?.length || 0} entrées)</span>
+                        <span>Journal d'utilisation ({apiKey.usageLog?.length || 0} entrées)</span>
                       </button>
                     </div>
 
                     {/* Usage Log Display */}
                     {showUsageLog === apiKey.id && apiKey.usageLog && (
-                      <div className="mt-4 border-t pt-4">
-                        <h6 className="font-medium text-gray-900 mb-3 flex items-center space-x-2">
+                      <div className="mt-3 sm:mt-4 border-t pt-3 sm:pt-4">
+                        <h6 className="font-medium text-gray-900 mb-3 flex items-center space-x-2 text-sm sm:text-base">
                           <BarChart3 className="w-4 h-4" />
                           <span>Journal d'utilisation</span>
                         </h6>
                         <div className="overflow-x-auto">
-                          <table className="w-full text-sm">
+                          <table className="w-full text-xs sm:text-sm">
                             <thead className="bg-gray-50">
                               <tr>
-                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Date/Heure</th>
-                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Endpoint</th>
-                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Méthode</th>
-                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Statut</th>
-                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Temps (ms)</th>
-                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">IP</th>
+                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Date/Heure</th>
+                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Endpoint</th>
+                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Méthode</th>
+                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Statut</th>
+                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Temps</th>
+                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">IP</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                               {apiKey.usageLog.map((log, index) => (
                                 <tr key={index} className="hover:bg-gray-50">
-                                  <td className="px-3 py-2 text-gray-700">
+                                  <td className="px-2 sm:px-3 py-2 text-gray-700 text-xs">
                                     {formatDateTime(log.timestamp)}
                                   </td>
-                                  <td className="px-3 py-2 text-gray-700 font-mono text-xs">
+                                  <td className="px-2 sm:px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-20 sm:max-w-32">
                                     {log.endpoint}
                                   </td>
-                                  <td className="px-3 py-2">
-                                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
+                                  <td className="px-2 sm:px-3 py-2">
+                                    <span className={`inline-flex px-1 sm:px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
                                       {log.method}
                                     </span>
                                   </td>
-                                  <td className="px-3 py-2">
+                                  <td className="px-2 sm:px-3 py-2">
                                     <span className={`font-medium ${getStatusColor(log.status)}`}>
                                       {log.status}
                                     </span>
                                   </td>
-                                  <td className="px-3 py-2 text-gray-700">
+                                  <td className="px-2 sm:px-3 py-2 text-gray-700 text-xs">
                                     {log.responseTime}ms
                                   </td>
-                                  <td className="px-3 py-2 text-gray-700 font-mono text-xs">
+                                  <td className="px-2 sm:px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-16 sm:max-w-24">
                                     {log.ipAddress}
                                   </td>
                                 </tr>
@@ -728,10 +787,10 @@ export default function Api() {
                 ))}
 
                 {apis.find(api => api.id === selectedApi)?.clesApi.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <Key className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                    <p>Aucune clé API configurée pour cette API</p>
-                    <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  <div className="text-center py-6 sm:py-8 text-gray-500">
+                    <Key className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
+                    <p className="text-sm sm:text-base">Aucune clé API configurée pour cette API</p>
+                    <button className="mt-3 sm:mt-4 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
                       Créer la première clé API
                     </button>
                   </div>

@@ -6,6 +6,9 @@ import Api from './pagesAdmin/Api';
 import Email from './pagesAdmin/Email';
 import Profile from './pagesAdmin/Profile';
 import Dashboard from './pagesAdmin/Dashboard';
+import Support from './pagesAdmin/Support';
+import Parametres from './pagesAdmin/Parametres';
+
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -40,10 +43,20 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         return (
           <Email />
         );
-        
-      case 'profile':
+
+      case 'settings':
         return (
-          <Profile />
+          <Parametres />
+        );   
+
+        case 'profile':
+          return (
+            <Profile />
+          );
+
+        case 'support':
+        return (
+          <Support />
         );
 
       default:
@@ -58,7 +71,9 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       documents: 'Gestion documents',
       api: 'Gestion d\'API',
       email: 'Gestion d\'email',
-      profile: 'Profile'
+      profile: 'Profile',
+      support: 'Support',
+      parametres: 'Paramètres'
     };
     return titles[activeSection] || 'Dashboard';
   };

@@ -8,7 +8,9 @@ import {
   User, 
   LogOut,
   X,
-  Shield
+  Shield,
+  MessageCircle,
+  Settings
 } from "lucide-react";
 
 export type SidebarItem = {
@@ -43,7 +45,9 @@ export default function Sidebar({
     { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-5 h-5" /> },
     { id: 'api', label: 'Gestion d\'API', icon: <Code className="w-5 h-5" /> },
     { id: 'email', label: 'Gestion d\'email', icon: <Mail className="w-5 h-5" /> },
+    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-5 h-5" /> },
     { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
+    { id: 'support', label: 'Support', icon: <MessageCircle className="w-5 h-5" /> },
   ];
 
   const sidebarItems = items.length > 0 ? items : defaultItems;

@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { 
     MessageSquare as MessageIcon, 
     ArrowLeft as ReplyIcon, 
-    Send as SendIcon,
     User as PersonIcon,
     Mail as EmailIcon,
     Phone as PhoneIcon,
     X as CloseIcon,
-    Plus as PlusIcon,
-    Filter as FilterIcon,
     Search as SearchIcon,
     Plus
 } from 'lucide-react';
@@ -116,15 +113,6 @@ export default function Support() {
             case 'new': return 'bg-red-500';
             case 'in-progress': return 'bg-yellow-500';
             case 'resolved': return 'bg-green-500';
-            default: return 'bg-gray-500';
-        }
-    };
-
-    const getPriorityColor = (priority: string) => {
-        switch (priority) {
-            case 'high': return 'bg-red-500';
-            case 'medium': return 'bg-yellow-500';
-            case 'low': return 'bg-green-500';
             default: return 'bg-gray-500';
         }
     };

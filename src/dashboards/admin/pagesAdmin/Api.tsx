@@ -68,7 +68,6 @@ export default function Api() {
     const [showApiKeys, setShowApiKeys] = useState(false);
     const [copiedKey, setCopiedKey] = useState<string | null>(null);
     const [showKey, setShowKey] = useState<{[key: string]: boolean}>({});
-    const [selectedKeyForPermissions, setSelectedKeyForPermissions] = useState<string | null>(null);
     const [showUsageLog, setShowUsageLog] = useState<string | null>(null);
     const [editingPermissions, setEditingPermissions] = useState<{[key: string]: boolean}>({});
 

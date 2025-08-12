@@ -183,16 +183,6 @@ export default function Documents() {
         }
     };
 
-    const handleAssignToClient = () => {
-        if (selectedClient && selectedDocuments.length > 0) {
-            // Ici, vous ajouteriez la logique pour assigner les documents au client
-            console.log(`Assigning documents ${selectedDocuments} to client ${selectedClient}`);
-            setShowAssignModal(false);
-            setSelectedDocuments([]);
-            setSelectedClient('');
-        }
-    };
-
     const assignDocumentsToClient = (clientId: string, documentIds: string[]) => {
         // Trouver le client sélectionné
         const client = clients.find(c => c.id === clientId);

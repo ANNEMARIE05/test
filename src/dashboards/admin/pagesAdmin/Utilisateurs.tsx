@@ -12,8 +12,6 @@ import {
   Mail,
   Key,
   EyeOff,
-  AlertCircle,
-  TrendingUp,
   Copy,
   RefreshCw,
 } from "lucide-react";
@@ -57,18 +55,8 @@ export default function Utilisateurs() {
     const [isSendingInvitation, setIsSendingInvitation] = useState(false);
     const [passwordVisibility, setPasswordVisibility] = useState<{[key: string]: boolean}>({});
     const [apiKeyVisibility, setApiKeyVisibility] = useState<{[key: string]: boolean}>({});
-    const [showAlerts, setShowAlerts] = useState(true);
     const [isGeneratingApiKey, setIsGeneratingApiKey] = useState(false);
-    const [showApiKeyModal, setShowApiKeyModal] = useState(false);
-    const [apiKeyExpirationDays, setApiKeyExpirationDays] = useState(30);
-    const [showApiKeyHistory, setShowApiKeyHistory] = useState(false);
-    const [apiKeyHistory, setApiKeyHistory] = useState<Array<{
-      key: string;
-      generatedAt: Date;
-      expiresAt?: Date;
-      revokedAt?: Date;
-      reason?: string;
-    }>>([]);
+    const [apiKeyExpirationDays] = useState(30);
 
     const [users, setUsers] = useState<User[]>([
         {
@@ -182,61 +170,6 @@ export default function Utilisateurs() {
         }
       ]);
 
-      // Fonction pour calculer le pourcentage d'utilisation
-      const getUsagePercentage = (user: User) => {
-        const limite = user.limiteDocuments || 100;
-        return Math.round((user.documentsConsommes / limite) * 100);
-      };
-
-      // Fonction pour déterminer le niveau d'alerte
-      const getAlertLevel = (user: User) => {
-        const percentage = getUsagePercentage(user);
-        if (percentage >= 100) return 'critical';
-        if (percentage >= 80) return 'warning';
-        if (percentage >= 60) return 'info';
-        return 'normal';
-      };
-
-      // Fonction pour obtenir la couleur de l'alerte
-      const getAlertColor = (level: string) => {
-        switch (level) {
-          case 'critical': return 'text-red-600 bg-red-50 border-red-200';
-          case 'warning': return 'text-orange-600 bg-orange-50 border-orange-200';
-          case 'info': return 'text-blue-600 bg-blue-50 border-blue-200';
-          default: return 'text-green-600 bg-green-50 border-green-200';
-        }
-      };
-
-      // Fonction pour obtenir l'icône d'alerte
-      const getAlertIcon = (level: string) => {
-        switch (level) {
-          case 'critical': return <AlertTriangle className="w-4 h-4" />;
-          case 'warning': return <AlertCircle className="w-4 h-4" />;
-          case 'info': return <TrendingUp className="w-4 h-4" />;
-          default: return null;
-        }
-      };
-
-      // Fonction pour obtenir le message d'alerte
-      const getAlertMessage = (user: User) => {
-        const percentage = getUsagePercentage(user);
-        const limite = user.limiteDocuments || 100;
-        
-        if (percentage >= 100) {
-          return `Limite dépassée ! ${user.documentsConsommes}/${limite} documents`;
-        } else if (percentage >= 80) {
-          return `Attention : ${percentage}% de la limite utilisée (${user.documentsConsommes}/${limite})`;
-        } else if (percentage >= 60) {
-          return `${percentage}% de la limite utilisée (${user.documentsConsommes}/${limite})`;
-        }
-        return `${percentage}% de la limite utilisée (${user.documentsConsommes}/${limite})`;
-      };
-
-      // Utilisateurs avec alertes
-      const usersWithAlerts = users.filter(user => getAlertLevel(user) !== 'normal');
-      const criticalUsers = users.filter(user => getAlertLevel(user) === 'critical');
-      const warningUsers = users.filter(user => getAlertLevel(user) === 'warning');
-
       const filteredUsers = users.filter(user =>
         user.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -295,7 +228,7 @@ export default function Utilisateurs() {
       };
 
       // Fonction pour envoyer l'email d'invitation
-      const sendInvitationEmail = async (email: string, password: string, nom: string) => {
+      const sendInvitationEmail = async (email: string, password: string) => {
         setIsSendingInvitation(true);
         
         try {
@@ -1036,7 +969,7 @@ export default function Utilisateurs() {
                     Annuler
                   </button>
                   <button
-                    onClick={() => sendInvitationEmail(invitationEmail, invitationPassword, 'Nouvel utilisateur')}
+                    onClick={() => sendInvitationEmail(invitationEmail, invitationPassword)}
                     disabled={isSendingInvitation}
                     className="px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >

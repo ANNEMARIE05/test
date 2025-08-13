@@ -19,6 +19,7 @@ import {
   FileText,
   Settings
 } from "lucide-react";
+import React from 'react'; // Added missing import for React
 
 interface ApiPermission {
   lecture: boolean;
@@ -70,6 +71,8 @@ export default function Api() {
     const [showKey, setShowKey] = useState<{[key: string]: boolean}>({});
     const [showUsageLog, setShowUsageLog] = useState<string | null>(null);
     const [editingPermissions, setEditingPermissions] = useState<{[key: string]: boolean}>({});
+    const [selectedApiKey, setSelectedApiKey] = useState<string | null>(null);
+    const [showApiLogs, setShowApiLogs] = useState<string | null>(null);
 
     const apis: ApiEndpoint[] = [
         {
@@ -389,414 +392,707 @@ export default function Api() {
           </div>
 
           {/* APIs Table - Mobile Cards */}
-          <div className="block sm:hidden space-y-3">
+          <div className="block sm:hidden space-y-1">
             {filteredApis.map((api) => (
-              <div key={api.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-medium text-gray-900 truncate">{api.nom}</h3>
-                    <p className="text-xs text-gray-500 font-mono truncate">{api.url}</p>
+              <div key={api.id} className="space-y-1">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2">
+                  <div className="flex items-start justify-between mb-1">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-medium text-gray-900 truncate">{api.nom}</h3>
+                      <p className="text-xs text-gray-500 font-mono truncate">{api.url}</p>
+                    </div>
+                    <span className={`inline-flex px-1.5 py-0.5 text-xs font-semibold rounded-full ml-1 flex-shrink-0 ${
+                      api.statut === 'Actif' ? 'bg-green-100 text-green-800' :
+                      api.statut === 'Maintenance' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {api.statut}
+                    </span>
                   </div>
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ml-2 flex-shrink-0 ${
-                    api.statut === 'Actif' ? 'bg-green-100 text-green-800' :
-                    api.statut === 'Maintenance' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {api.statut}
-                  </span>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
-                  <div>
-                    <span className="text-gray-500">Temps:</span>
-                    <span className="ml-1 text-gray-900">{api.tempsReponse}</span>
+                  
+                  <div className="grid grid-cols-2 gap-1 mb-1 text-xs">
+                    <div>
+                      <span className="text-gray-500">Temps:</span>
+                      <span className="ml-1 text-gray-900">{api.tempsReponse}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Utilisation:</span>
+                      <span className="ml-1 text-gray-900">{api.utilisation}%</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-gray-500">Utilisation:</span>
-                    <span className="ml-1 text-gray-900">{api.utilisation}%</span>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1">
+                      <span className="text-xs text-gray-500">{api.clesApi.length} clés</span>
+                      <button 
+                        onClick={() => {
+                          setSelectedApi(selectedApi === api.id ? null : api.id);
+                          setShowApiKeys(!showApiKeys);
+                        }}
+                        className="text-blue-600 hover:text-blue-900 p-0.5 rounded hover:bg-blue-50"
+                        title="Gérer les clés API"
+                      >
+                        <Key className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <button 
+                        onClick={() => setShowApiLogs(showApiLogs === api.id ? null : api.id)}
+                        className="text-blue-600 hover:text-blue-900 p-0.5 rounded hover:bg-blue-50" 
+                        title="Voir les logs"
+                      >
+                        <Activity className="w-3 h-3" />
+                      </button>
+                      <button className="text-red-600 hover:text-red-900 p-0.5 rounded hover:bg-red-50" title="Supprimer">
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs text-gray-500">{api.clesApi.length} clés</span>
-                    <button 
-                      onClick={() => {
-                        setSelectedApi(selectedApi === api.id ? null : api.id);
-                        setShowApiKeys(!showApiKeys);
-                      }}
-                      className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
-                      title="Gérer les clés API"
-                    >
-                      <Key className="w-4 h-4" />
-                    </button>
+                {/* API Keys for this API */}
+                {selectedApi === api.id && showApiKeys && (
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 ml-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-gray-900">Clés API</h4>
+                      <button className="flex items-center space-x-1 px-1.5 py-0.5 bg-green-600 text-white rounded text-xs hover:bg-green-700">
+                        <Plus className="w-3 h-3" />
+                        <span>Nouvelle clé</span>
+                      </button>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      {api.clesApi.map((apiKey) => (
+                        <div key={apiKey.id} className="border border-gray-200 rounded-lg p-2">
+                          {/* Header with name and status */}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center space-x-1">
+                              <Shield className="w-3 h-3 text-blue-600" />
+                              <span className="text-xs font-medium text-gray-900">{apiKey.nom}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <span className={`inline-flex px-1 py-0.5 text-xs font-semibold rounded-full ${getStatusColor(apiKey.statut)}`}>
+                                {apiKey.statut}
+                              </span>
+                              <button 
+                                onClick={() => setShowKey({...showKey, [apiKey.id]: !showKey[apiKey.id]})}
+                                className="text-gray-400 hover:text-gray-600 p-0.5 rounded hover:bg-gray-50"
+                              >
+                                {showKey[apiKey.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* API Key Display */}
+                          <div className="bg-gray-50 rounded p-2 mb-2">
+                            <div className="flex flex-col space-y-1">
+                              <code className="text-xs font-mono text-gray-700 break-all leading-relaxed">
+                                {showKey[apiKey.id] ? apiKey.cle : '••••••••••••••••••••••••••••••••'}
+                              </code>
+                              <div className="flex items-center justify-end space-x-1">
+                                <button
+                                  onClick={() => copyToClipboard(apiKey.cle, apiKey.id)}
+                                  className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 px-1.5 py-0.5 rounded text-xs hover:bg-blue-50"
+                                >
+                                  {copiedKey === apiKey.id ? <CheckCircle className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                                  <span>{copiedKey === apiKey.id ? 'Copié' : 'Copier'}</span>
+                                </button>
+                                <button
+                                  onClick={() => regenerateKey(api.id, apiKey.id)}
+                                  className="flex items-center space-x-1 text-orange-600 hover:text-orange-800 px-1.5 py-0.5 rounded text-xs hover:bg-orange-50"
+                                >
+                                  <RefreshCw className="w-3 h-3" />
+                                  <span>Régénérer</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Permissions - Vertical Layout */}
+                          <div className="mb-2">
+                            <h5 className="text-xs font-medium text-gray-700 mb-1 flex items-center space-x-1">
+                              <Settings className="w-3 h-3" />
+                              <span>Permissions</span>
+                            </h5>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Lecture seule</span>
+                                <input 
+                                  type="checkbox" 
+                                  checked={apiKey.permissions.lecture}
+                                  readOnly
+                                  className="rounded border-gray-300 w-3 h-3"
+                                />
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Soumission</span>
+                                <input 
+                                  type="checkbox" 
+                                  checked={apiKey.permissions.soumission}
+                                  readOnly
+                                  className="rounded border-gray-300 w-3 h-3"
+                                />
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Accès aux résultats</span>
+                                <input 
+                                  type="checkbox" 
+                                  checked={apiKey.permissions.accesResultats}
+                                  readOnly
+                                  className="rounded border-gray-300 w-3 h-3"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Usage Stats - Vertical Layout */}
+                          <div className="mb-2">
+                            <h5 className="text-xs font-medium text-gray-700 mb-1 flex items-center space-x-1">
+                              <Activity className="w-3 h-3" />
+                              <span>Statistiques</span>
+                            </h5>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Requêtes totales</span>
+                                <span className="text-xs font-medium text-gray-900">{apiKey.utilisation.requetes.toLocaleString()}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Erreurs</span>
+                                <span className="text-xs font-medium text-red-600">{apiKey.utilisation.erreurs}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Dernier accès</span>
+                                <span className="text-xs font-medium text-gray-900">{formatDateTime(apiKey.utilisation.dernierAcces)}</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-600">Expire le</span>
+                                <span className="text-xs font-medium text-gray-900">{formatDate(apiKey.dateExpiration)}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Usage Log Button */}
+                          <div className="border-t pt-2">
+                            <button
+                              onClick={() => setShowUsageLog(showUsageLog === apiKey.id ? null : apiKey.id)}
+                              className="flex items-center justify-center space-x-1 w-full text-blue-600 hover:text-blue-800 text-xs py-1.5 rounded-lg hover:bg-blue-50"
+                            >
+                              <FileText className="w-3 h-3" />
+                              <span>Journal ({apiKey.usageLog?.length || 0})</span>
+                            </button>
+                          </div>
+
+                          {/* Usage Log Display */}
+                          {showUsageLog === apiKey.id && apiKey.usageLog && (
+                            <div className="mt-2 border-t pt-2">
+                              <h6 className="font-medium text-gray-900 mb-2 text-xs flex items-center space-x-1">
+                                <BarChart3 className="w-3 h-3" />
+                                <span>Journal d'utilisation</span>
+                              </h6>
+                              <div className="space-y-1 max-h-32 overflow-y-auto">
+                                {apiKey.usageLog.map((log, index) => (
+                                  <div key={index} className="bg-gray-50 rounded p-2 text-xs">
+                                    <div className="space-y-1">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-gray-600 font-medium">Date/Heure</span>
+                                        <span className="text-gray-900">{formatDateTime(log.timestamp)}</span>
+                                      </div>
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-gray-600 font-medium">Endpoint</span>
+                                        <span className="text-gray-900 font-mono truncate max-w-24">{log.endpoint}</span>
+                                      </div>
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-gray-600 font-medium">Méthode</span>
+                                        <span className={`inline-flex px-1 py-0.5 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
+                                          {log.method}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-gray-600 font-medium">Statut</span>
+                                        <span className={`font-medium ${getStatusColor(log.status)}`}>
+                                          {log.status}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-gray-600 font-medium">Temps</span>
+                                        <span className="text-gray-900">{log.responseTime}ms</span>
+                                      </div>
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-gray-600 font-medium">IP</span>
+                                        <span className="text-gray-900 font-mono truncate max-w-20">{log.ipAddress}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {api.clesApi.length === 0 && (
+                        <div className="text-center py-4 text-gray-500">
+                          <Key className="w-6 h-6 mx-auto mb-1 text-gray-300" />
+                          <p className="text-xs">Aucune clé API configurée</p>
+                          <button className="mt-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs">
+                            Créer la première clé API
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-1">
-                    <button className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" title="Voir les logs">
-                      <Activity className="w-4 h-4" />
-                    </button>
-                    <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" title="Modifier">
-                      <Edit className="w-4 h-4" />
-                    </button>
-                    <button className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Supprimer">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                )}
+
+                {/* API Logs */}
+                {showApiLogs === api.id && (
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 ml-1">
+                    <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center space-x-1">
+                      <Activity className="w-3 h-3" />
+                      <span>Logs de l'API</span>
+                    </h4>
+                    <div className="space-y-1 max-h-24 overflow-y-auto">
+                      {api.clesApi.flatMap(key => key.usageLog || []).slice(0, 5).map((log, index) => (
+                        <div key={index} className="bg-gray-50 rounded p-1.5 text-xs">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-gray-600">{formatDateTime(log.timestamp)}</span>
+                            <span className={`inline-flex px-1 py-0.5 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
+                              {log.method}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-700 font-mono truncate">{log.endpoint}</span>
+                            <span className={`font-medium ${getStatusColor(log.status)}`}>
+                              {log.status}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-gray-600">
+                            <span>{log.responseTime}ms</span>
+                            <span className="font-mono truncate">{log.ipAddress}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
 
           {/* APIs Table - Desktop */}
-          <div className="hidden sm:block bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Nom
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      URL
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Statut
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Temps de réponse
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Utilisation
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Clés API
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredApis.map((api) => (
-                    <tr key={api.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{api.nom}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 font-mono">{api.url}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          api.statut === 'Actif' ? 'bg-green-100 text-green-800' :
-                          api.statut === 'Maintenance' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {api.statut}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{api.tempsReponse}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
-                            <div 
-                              className="bg-blue-600 h-2 rounded-full" 
-                              style={{ width: `${api.utilisation}%` }}
-                            ></div>
-                          </div>
-                          <span className="text-sm text-gray-900">{api.utilisation}%</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-900">{api.clesApi.length}</span>
-                          <button 
-                            onClick={() => {
-                              setSelectedApi(selectedApi === api.id ? null : api.id);
-                              setShowApiKeys(!showApiKeys);
-                            }}
-                            className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
-                            title="Gérer les clés API"
-                          >
-                            <Key className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-2">
-                          <button className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" title="Voir les logs">
-                            <Activity className="w-4 h-4" />
-                          </button>
-                          <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" title="Modifier">
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Supprimer">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
+          <div className="hidden sm:block space-y-4">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Nom
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        URL
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Statut
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Temps de réponse
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Utilisation
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Clés API
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredApis.map((api) => (
+                      <React.Fragment key={api.id}>
+                        <tr className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">{api.nom}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 font-mono">{api.url}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              api.statut === 'Actif' ? 'bg-green-100 text-green-800' :
+                              api.statut === 'Maintenance' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {api.statut}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{api.tempsReponse}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+                                <div 
+                                  className="bg-blue-600 h-2 rounded-full" 
+                                  style={{ width: `${api.utilisation}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-sm text-gray-900">{api.utilisation}%</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm text-gray-900">{api.clesApi.length}</span>
+                              <button 
+                                onClick={() => {
+                                  setSelectedApi(selectedApi === api.id ? null : api.id);
+                                  setShowApiKeys(!showApiKeys);
+                                }}
+                                className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                                title="Gérer les clés API"
+                              >
+                                <Key className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex items-center space-x-2">
+                              <button 
+                                onClick={() => setShowApiLogs(showApiLogs === api.id ? null : api.id)}
+                                className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" 
+                                title="Voir les logs"
+                              >
+                                <Activity className="w-4 h-4" />
+                              </button>
+                              <button className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Supprimer">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+
+                        {/* API Keys Management Section - Inline */}
+                        {selectedApi === api.id && showApiKeys && (
+                          <tr>
+                            <td colSpan={7} className="px-6 py-4 bg-gray-50">
+                              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                                <div className="flex items-center justify-between mb-4">
+                                  <div>
+                                    <h3 className="text-lg font-semibold text-gray-900">
+                                      Clés API - {api.nom}
+                                    </h3>
+                                    <p className="text-sm text-gray-600">Gérez les clés d'accès et les permissions</p>
+                                  </div>
+                                  <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
+                                    <Plus className="w-4 h-4" />
+                                    <span>Nouvelle clé API</span>
+                                  </button>
+                                </div>
+
+                                <div className="space-y-4">
+                                  {api.clesApi.map((apiKey) => (
+                                    <div key={apiKey.id} className="border border-gray-200 rounded-lg p-4">
+                                      <div className="flex items-center justify-between mb-4">
+                                        <div className="flex items-center space-x-3">
+                                          <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                                          <div className="min-w-0 flex-1">
+                                            <h4 className="font-medium text-gray-900 truncate">{apiKey.nom}</h4>
+                                            <p className="text-sm text-gray-500">Créée le {formatDate(apiKey.dateCreation)}</p>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(apiKey.statut)}`}>
+                                            {apiKey.statut}
+                                          </span>
+                                          <button 
+                                            onClick={() => setShowKey({...showKey, [apiKey.id]: !showKey[apiKey.id]})}
+                                            className="text-gray-400 hover:text-gray-600"
+                                          >
+                                            {showKey[apiKey.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                          </button>
+                                        </div>
+                                      </div>
+
+                                      {/* API Key Display */}
+                                      <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                                        <div className="flex items-center justify-between">
+                                          <code className="text-sm font-mono text-gray-700 break-all">
+                                            {showKey[apiKey.id] ? apiKey.cle : '••••••••••••••••••••••••••••••••'}
+                                          </code>
+                                          <div className="flex items-center space-x-2">
+                                            <button
+                                              onClick={() => copyToClipboard(apiKey.cle, apiKey.id)}
+                                              className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                                              title="Copier la clé"
+                                            >
+                                              {copiedKey === apiKey.id ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                                            </button>
+                                            <button
+                                              onClick={() => regenerateKey(api.id, apiKey.id)}
+                                              className="text-orange-600 hover:text-orange-800 p-1 rounded hover:bg-orange-50"
+                                              title="Régénérer la clé"
+                                            >
+                                              <RefreshCw className="w-4 h-4" />
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Permissions Section */}
+                                      <div className="mb-4">
+                                        <div className="flex items-center justify-between mb-3">
+                                          <h5 className="font-medium text-gray-900 flex items-center space-x-2 text-sm sm:text-base">
+                                            <Settings className="w-4 h-4" />
+                                            <span>Permissions</span>
+                                          </h5>
+                                          <button
+                                            onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: !editingPermissions[apiKey.id]})}
+                                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center space-x-1"
+                                          >
+                                            <Edit className="w-3 h-3" />
+                                            <span>{editingPermissions[apiKey.id] ? 'Annuler' : 'Modifier'}</span>
+                                          </button>
+                                        </div>
+                                        
+                                        {editingPermissions[apiKey.id] ? (
+                                          <div className="space-y-3">
+                                            <div className="grid grid-cols-3 gap-4">
+                                              <div className="flex items-center space-x-2">
+                                                <input 
+                                                  type="checkbox" 
+                                                  defaultChecked={apiKey.permissions.lecture}
+                                                  className="rounded border-gray-300"
+                                                />
+                                                <span className="text-sm text-gray-700">Lecture seule</span>
+                                              </div>
+                                              <div className="flex items-center space-x-2">
+                                                <input 
+                                                  type="checkbox" 
+                                                  defaultChecked={apiKey.permissions.soumission}
+                                                  className="rounded border-gray-300"
+                                                />
+                                                <span className="text-sm text-gray-700">Soumission</span>
+                                              </div>
+                                              <div className="flex items-center space-x-2">
+                                                <input 
+                                                  type="checkbox" 
+                                                  defaultChecked={apiKey.permissions.accesResultats}
+                                                  className="rounded border-gray-300"
+                                                />
+                                                <span className="text-sm text-gray-700">Accès aux résultats</span>
+                                              </div>
+                                            </div>
+                                            <div className="flex space-x-2">
+                                              <button
+                                                onClick={() => updatePermissions(api.id, apiKey.id, apiKey.permissions)}
+                                                className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                                              >
+                                                Sauvegarder
+                                              </button>
+                                              <button
+                                                onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: false})}
+                                                className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
+                                              >
+                                                Annuler
+                                              </button>
+                                            </div>
+                                          </div>
+                                        ) : (
+                                          <div className="grid grid-cols-3 gap-4">
+                                            <div className="flex items-center space-x-2">
+                                              <input 
+                                                type="checkbox" 
+                                                checked={apiKey.permissions.lecture}
+                                                readOnly
+                                                className="rounded border-gray-300"
+                                              />
+                                              <span className="text-sm text-gray-700">Lecture seule</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                              <input 
+                                                type="checkbox" 
+                                                checked={apiKey.permissions.soumission}
+                                                readOnly
+                                                className="rounded border-gray-300"
+                                              />
+                                              <span className="text-sm text-gray-700">Soumission</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                              <input 
+                                                type="checkbox" 
+                                                checked={apiKey.permissions.accesResultats}
+                                                readOnly
+                                                className="rounded border-gray-300"
+                                              />
+                                              <span className="text-sm text-gray-700">Accès aux résultats</span>
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+
+                                      {/* Usage Statistics */}
+                                      <div className="grid grid-cols-4 gap-4 text-sm mb-4">
+                                        <div className="flex items-center space-x-2">
+                                          <Activity className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                          <span className="text-gray-700 truncate">{apiKey.utilisation.requetes.toLocaleString()} requêtes</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                          <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                                          <span className="text-gray-700">{apiKey.utilisation.erreurs} erreurs</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                          <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                                          <span className="text-gray-700 truncate">Dernier: {formatDateTime(apiKey.utilisation.dernierAcces)}</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                          <Calendar className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                                          <span className="text-gray-700 truncate">Expire: {formatDate(apiKey.dateExpiration)}</span>
+                                        </div>
+                                      </div>
+
+                                      {/* Usage Log Button */}
+                                      <div className="flex items-center justify-between">
+                                        <button
+                                          onClick={() => setShowUsageLog(showUsageLog === apiKey.id ? null : apiKey.id)}
+                                          className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm"
+                                        >
+                                          <FileText className="w-4 h-4" />
+                                          <span>Journal d'utilisation ({apiKey.usageLog?.length || 0} entrées)</span>
+                                        </button>
+                                      </div>
+
+                                      {/* Usage Log Display */}
+                                      {showUsageLog === apiKey.id && apiKey.usageLog && (
+                                        <div className="mt-4 border-t pt-4">
+                                          <h6 className="font-medium text-gray-900 mb-3 flex items-center space-x-2">
+                                            <BarChart3 className="w-4 h-4" />
+                                            <span>Journal d'utilisation</span>
+                                          </h6>
+                                          <div className="overflow-x-auto">
+                                            <table className="w-full text-sm">
+                                              <thead className="bg-gray-50">
+                                                <tr>
+                                                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Date/Heure</th>
+                                                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Endpoint</th>
+                                                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Méthode</th>
+                                                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Statut</th>
+                                                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Temps</th>
+                                                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">IP</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody className="divide-y divide-gray-200">
+                                                {apiKey.usageLog.map((log, index) => (
+                                                  <tr key={index} className="hover:bg-gray-50">
+                                                    <td className="px-3 py-2 text-gray-700 text-xs">
+                                                      {formatDateTime(log.timestamp)}
+                                                    </td>
+                                                    <td className="px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-32">
+                                                      {log.endpoint}
+                                                    </td>
+                                                    <td className="px-3 py-2">
+                                                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
+                                                        {log.method}
+                                                      </span>
+                                                    </td>
+                                                    <td className="px-3 py-2">
+                                                      <span className={`font-medium ${getStatusColor(log.status)}`}>
+                                                        {log.status}
+                                                      </span>
+                                                    </td>
+                                                    <td className="px-3 py-2 text-gray-700 text-xs">
+                                                      {log.responseTime}ms
+                                                    </td>
+                                                    <td className="px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-24">
+                                                      {log.ipAddress}
+                                                    </td>
+                                                  </tr>
+                                                ))}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+
+                                  {api.clesApi.length === 0 && (
+                                    <div className="text-center py-8 text-gray-500">
+                                      <Key className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                                      <p className="text-base">Aucune clé API configurée pour cette API</p>
+                                      <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                        Créer la première clé API
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+
+                        {/* API Logs - Inline */}
+                        {showApiLogs === api.id && (
+                          <tr>
+                            <td colSpan={7} className="px-6 py-4 bg-gray-50">
+                              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                                  <Activity className="w-5 h-5" />
+                                  <span>Logs de l'API - {api.nom}</span>
+                                </h3>
+                                <div className="overflow-x-auto">
+                                  <table className="w-full text-sm">
+                                    <thead className="bg-gray-50">
+                                      <tr>
+                                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Date/Heure</th>
+                                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Endpoint</th>
+                                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Méthode</th>
+                                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Statut</th>
+                                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Temps</th>
+                                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">IP</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                      {api.clesApi.flatMap(key => key.usageLog || []).slice(0, 20).map((log, index) => (
+                                        <tr key={index} className="hover:bg-gray-50">
+                                          <td className="px-3 py-2 text-gray-700 text-xs">
+                                            {formatDateTime(log.timestamp)}
+                                          </td>
+                                          <td className="px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-32">
+                                            {log.endpoint}
+                                          </td>
+                                          <td className="px-3 py-2">
+                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
+                                              {log.method}
+                                            </span>
+                                          </td>
+                                          <td className="px-3 py-2">
+                                            <span className={`font-medium ${getStatusColor(log.status)}`}>
+                                              {log.status}
+                                            </span>
+                                          </td>
+                                          <td className="px-3 py-2 text-gray-700 text-xs">
+                                            {log.responseTime}ms
+                                          </td>
+                                          <td className="px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-24">
+                                            {log.ipAddress}
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-
-          {/* API Keys Management Section */}
-          {selectedApi && showApiKeys && (
-            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
-                <div>
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                    Clés API - {apis.find(api => api.id === selectedApi)?.nom}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-gray-600">Gérez les clés d'accès et les permissions</p>
-                </div>
-                <button className="flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                  <Plus className="w-4 h-4" />
-                  <span>Nouvelle clé API</span>
-                </button>
-              </div>
-
-              <div className="space-y-3 sm:space-y-4">
-                {apis.find(api => api.id === selectedApi)?.clesApi.map((apiKey) => (
-                  <div key={apiKey.id} className="border border-gray-200 rounded-lg p-3 sm:p-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-3 sm:mb-4">
-                      <div className="flex items-center space-x-3">
-                        <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                        <div className="min-w-0 flex-1">
-                          <h4 className="font-medium text-gray-900 text-sm sm:text-base truncate">{apiKey.nom}</h4>
-                          <p className="text-xs text-gray-500">Créée le {formatDate(apiKey.dateCreation)}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(apiKey.statut)}`}>
-                          {apiKey.statut}
-                        </span>
-                        <button 
-                          onClick={() => setShowKey({...showKey, [apiKey.id]: !showKey[apiKey.id]})}
-                          className="text-gray-400 hover:text-gray-600"
-                        >
-                          {showKey[apiKey.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* API Key Display */}
-                    <div className="bg-gray-50 rounded-lg p-3 mb-3 sm:mb-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-                        <code className="text-xs sm:text-sm font-mono text-gray-700 break-all">
-                          {showKey[apiKey.id] ? apiKey.cle : '••••••••••••••••••••••••••••••••'}
-                        </code>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => copyToClipboard(apiKey.cle, apiKey.id)}
-                            className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
-                            title="Copier la clé"
-                          >
-                            {copiedKey === apiKey.id ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                          </button>
-                          <button
-                            onClick={() => regenerateKey(selectedApi, apiKey.id)}
-                            className="text-orange-600 hover:text-orange-800 p-1 rounded hover:bg-orange-50"
-                            title="Régénérer la clé"
-                          >
-                            <RefreshCw className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Permissions Section */}
-                    <div className="mb-3 sm:mb-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3">
-                        <h5 className="font-medium text-gray-900 flex items-center space-x-2 text-sm sm:text-base">
-                          <Settings className="w-4 h-4" />
-                          <span>Permissions</span>
-                        </h5>
-                        <button
-                          onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: !editingPermissions[apiKey.id]})}
-                          className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm flex items-center space-x-1 self-start sm:self-auto"
-                        >
-                          <Edit className="w-3 h-3" />
-                          <span>{editingPermissions[apiKey.id] ? 'Annuler' : 'Modifier'}</span>
-                        </button>
-                      </div>
-                      
-                      {editingPermissions[apiKey.id] ? (
-                        <div className="space-y-3">
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                            <div className="flex items-center space-x-2">
-                              <input 
-                                type="checkbox" 
-                                defaultChecked={apiKey.permissions.lecture}
-                                className="rounded border-gray-300"
-                              />
-                              <span className="text-xs sm:text-sm text-gray-700">Lecture seule</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input 
-                                type="checkbox" 
-                                defaultChecked={apiKey.permissions.soumission}
-                                className="rounded border-gray-300"
-                              />
-                              <span className="text-xs sm:text-sm text-gray-700">Soumission</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input 
-                                type="checkbox" 
-                                defaultChecked={apiKey.permissions.accesResultats}
-                                className="rounded border-gray-300"
-                              />
-                              <span className="text-xs sm:text-sm text-gray-700">Accès aux résultats</span>
-                            </div>
-                          </div>
-                          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                            <button
-                              onClick={() => updatePermissions(selectedApi, apiKey.id, apiKey.permissions)}
-                              className="px-3 py-1 bg-green-600 text-white text-xs sm:text-sm rounded hover:bg-green-700"
-                            >
-                              Sauvegarder
-                            </button>
-                            <button
-                              onClick={() => setEditingPermissions({...editingPermissions, [apiKey.id]: false})}
-                              className="px-3 py-1 bg-gray-600 text-white text-xs sm:text-sm rounded hover:bg-gray-700"
-                            >
-                              Annuler
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="checkbox" 
-                              checked={apiKey.permissions.lecture}
-                              readOnly
-                              className="rounded border-gray-300"
-                            />
-                            <span className="text-xs sm:text-sm text-gray-700">Lecture seule</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="checkbox" 
-                              checked={apiKey.permissions.soumission}
-                              readOnly
-                              className="rounded border-gray-300"
-                            />
-                            <span className="text-xs sm:text-sm text-gray-700">Soumission</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="checkbox" 
-                              checked={apiKey.permissions.accesResultats}
-                              readOnly
-                              className="rounded border-gray-300"
-                            />
-                            <span className="text-xs sm:text-sm text-gray-700">Accès aux résultats</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Usage Statistics */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm mb-3 sm:mb-4">
-                      <div className="flex items-center space-x-2">
-                        <Activity className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                        <span className="text-gray-700 truncate">{apiKey.utilisation.requetes.toLocaleString()} requêtes</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                        <span className="text-gray-700">{apiKey.utilisation.erreurs} erreurs</span>
-                      </div>
-                      <div className="flex items-center space-x-2 col-span-2 sm:col-span-1">
-                        <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                        <span className="text-gray-700 truncate">Dernier: {formatDateTime(apiKey.utilisation.dernierAcces)}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 col-span-2 sm:col-span-1">
-                        <Calendar className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                        <span className="text-gray-700 truncate">Expire: {formatDate(apiKey.dateExpiration)}</span>
-                      </div>
-                    </div>
-
-                    {/* Usage Log Button */}
-                    <div className="flex items-center justify-between">
-                      <button
-                        onClick={() => setShowUsageLog(showUsageLog === apiKey.id ? null : apiKey.id)}
-                        className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-xs sm:text-sm"
-                      >
-                        <FileText className="w-4 h-4" />
-                        <span>Journal d'utilisation ({apiKey.usageLog?.length || 0} entrées)</span>
-                      </button>
-                    </div>
-
-                    {/* Usage Log Display */}
-                    {showUsageLog === apiKey.id && apiKey.usageLog && (
-                      <div className="mt-3 sm:mt-4 border-t pt-3 sm:pt-4">
-                        <h6 className="font-medium text-gray-900 mb-3 flex items-center space-x-2 text-sm sm:text-base">
-                          <BarChart3 className="w-4 h-4" />
-                          <span>Journal d'utilisation</span>
-                        </h6>
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-xs sm:text-sm">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Date/Heure</th>
-                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Endpoint</th>
-                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Méthode</th>
-                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Statut</th>
-                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">Temps</th>
-                                <th className="px-2 sm:px-3 py-2 text-left text-xs font-medium text-gray-500">IP</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                              {apiKey.usageLog.map((log, index) => (
-                                <tr key={index} className="hover:bg-gray-50">
-                                  <td className="px-2 sm:px-3 py-2 text-gray-700 text-xs">
-                                    {formatDateTime(log.timestamp)}
-                                  </td>
-                                  <td className="px-2 sm:px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-20 sm:max-w-32">
-                                    {log.endpoint}
-                                  </td>
-                                  <td className="px-2 sm:px-3 py-2">
-                                    <span className={`inline-flex px-1 sm:px-2 py-1 text-xs font-semibold rounded-full ${getMethodColor(log.method)}`}>
-                                      {log.method}
-                                    </span>
-                                  </td>
-                                  <td className="px-2 sm:px-3 py-2">
-                                    <span className={`font-medium ${getStatusColor(log.status)}`}>
-                                      {log.status}
-                                    </span>
-                                  </td>
-                                  <td className="px-2 sm:px-3 py-2 text-gray-700 text-xs">
-                                    {log.responseTime}ms
-                                  </td>
-                                  <td className="px-2 sm:px-3 py-2 text-gray-700 font-mono text-xs truncate max-w-16 sm:max-w-24">
-                                    {log.ipAddress}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {apis.find(api => api.id === selectedApi)?.clesApi.length === 0 && (
-                  <div className="text-center py-6 sm:py-8 text-gray-500">
-                    <Key className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
-                    <p className="text-sm sm:text-base">Aucune clé API configurée pour cette API</p>
-                    <button className="mt-3 sm:mt-4 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                      Créer la première clé API
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       );
 }

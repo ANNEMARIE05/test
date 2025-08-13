@@ -17,7 +17,8 @@ import {
   Clock,
   BarChart3,
   FileText,
-  Settings
+  Settings,
+  X
 } from "lucide-react";
 import React from 'react'; // Added missing import for React
 
@@ -56,6 +57,7 @@ interface ApiKey {
 interface ApiEndpoint {
     id: string;
     nom: string;
+    nomClient: string; // Added client name
     url: string;
     statut: string;
     tempsReponse: string;
@@ -71,13 +73,17 @@ export default function Api() {
     const [showKey, setShowKey] = useState<{[key: string]: boolean}>({});
     const [showUsageLog, setShowUsageLog] = useState<string | null>(null);
     const [editingPermissions, setEditingPermissions] = useState<{[key: string]: boolean}>({});
-    const [selectedApiKey, setSelectedApiKey] = useState<string | null>(null);
     const [showApiLogs, setShowApiLogs] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(4);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [apiToDelete, setApiToDelete] = useState<ApiEndpoint | null>(null);
 
     const apis: ApiEndpoint[] = [
         {
           id: '1',
           nom: 'OCR Document API',
+          nomClient: 'Jean Dupont',
           url: '/api/ocr/document',
           statut: 'Actif',
           tempsReponse: '150ms',
@@ -164,6 +170,7 @@ export default function Api() {
         {
           id: '2',
           nom: 'User Management API',
+          nomClient: 'Marie Martin',
           url: '/api/users',
           statut: 'Actif',
           tempsReponse: '45ms',
@@ -212,15 +219,56 @@ export default function Api() {
         {
           id: '3',
           nom: 'Document Storage API',
+          nomClient: 'Pierre Durand',
           url: '/api/documents',
           statut: 'Maintenance',
           tempsReponse: '320ms',
           utilisation: 67,
-          clesApi: []
+          clesApi: [
+            {
+              id: 'key6',
+              nom: 'Clé Storage',
+              cle: 'sk_storage_abcdef1234567890',
+              permissions: {
+                lecture: true,
+                soumission: true,
+                accesResultats: true
+              },
+              dateCreation: '2024-01-08',
+              dateExpiration: '2024-12-31',
+              statut: 'active',
+              utilisation: {
+                requetes: 5670,
+                erreurs: 15,
+                dernierAcces: '2024-01-20T08:45:00Z'
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-20T08:45:00Z',
+                  endpoint: '/api/documents/upload',
+                  method: 'POST',
+                  status: 200,
+                  responseTime: 320,
+                  ipAddress: '192.168.1.105',
+                  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T08:40:00Z',
+                  endpoint: '/api/documents/list',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 145,
+                  ipAddress: '192.168.1.105',
+                  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+              ]
+            }
+          ]
         },
         {
           id: '4',
           nom: 'Email Service API',
+          nomClient: 'Sophie Bernard',
           url: '/api/email',
           statut: 'Actif',
           tempsReponse: '78ms',
@@ -303,6 +351,104 @@ export default function Api() {
               ]
             }
           ]
+        },
+        {
+          id: '5',
+          nom: 'Payment Gateway API',
+          nomClient: 'Lucas Petit',
+          url: '/api/payments',
+          statut: 'Actif',
+          tempsReponse: '95ms',
+          utilisation: 78,
+          clesApi: [
+            {
+              id: 'key7',
+              nom: 'Clé Payment Live',
+              cle: 'sk_payment_live_1234567890abcdef',
+              permissions: {
+                lecture: true,
+                soumission: true,
+                accesResultats: true
+              },
+              dateCreation: '2024-01-03',
+              dateExpiration: '2024-12-31',
+              statut: 'active',
+              utilisation: {
+                requetes: 12340,
+                erreurs: 45,
+                dernierAcces: '2024-01-20T12:15:00Z'
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-20T12:15:00Z',
+                  endpoint: '/api/payments/process',
+                  method: 'POST',
+                  status: 200,
+                  responseTime: 95,
+                  ipAddress: '192.168.1.106',
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T12:10:00Z',
+                  endpoint: '/api/payments/status',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 67,
+                  ipAddress: '192.168.1.106',
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: '6',
+          nom: 'Analytics Dashboard API',
+          nomClient: 'Emma Dubois',
+          url: '/api/analytics',
+          statut: 'Actif',
+          tempsReponse: '120ms',
+          utilisation: 65,
+          clesApi: [
+            {
+              id: 'key8',
+              nom: 'Clé Analytics',
+              cle: 'sk_analytics_abcdef1234567890',
+              permissions: {
+                lecture: true,
+                soumission: false,
+                accesResultats: true
+              },
+              dateCreation: '2024-01-06',
+              dateExpiration: '2024-12-31',
+              statut: 'active',
+              utilisation: {
+                requetes: 7890,
+                erreurs: 12,
+                dernierAcces: '2024-01-20T13:30:00Z'
+              },
+              usageLog: [
+                {
+                  timestamp: '2024-01-20T13:30:00Z',
+                  endpoint: '/api/analytics/metrics',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 120,
+                  ipAddress: '192.168.1.107',
+                  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+                },
+                {
+                  timestamp: '2024-01-20T13:25:00Z',
+                  endpoint: '/api/analytics/reports',
+                  method: 'GET',
+                  status: 200,
+                  responseTime: 89,
+                  ipAddress: '192.168.1.107',
+                  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36'
+                }
+              ]
+            }
+          ]
         }
       ];
 
@@ -310,6 +456,14 @@ export default function Api() {
         api.nom.toLowerCase().includes(searchApis.toLowerCase()) ||
         api.statut.toLowerCase().includes(searchApis.toLowerCase())
       );
+
+      // Pagination logic
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentApis = filteredApis.slice(indexOfFirstItem, indexOfLastItem);
+      const totalPages = Math.ceil(filteredApis.length / itemsPerPage);
+
+      const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
       const copyToClipboard = async (text: string, keyId: string) => {
         try {
@@ -330,6 +484,31 @@ export default function Api() {
         // Logique pour mettre à jour les permissions
         console.log(`Mise à jour des permissions pour la clé ${keyId} de l'API ${apiId}:`, permissions);
         setEditingPermissions({...editingPermissions, [keyId]: false});
+      };
+
+      const regenerateApi = (apiId: string) => {
+        // Logique pour régénérer une API
+        console.log(`Régénération de l'API ${apiId}`);
+      };
+
+      const handleDeleteApi = (api: ApiEndpoint) => {
+        setApiToDelete(api);
+        setShowDeleteModal(true);
+      };
+
+      const confirmDeleteApi = () => {
+        if (apiToDelete) {
+          // Logique pour supprimer l'API
+          console.log(`Suppression de l'API ${apiToDelete.id} - ${apiToDelete.nom}`);
+          // Ici vous pouvez ajouter la logique de suppression réelle
+          setShowDeleteModal(false);
+          setApiToDelete(null);
+        }
+      };
+
+      const cancelDeleteApi = () => {
+        setShowDeleteModal(false);
+        setApiToDelete(null);
       };
 
       const getMethodColor = (method: string) => {
@@ -366,6 +545,18 @@ export default function Api() {
         return new Date(dateString).toLocaleString('fr-FR');
       };
 
+      const handleApiKeyToggle = (apiId: string) => {
+        if (selectedApi === apiId) {
+          // If clicking on the same API, close it
+          setSelectedApi(null);
+          setShowApiKeys(false);
+        } else {
+          // If clicking on a different API, close the current one and open the new one
+          setSelectedApi(apiId);
+          setShowApiKeys(true);
+        }
+      };
+
       return (
         <div className="space-y-4 sm:space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
@@ -373,10 +564,6 @@ export default function Api() {
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Gestion d'API</h2>
               <p className="text-sm sm:text-base text-gray-600">Configurez et surveillez les APIs et leurs clés</p>
             </div>
-            <button className="flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base">
-              <Plus className="w-4 h-4" />
-              <span>Ajouter une API</span>
-            </button>
           </div>
 
           {/* Search Bar */}
@@ -393,13 +580,16 @@ export default function Api() {
 
           {/* APIs Table - Mobile Cards */}
           <div className="block sm:hidden space-y-1">
-            {filteredApis.map((api) => (
+            {currentApis.map((api) => (
               <div key={api.id} className="space-y-1">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2">
                   <div className="flex items-start justify-between mb-1">
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-medium text-gray-900 truncate">{api.nom}</h3>
-                      <p className="text-xs text-gray-500 font-mono truncate">{api.url}</p>
+                      <p className="text-xs text-gray-500 truncate">{api.nomClient}</p>
+                      <p className="text-xs text-gray-500 font-mono truncate">
+                        {api.clesApi.length > 0 ? api.clesApi[0].cle.substring(0, 20) + '...' : 'Aucune clé'}
+                      </p>
                     </div>
                     <span className={`inline-flex px-1.5 py-0.5 text-xs font-semibold rounded-full ml-1 flex-shrink-0 ${
                       api.statut === 'Actif' ? 'bg-green-100 text-green-800' :
@@ -425,10 +615,7 @@ export default function Api() {
                     <div className="flex items-center space-x-1">
                       <span className="text-xs text-gray-500">{api.clesApi.length} clés</span>
                       <button 
-                        onClick={() => {
-                          setSelectedApi(selectedApi === api.id ? null : api.id);
-                          setShowApiKeys(!showApiKeys);
-                        }}
+                        onClick={() => handleApiKeyToggle(api.id)}
                         className="text-blue-600 hover:text-blue-900 p-0.5 rounded hover:bg-blue-50"
                         title="Gérer les clés API"
                       >
@@ -437,13 +624,17 @@ export default function Api() {
                     </div>
                     <div className="flex items-center space-x-1">
                       <button 
-                        onClick={() => setShowApiLogs(showApiLogs === api.id ? null : api.id)}
-                        className="text-blue-600 hover:text-blue-900 p-0.5 rounded hover:bg-blue-50" 
-                        title="Voir les logs"
+                        onClick={() => handleApiKeyToggle(api.id)}
+                        className="text-green-600 hover:text-green-900 p-0.5 rounded hover:bg-green-50"
+                        title="Voir les informations"
                       >
-                        <Activity className="w-3 h-3" />
+                        <Eye className="w-3 h-3" />
                       </button>
-                      <button className="text-red-600 hover:text-red-900 p-0.5 rounded hover:bg-red-50" title="Supprimer">
+                      <button 
+                        onClick={() => handleDeleteApi(api)}
+                        className="text-red-600 hover:text-red-900 p-0.5 rounded hover:bg-red-50" 
+                        title="Supprimer"
+                      >
                         <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
@@ -455,9 +646,15 @@ export default function Api() {
                   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 ml-1">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-medium text-gray-900">Clés API</h4>
-                      <button className="flex items-center space-x-1 px-1.5 py-0.5 bg-green-600 text-white rounded text-xs hover:bg-green-700">
-                        <Plus className="w-3 h-3" />
-                        <span>Nouvelle clé</span>
+                      <button 
+                        onClick={() => {
+                          setSelectedApi(null);
+                          setShowApiKeys(false);
+                        }}
+                        className="text-gray-400 hover:text-gray-600 p-0.5 rounded hover:bg-gray-50"
+                        title="Fermer"
+                      >
+                        <X className="w-3 h-3" />
                       </button>
                     </div>
                     
@@ -686,10 +883,10 @@ export default function Api() {
                   <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Nom
+                        Nom du client
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        URL
+                        Clé API
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Statut
@@ -709,14 +906,16 @@ export default function Api() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredApis.map((api) => (
+                    {currentApis.map((api) => (
                       <React.Fragment key={api.id}>
                         <tr className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{api.nom}</div>
+                            <div className="text-sm font-medium text-gray-900">{api.nomClient}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 font-mono">{api.url}</div>
+                            <div className="text-sm text-gray-900 font-mono">
+                              {api.clesApi.length > 0 ? api.clesApi[0].cle.substring(0, 20) + '...' : 'Aucune clé'}
+                            </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -759,13 +958,17 @@ export default function Api() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div className="flex items-center space-x-2">
                               <button 
-                                onClick={() => setShowApiLogs(showApiLogs === api.id ? null : api.id)}
-                                className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50" 
-                                title="Voir les logs"
+                                onClick={() => handleApiKeyToggle(api.id)}
+                                className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                                title="Voir les informations"
                               >
-                                <Activity className="w-4 h-4" />
+                                <Eye className="w-4 h-4" />
                               </button>
-                              <button className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Supprimer">
+                              <button 
+                                onClick={() => handleDeleteApi(api)}
+                                className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" 
+                                title="Supprimer"
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
@@ -780,13 +983,19 @@ export default function Api() {
                                 <div className="flex items-center justify-between mb-4">
                                   <div>
                                     <h3 className="text-lg font-semibold text-gray-900">
-                                      Clés API - {api.nom}
+                                      Clés API - {api.nomClient}
                                     </h3>
                                     <p className="text-sm text-gray-600">Gérez les clés d'accès et les permissions</p>
                                   </div>
-                                  <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                                    <Plus className="w-4 h-4" />
-                                    <span>Nouvelle clé API</span>
+                                  <button 
+                                    onClick={() => {
+                                      setSelectedApi(null);
+                                      setShowApiKeys(false);
+                                    }}
+                                    className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-50"
+                                    title="Fermer"
+                                  >
+                                    <X className="w-4 h-4" />
                                   </button>
                                 </div>
 
@@ -1036,10 +1245,19 @@ export default function Api() {
                           <tr>
                             <td colSpan={7} className="px-6 py-4 bg-gray-50">
                               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center space-x-2">
-                                  <Activity className="w-5 h-5" />
-                                  <span>Logs de l'API - {api.nom}</span>
-                                </h3>
+                                <div className="flex items-center justify-between mb-4">
+                                  <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+                                    <Activity className="w-5 h-5" />
+                                    <span>Logs de l'API - {api.nom}</span>
+                                  </h3>
+                                  <button 
+                                    onClick={() => setShowApiLogs(null)}
+                                    className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-50"
+                                    title="Fermer"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </div>
                                 <div className="overflow-x-auto">
                                   <table className="w-full text-sm">
                                     <thead className="bg-gray-50">
@@ -1093,6 +1311,116 @@ export default function Api() {
               </div>
             </div>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+              <div className="flex-1 flex justify-between sm:hidden">
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Précédent
+                </button>
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Suivant
+                </button>
+              </div>
+              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-gray-700">
+                    Affichage de <span className="font-medium">{indexOfFirstItem + 1}</span> à{' '}
+                    <span className="font-medium">
+                      {Math.min(indexOfLastItem, filteredApis.length)}
+                    </span>{' '}
+                    sur <span className="font-medium">{filteredApis.length}</span> résultats
+                  </p>
+                </div>
+                <div>
+                  <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    <button
+                      onClick={() => paginate(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span className="sr-only">Précédent</span>
+                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                    
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+                      <button
+                        key={number}
+                        onClick={() => paginate(number)}
+                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                          currentPage === number
+                            ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        {number}
+                      </button>
+                    ))}
+                    
+                    <button
+                      onClick={() => paginate(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span className="sr-only">Suivant</span>
+                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteModal && apiToDelete && (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+              <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div className="mt-3 text-center">
+                  <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                    <AlertTriangle className="h-6 w-6 text-red-600" />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mt-4">
+                    Confirmer la suppression
+                  </h3>
+                  <div className="mt-2 px-7 py-3">
+                    <p className="text-sm text-gray-500">
+                      Êtes-vous sûr de vouloir supprimer l'API <strong>{apiToDelete.nom}</strong> ?
+                    </p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Cette action est irréversible et supprimera également toutes les clés API associées.
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center space-x-3 mt-4">
+                    <button
+                      onClick={cancelDeleteApi}
+                      className="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={confirmDeleteApi}
+                      className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
 }

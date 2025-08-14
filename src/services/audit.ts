@@ -91,3 +91,13 @@ export function subscribe(listener: (entries: AuditEntry[]) => void): () => void
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
+
+// Alias français
+export type GraviteAudit = AuditSeverity;
+export type EntreeAudit = AuditEntry;
+
+export const journaliserAction = logAction;
+export const lireActionsRecentes = getRecentActions;
+export const lireToutesActions = getAllActions;
+export const viderJournalAudit = clearAuditLog;
+export const abonner = subscribe;

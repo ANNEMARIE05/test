@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { logAction } from '../../../services/audit';
+import { journaliserAction } from '../../../services/audit';
 
 interface Utilisateur {
     id: string;
@@ -25,7 +25,7 @@ export default function Email() {
 
     const renvoyerAcces = () => {
         setAfficherMessage(true);
-        logAction({ action: 'renvoi_email', entityType: 'email' });
+        journaliserAction({ action: 'renvoi_email', entityType: 'email' });
     };
 
     return (
@@ -79,10 +79,10 @@ export default function Email() {
                 />
               </div>
               <div className="flex flex-col sm:flex-row gap-2">
-                <button className="flex-1 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm" onClick={() => logAction({ action: 'envoi_email_auto', entityType: 'email' })}>
+                <button className="flex-1 px-3 py-1.5 bg_green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm" onClick={() => journaliserAction({ action: 'envoi_email_auto', entityType: 'email' })}>
                   Générer et envoyer l'email
                 </button>
-                <button className="flex-1 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs sm:text-sm" onClick={() => logAction({ action: 'previsualisation_email', entityType: 'email' })}>
+                <button className="flex-1 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs sm:text-sm" onClick={() => journaliserAction({ action: 'previsualisation_email', entityType: 'email' })}>
                   Prévisualiser l'email
                 </button>
               </div>

@@ -10,7 +10,7 @@ import Support from './pagesAdmin/Support';
 import Parametres from './pagesAdmin/Parametres';
 import Historique from './pagesAdmin/Historique';
 import Dashboard from './pagesAdmin/Dashboard';
-import { logAction } from '../../services/audit';
+import { journaliserAction } from '../../services/audit';
 
 
 interface AdminDashboardProps {
@@ -21,18 +21,18 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [sectionActive, setSectionActive] = useState('tableau');
 
   useEffect(() => {
-    const handler = (e: any) => {
+    const gestionnaire = (e: any) => {
       const section = e?.detail?.section;
       if (typeof section === 'string') {
         setSectionActive(section);
       }
     };
-    window.addEventListener('admin:navigate', handler);
-    return () => window.removeEventListener('admin:navigate', handler);
+    window.addEventListener('admin:navigate', gestionnaire);
+    return () => window.removeEventListener('admin:navigate', gestionnaire);
   }, []);
 
   useEffect(() => {
-    logAction({ action: 'navigation', entityType: 'section', entityId: sectionActive });
+    journaliserAction({ action: 'navigation', entityType: 'section', entityId: sectionActive });
   }, [sectionActive]);
 
   const afficherContenu = () => {

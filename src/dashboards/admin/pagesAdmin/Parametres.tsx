@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { logAction } from '../../../services/audit';
+import { journaliserAction } from '../../../services/audit';
 
 interface Parametres {
   auth2F: boolean;
@@ -31,7 +31,7 @@ export default function Parametres() {
       ...prev,
       [cle]: valeur
     }));
-    logAction({ action: 'changement_parametre', entityType: 'parametres', metadata: { cle, valeur } });
+    journaliserAction({ action: 'changement_parametre', entityType: 'parametres', metadata: { cle, valeur } });
   };
 
   const changerNotif = (cle: string, valeur: boolean) => {
@@ -42,7 +42,7 @@ export default function Parametres() {
         [cle]: valeur
       }
     }));
-    logAction({ action: 'changement_notification', entityType: 'parametres', metadata: { cle, valeur } });
+    journaliserAction({ action: 'changement_notification', entityType: 'parametres', metadata: { cle, valeur } });
   };
 
   const sauvegarder = async () => {
@@ -52,7 +52,7 @@ export default function Parametres() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // Simuler une notification toast
       console.log('Paramètres sauvegardés avec succès');
-      logAction({ action: 'sauvegarde_parametres', entityType: 'parametres' });
+      journaliserAction({ action: 'sauvegarde_parametres', entityType: 'parametres' });
     } catch (error) {
       // Simuler une notification toast
       console.error('Erreur lors de la sauvegarde des paramètres');

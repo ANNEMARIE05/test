@@ -9,7 +9,7 @@ import {
   Bell,
   UserCheck,
 } from "lucide-react";
-import { logAction } from '../../../services/audit';
+import { journaliserAction } from '../../../services/audit';
 
 interface Client {
     id: string;
@@ -144,7 +144,7 @@ export default function Documents() {
                 };
 
                 setHistoriqueAllocations(prev => [entreeHistorique, ...prev]);
-                logAction({ action: entreeHistorique.action === 'assignation' ? 'assignation_documents' : 'modification_documents', entityType: 'client', entityId: clientSelectionne.id, metadata: { ancienne: ancienClient.limiteMensuelle, nouvelle: formulaireAssignation.limiteMensuelle } });
+                journaliserAction({ action: entreeHistorique.action === 'assignation' ? 'assignation_documents' : 'modification_documents', entityType: 'client', entityId: clientSelectionne.id, metadata: { ancienne: ancienClient.limiteMensuelle, nouvelle: formulaireAssignation.limiteMensuelle } });
             }
 
             setFormulaireAssignation({ clientSelectionne: '', limiteMensuelle: 0 });
@@ -156,7 +156,7 @@ export default function Documents() {
         if (clientPourAlerte) {
             // Ici vous pouvez implémenter la logique d'envoi d'alerte
             console.log(`Alerte envoyée à ${clientPourAlerte.nom} (${clientPourAlerte.email})`);
-            logAction({ action: 'envoi_alerte', entityType: 'client', entityId: clientPourAlerte.id });
+            journaliserAction({ action: 'envoi_alerte', entityType: 'client', entityId: clientPourAlerte.id });
             setClientPourAlerte(null);
             setAfficherModalAlerte(false);
         }
@@ -199,7 +199,7 @@ export default function Documents() {
                     };
 
                     setHistoriqueAllocations(prev => [entreeHistorique, ...prev]);
-                    logAction({ action: 'modification_documents', entityType: 'client', entityId: clientEnModification.id, metadata: { ancienne: ancienClient.limiteMensuelle, nouvelle: clientEnModification.limiteMensuelle } });
+                    journaliserAction({ action: 'modification_documents', entityType: 'client', entityId: clientEnModification.id, metadata: { ancienne: ancienClient.limiteMensuelle, nouvelle: clientEnModification.limiteMensuelle } });
                 }
             }
 
@@ -226,7 +226,7 @@ export default function Documents() {
             setHistoriqueAllocations(prev => [entreeHistorique, ...prev]);
 
             setClients(prev => prev.filter(client => client.id !== clientASupprimer.id));
-            logAction({ action: 'suppression_client', entityType: 'client', entityId: clientASupprimer.id });
+            journaliserAction({ action: 'suppression_client', entityType: 'client', entityId: clientASupprimer.id });
             setClientASupprimer(null);
             setAfficherModalSuppression(false);
         }

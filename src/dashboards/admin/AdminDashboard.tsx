@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import Layout from '../../components/Layout';
 import Utilisateurs from './pagesAdmin/Utilisateurs';
 import Documents from './pagesAdmin/Documents';
@@ -9,6 +10,7 @@ import Support from './pagesAdmin/Support';
 import Parametres from './pagesAdmin/Parametres';
 import Historique from './pagesAdmin/Historique';
 import Dashboard from './pagesAdmin/Dashboard';
+import { logAction } from '../../services/audit';
 
 
 interface AdminDashboardProps {
@@ -17,6 +19,21 @@ interface AdminDashboardProps {
 
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [sectionActive, setSectionActive] = useState('tableau');
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      const section = e?.detail?.section;
+      if (typeof section === 'string') {
+        setSectionActive(section);
+      }
+    };
+    window.addEventListener('admin:navigate', handler);
+    return () => window.removeEventListener('admin:navigate', handler);
+  }, []);
+
+  useEffect(() => {
+    logAction({ action: 'navigation', entityType: 'section', entityId: sectionActive });
+  }, [sectionActive]);
 
   const afficherContenu = () => {
     switch (sectionActive) {

@@ -4,9 +4,11 @@ import PageOTP from "./auth/PageOTP";
 import Reinitialisation from "./auth/Reinitialisation";
 import AdminDashboard from "./dashboards/admin/AdminDashboard";
 import UserDashboard from "./dashboards/user/Dashboard";
+import { logAction } from "./services/audit";
 
 export default function App() {
   const handleLogout = () => {
+    logAction({ action: 'logout', entityType: 'session' });
     window.location.href = "/login";
     console.log("Déconnexion");
   };

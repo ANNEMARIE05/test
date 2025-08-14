@@ -20,6 +20,7 @@ import {
   X
 } from "lucide-react";
 import React from 'react'; // Added missing import for React
+import { logAction } from '../../../services/audit';
 
 interface ApiPermission {
   lecture: boolean;
@@ -469,6 +470,7 @@ export default function Api() {
           await navigator.clipboard.writeText(text);
           setCopiedKey(keyId);
           setTimeout(() => setCopiedKey(null), 2000);
+          logAction({ action: 'copie_cle_api', entityType: 'api_key', entityId: keyId });
         } catch (err) {
           console.error('Erreur lors de la copie:', err);
         }
@@ -477,12 +479,14 @@ export default function Api() {
       const regenerateKey = (apiId: string, keyId: string) => {
         // Logique pour régénérer une clé API
         console.log(`Régénération de la clé ${keyId} pour l'API ${apiId}`);
+        logAction({ action: 'regeneration_cle_api', entityType: 'api', entityId: apiId, metadata: { keyId } });
       };
 
       const updatePermissions = (apiId: string, keyId: string, permissions: ApiPermission) => {
         // Logique pour mettre à jour les permissions
         console.log(`Mise à jour des permissions pour la clé ${keyId} de l'API ${apiId}:`, permissions);
         setEditingPermissions({...editingPermissions, [keyId]: false});
+        logAction({ action: 'maj_permissions_api', entityType: 'api', entityId: apiId, metadata: { keyId, permissions } });
       };
 
       const handleDeleteApi = (api: ApiEndpoint) => {
@@ -497,6 +501,7 @@ export default function Api() {
           // Ici vous pouvez ajouter la logique de suppression réelle
           setShowDeleteModal(false);
           setApiToDelete(null);
+          logAction({ action: 'suppression_api', entityType: 'api', entityId: apiToDelete.id, metadata: { nom: apiToDelete.nom } });
         }
       };
 

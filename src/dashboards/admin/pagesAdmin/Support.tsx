@@ -9,6 +9,7 @@ import {
     Search as SearchIcon,
     Plus
 } from 'lucide-react';
+import { journaliserAction } from '../../../services/audit';
 
 interface Message {
     id: string;
@@ -154,6 +155,7 @@ export default function Support() {
             setMessageSelectionne(messageMisAJour);
             setContenuReponse('');
             setDialogueReponseOuvert(false);
+            journaliserAction({ action: 'reponse_support', entityType: 'support', entityId: messageMisAJour.id });
         }
     };
 
@@ -176,6 +178,7 @@ export default function Support() {
             setMessages([message, ...messages]);
             setNouveauMessage({ sujet: '', contenu: '', destinataire: '' });
             setDialogueNouveauOuvert(false);
+            journaliserAction({ action: 'nouveau_message_support', entityType: 'support', entityId: message.id });
         }
     };
 

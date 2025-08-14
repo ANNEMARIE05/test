@@ -15,6 +15,7 @@ import {
   Copy,
   RefreshCw,
 } from "lucide-react";
+import { journaliserAction } from '../../../services/audit';
 
 interface User {
     id: string;
@@ -187,6 +188,7 @@ export default function Utilisateurs() {
             user.id === editingUser.id ? editingUser : user
           ));
           setShowEditModal(false);
+          journaliserAction({ action: 'modification_utilisateur', entityType: 'utilisateur', entityId: editingUser.id, metadata: { email: editingUser.email, role: editingUser.role } });
           setEditingUser(null);
         }
       };
@@ -199,6 +201,7 @@ export default function Utilisateurs() {
       const confirmDeleteUser = () => {
         if (selectedUser) {
           setUsers(users.filter(user => user.id !== selectedUser.id));
+          journaliserAction({ action: 'suppression_utilisateur', entityType: 'utilisateur', entityId: selectedUser.id, metadata: { email: selectedUser.email } });
           setShowDeleteModal(false);
           setSelectedUser(null);
         }
@@ -251,6 +254,7 @@ export default function Utilisateurs() {
               ? { ...user, invitationSent: true, invitationDate: new Date() }
               : user
           ));
+          journaliserAction({ action: 'envoi_invitation', entityType: 'utilisateur', metadata: { email } });
           
           setShowInvitationModal(false);
           setInvitationEmail('');
@@ -279,6 +283,7 @@ export default function Utilisateurs() {
         };
         
         setUsers([...users, userToCreate]);
+        journaliserAction({ action: 'creation_utilisateur', entityType: 'utilisateur', entityId: userToCreate.id, metadata: { email: userToCreate.email, role: userToCreate.role } });
         setInvitationEmail(newUser.email);
         setInvitationPassword(tempPassword);
         setShowCreateModal(false);
@@ -329,6 +334,7 @@ export default function Utilisateurs() {
           
           // Afficher la nouvelle clé API
           setApiKeyVisibility(prev => ({...prev, [userId]: true}));
+          journaliserAction({ action: 'generation_cle_api', entityType: 'utilisateur', entityId: userId });
           
           alert('Nouvelle clé API générée avec succès !');
           
@@ -343,6 +349,7 @@ export default function Utilisateurs() {
       // Fonction pour copier la clé API dans le presse-papiers
       const copyApiKeyToClipboard = (apiKey: string) => {
         navigator.clipboard.writeText(apiKey);
+        journaliserAction({ action: 'copie_cle_api', entityType: 'utilisateur' });
         alert('Clé API copiée dans le presse-papiers !');
       };
 

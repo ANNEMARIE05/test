@@ -4,7 +4,6 @@ import {
   Edit,
   Trash2,
   Search,
-  Plus,
   Copy,
   RefreshCw,
   Eye,
@@ -484,11 +483,6 @@ export default function Api() {
         // Logique pour mettre à jour les permissions
         console.log(`Mise à jour des permissions pour la clé ${keyId} de l'API ${apiId}:`, permissions);
         setEditingPermissions({...editingPermissions, [keyId]: false});
-      };
-
-      const regenerateApi = (apiId: string) => {
-        // Logique pour régénérer une API
-        console.log(`Régénération de l'API ${apiId}`);
       };
 
       const handleDeleteApi = (api: ApiEndpoint) => {

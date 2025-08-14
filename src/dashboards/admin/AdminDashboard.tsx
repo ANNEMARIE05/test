@@ -9,6 +9,7 @@ import Support from './pagesAdmin/Support';
 import Parametres from './pagesAdmin/Parametres';
 import Historique from './pagesAdmin/Historique';
 import Dashboard from './pagesAdmin/Dashboard';
+import { AdminActivityProvider } from './AdminActivityContext';
 
 
 interface AdminDashboardProps {
@@ -22,7 +23,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     switch (sectionActive) {
       case 'tableau':
         return (
-          <Dashboard />
+          <Dashboard onNavigate={setSectionActive} />
         );
 
       case 'utilisateurs':
@@ -85,15 +86,17 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   };
 
   return (
-    <Layout
-      activeSection={sectionActive}
-      onSectionChange={setSectionActive}
-      onLogout={onLogout}
-      title="OCR"
-      headerTitle={obtenirTitreEnTete()}
-      user={{ name: "Administrateur" }}
-    >
-      {afficherContenu()}
-    </Layout>
+    <AdminActivityProvider>
+      <Layout
+        activeSection={sectionActive}
+        onSectionChange={setSectionActive}
+        onLogout={onLogout}
+        title="OCR"
+        headerTitle={obtenirTitreEnTete()}
+        user={{ name: "Administrateur" }}
+      >
+        {afficherContenu()}
+      </Layout>
+    </AdminActivityProvider>
   );
 }

@@ -9,6 +9,7 @@ import {
   Bell,
   UserCheck,
 } from "lucide-react";
+import { useAdminActivity } from '../AdminActivityContext';
 
 interface Client {
     id: string;
@@ -46,6 +47,7 @@ export default function Documents() {
         clientSelectionne: '',
         limiteMensuelle: 0
     });
+    const { addActivity } = useAdminActivity();
 
     const [clients, setClients] = useState<Client[]>([
         {
@@ -143,6 +145,14 @@ export default function Documents() {
                 };
 
                 setHistoriqueAllocations(prev => [entreeHistorique, ...prev]);
+
+                // Log global activity
+                addActivity({
+                  type: ancienClient.limiteMensuelle === 0 ? 'documents_assign' : 'documents_modify',
+                  title: ancienClient.limiteMensuelle === 0 ? 'Assignation de documents' : 'Modification d\'allocation',
+                  description: `${clientSelectionne.nom}: ${ancienClient.limiteMensuelle} → ${formulaireAssignation.limiteMensuelle}`,
+                  metadata: { clientId: clientSelectionne.id }
+                });
             }
 
             setFormulaireAssignation({ clientSelectionne: '', limiteMensuelle: 0 });
@@ -154,6 +164,13 @@ export default function Documents() {
         if (clientPourAlerte) {
             // Ici vous pouvez implémenter la logique d'envoi d'alerte
             console.log(`Alerte envoyée à ${clientPourAlerte.nom} (${clientPourAlerte.email})`);
+            // Log global activity
+            addActivity({
+              type: 'alert_send',
+              title: 'Alerte envoyée',
+              description: `Client: ${clientPourAlerte.nom}`,
+              metadata: { clientId: clientPourAlerte.id }
+            });
             setClientPourAlerte(null);
             setAfficherModalAlerte(false);
         }
@@ -196,6 +213,14 @@ export default function Documents() {
                     };
 
                     setHistoriqueAllocations(prev => [entreeHistorique, ...prev]);
+
+                    // Log global activity
+                    addActivity({
+                      type: 'documents_modify',
+                      title: 'Modification d\'allocation',
+                      description: `${clientEnModification.nom}: ${ancienClient.limiteMensuelle} → ${clientEnModification.limiteMensuelle}`,
+                      metadata: { clientId: clientEnModification.id }
+                    });
                 }
             }
 
@@ -220,6 +245,14 @@ export default function Documents() {
             };
 
             setHistoriqueAllocations(prev => [entreeHistorique, ...prev]);
+
+            // Log global activity
+            addActivity({
+              type: 'documents_delete',
+              title: 'Client supprimé',
+              description: `${clientASupprimer.nom} (allocation ${clientASupprimer.limiteMensuelle})`,
+              metadata: { clientId: clientASupprimer.id }
+            });
 
             setClients(prev => prev.filter(client => client.id !== clientASupprimer.id));
             setClientASupprimer(null);

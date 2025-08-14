@@ -5,10 +5,10 @@ import Documents from './pagesAdmin/Documents';
 import Api from './pagesAdmin/Api';
 import Email from './pagesAdmin/Email';
 import Profile from './pagesAdmin/Profile';
-import TableauBord from './pagesAdmin/Dashboard';
 import Support from './pagesAdmin/Support';
 import Parametres from './pagesAdmin/Parametres';
 import Historique from './pagesAdmin/Historique';
+import Dashboard from './pagesAdmin/Dashboard';
 
 
 interface AdminDashboardProps {
@@ -16,13 +16,13 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
-  const [sectionActive, setSectionActive] = useState('tableau-bord');
+  const [sectionActive, setSectionActive] = useState('tableau');
 
   const afficherContenu = () => {
     switch (sectionActive) {
       case 'tableau':
         return (
-          <TableauBord />
+          <Dashboard />
         );
 
       case 'utilisateurs':
@@ -72,7 +72,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const obtenirTitreEnTete = () => {
     const titres: { [key: string]: string } = {
-      'tableau-bord': 'Tableau de bord',
+      'tableau': 'Tableau de bord',
       'utilisateurs': 'Gestion utilisateurs',
       'documents': 'Gestion documents',
       'api': 'Gestion d\'API',

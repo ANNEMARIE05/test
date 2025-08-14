@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import React from 'react'; 
 // Added missing import for React
+import { useAdminActivity } from '../AdminActivityContext';
 
 interface ApiPermission {
   lecture: boolean;
@@ -78,6 +79,7 @@ export default function Api() {
     const [itemsPerPage] = useState(4);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [apiToDelete, setApiToDelete] = useState<ApiEndpoint | null>(null);
+    const { addActivity } = useAdminActivity();
 
     const apis: ApiEndpoint[] = [
         {
@@ -484,6 +486,13 @@ export default function Api() {
         // Logique pour mettre à jour les permissions
         console.log(`Mise à jour des permissions pour la clé ${keyId} de l'API ${apiId}:`, permissions);
         setEditingPermissions({...editingPermissions, [keyId]: false});
+        // Log activity
+        addActivity({
+          type: 'api_permissions_update',
+          title: 'Permissions API mises à jour',
+          description: `API ${apiId}, clé ${keyId}`,
+          metadata: { apiId, keyId }
+        });
       };
 
       const handleDeleteApi = (api: ApiEndpoint) => {
@@ -497,6 +506,13 @@ export default function Api() {
           console.log(`Suppression de l'API ${apiToDelete.id} - ${apiToDelete.nom}`);
           // Ici vous pouvez ajouter la logique de suppression réelle
           setShowDeleteModal(false);
+          // Log activity
+          addActivity({
+            type: 'api_delete',
+            title: 'API supprimée',
+            description: `${apiToDelete.nom}`,
+            metadata: { apiId: apiToDelete.id }
+          });
           setApiToDelete(null);
         }
       };

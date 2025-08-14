@@ -15,6 +15,7 @@ import {
   Copy,
   RefreshCw,
 } from "lucide-react";
+import { useAdminActivity } from '../AdminActivityContext';
 
 interface User {
     id: string;
@@ -57,6 +58,7 @@ export default function Utilisateurs() {
     const [apiKeyVisibility, setApiKeyVisibility] = useState<{[key: string]: boolean}>({});
     const [isGeneratingApiKey, setIsGeneratingApiKey] = useState(false);
     const [apiKeyExpirationDays] = useState(30);
+    const { addActivity } = useAdminActivity();
 
     const [users, setUsers] = useState<User[]>([
         {
@@ -183,10 +185,18 @@ export default function Utilisateurs() {
     
       const handleSaveUser = () => {
         if (editingUser) {
+          const userBeforeSave = editingUser;
           setUsers(users.map(user => 
             user.id === editingUser.id ? editingUser : user
           ));
           setShowEditModal(false);
+          // Log activity
+          addActivity({
+            type: 'user_update',
+            title: 'Utilisateur modifié',
+            description: `${userBeforeSave.nom} (${userBeforeSave.email})`,
+            metadata: { userId: userBeforeSave.id }
+          });
           setEditingUser(null);
         }
       };
@@ -198,8 +208,16 @@ export default function Utilisateurs() {
     
       const confirmDeleteUser = () => {
         if (selectedUser) {
+          const userToDelete = selectedUser;
           setUsers(users.filter(user => user.id !== selectedUser.id));
           setShowDeleteModal(false);
+          // Log activity
+          addActivity({
+            type: 'user_delete',
+            title: 'Utilisateur supprimé',
+            description: `${userToDelete.nom} (${userToDelete.email})`,
+            metadata: { userId: userToDelete.id }
+          });
           setSelectedUser(null);
         }
       };
@@ -258,6 +276,14 @@ export default function Utilisateurs() {
           
           // Afficher une notification de succès
           alert('Email d\'invitation envoyé avec succès !');
+
+          // Log activity
+          addActivity({
+            type: 'user_invite_send',
+            title: 'Invitation envoyée',
+            description: `Invitation envoyée à ${email}`,
+            metadata: { email }
+          });
           
         } catch (error) {
           console.error('Erreur lors de l\'envoi de l\'email:', error);
@@ -279,6 +305,13 @@ export default function Utilisateurs() {
         };
         
         setUsers([...users, userToCreate]);
+        // Log activity
+        addActivity({
+          type: 'user_create',
+          title: 'Utilisateur créé',
+          description: `${userToCreate.nom} (${userToCreate.email})`,
+          metadata: { userId: userToCreate.id }
+        });
         setInvitationEmail(newUser.email);
         setInvitationPassword(tempPassword);
         setShowCreateModal(false);
@@ -315,6 +348,7 @@ export default function Utilisateurs() {
           const newApiKey = generateApiKey();
           const now = new Date();
           const expiresAt = new Date(now.getTime() + apiKeyExpirationDays * 24 * 60 * 60 * 1000);
+          const targetUser = users.find(u => u.id === userId);
           
           setUsers(users.map(user => 
             user.id === userId 
@@ -331,6 +365,14 @@ export default function Utilisateurs() {
           setApiKeyVisibility(prev => ({...prev, [userId]: true}));
           
           alert('Nouvelle clé API générée avec succès !');
+
+          // Log activity
+          addActivity({
+            type: 'api_key_regenerate',
+            title: 'Clé API régénérée',
+            description: targetUser ? `Pour ${targetUser.nom}` : `Pour l'utilisateur ${userId}`,
+            metadata: { userId }
+          });
           
         } catch (error) {
           console.error('Erreur lors de la génération de la clé API:', error);

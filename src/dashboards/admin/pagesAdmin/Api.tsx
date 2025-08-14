@@ -19,7 +19,8 @@ import {
   Settings,
   X
 } from "lucide-react";
-import React from 'react'; // Added missing import for React
+import React from 'react'; 
+// Added missing import for React
 
 interface ApiPermission {
   lecture: boolean;

@@ -20,7 +20,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const afficherContenu = () => {
     switch (sectionActive) {
-      case 'tableau-bord':
+      case 'tableau':
         return (
           <TableauBord />
         );

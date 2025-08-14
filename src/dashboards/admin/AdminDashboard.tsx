@@ -5,7 +5,7 @@ import Documents from './pagesAdmin/Documents';
 import Api from './pagesAdmin/Api';
 import Email from './pagesAdmin/Email';
 import Profile from './pagesAdmin/Profile';
-import Dashboard from './pagesAdmin/Dashboard';
+import TableauBord from './pagesAdmin/Dashboard';
 import Support from './pagesAdmin/Support';
 import Parametres from './pagesAdmin/Parametres';
 import Historique from './pagesAdmin/Historique';
@@ -16,16 +16,16 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [sectionActive, setSectionActive] = useState('tableau-bord');
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'dashboard':
+  const afficherContenu = () => {
+    switch (sectionActive) {
+      case 'tableau-bord':
         return (
-          <Dashboard />
+          <TableauBord />
         );
 
-      case 'users':
+      case 'utilisateurs':
         return (
           <Utilisateurs />
         );
@@ -50,12 +50,12 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           <Historique />
         );
 
-      case 'settings':
+      case 'parametres':
         return (
           <Parametres />
         );   
 
-        case 'profile':
+        case 'profil':
           return (
             <Profile />
           );
@@ -70,30 +70,30 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     }
   };
 
-  const getHeaderTitle = () => {
-    const titles: { [key: string]: string } = {
-      dashboard: 'Tableau de bord',
-      users: 'Gestion utilisateurs',
-      documents: 'Gestion documents',
-      api: 'Gestion d\'API',
-      email: 'Gestion d\'email',
-      profile: 'Profile',
-      support: 'Support',
-      parametres: 'Paramètres'
+  const obtenirTitreEnTete = () => {
+    const titres: { [key: string]: string } = {
+      'tableau-bord': 'Tableau de bord',
+      'utilisateurs': 'Gestion utilisateurs',
+      'documents': 'Gestion documents',
+      'api': 'Gestion d\'API',
+      'email': 'Gestion d\'email',
+      'profil': 'Profile',
+      'support': 'Support',
+      'parametres': 'Paramètres'
     };
-    return titles[activeSection] || 'Dashboard';
+    return titres[sectionActive] || 'Dashboard';
   };
 
   return (
     <Layout
-      activeSection={activeSection}
-      onSectionChange={setActiveSection}
+      activeSection={sectionActive}
+      onSectionChange={setSectionActive}
       onLogout={onLogout}
       title="OCR"
-      headerTitle={getHeaderTitle()}
+      headerTitle={obtenirTitreEnTete()}
       user={{ name: "Administrateur" }}
     >
-      {renderContent()}
+      {afficherContenu()}
     </Layout>
   );
 }

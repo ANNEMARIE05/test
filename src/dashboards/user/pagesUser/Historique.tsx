@@ -8,11 +8,11 @@ interface Document {
   size: string;
   content?: string;
   extractedData?: {
-    invoiceNumber?: string;
-    amount?: string;
-    date?: string;
-    company?: string;
-    items?: Array<{ description: string; quantity: number; price: number }>;
+    numeroFacture?: string;
+    montant?: string;
+    dateFacture?: string;
+    entreprise?: string;
+    articles?: Array<{ description: string; quantite: number; prix: number }>;
   };
 }
 
@@ -26,13 +26,13 @@ export default function Historique() {
       size: '2.3 MB',
       content: 'Facture pour services de consultation informatique...',
       extractedData: {
-        invoiceNumber: 'FAC-2024-001',
-        amount: '820,000 FCFA',
-        date: '15/01/2024',
-        company: 'Tech Solutions SARL',
-        items: [
-          { description: 'Consultation développement web', quantity: 10, price: 82000 },
-          { description: 'Maintenance serveur', quantity: 1, price: 328000 }
+        numeroFacture: 'FAC-2024-001',
+        montant: '820,000 FCFA',
+        dateFacture: '15/01/2024',
+        entreprise: 'Tech Solutions SARL',
+        articles: [
+          { description: 'Consultation développement web', quantite: 10, prix: 82000 },
+          { description: 'Maintenance serveur', quantite: 1, prix: 328000 }
         ]
       }
     },
@@ -44,10 +44,10 @@ export default function Historique() {
       size: '1.8 MB',
       content: 'Contrat de prestation de services...',
       extractedData: {
-        invoiceNumber: 'CON-2024-002',
-        amount: '3,280,000 FCFA',
-        date: '14/01/2024',
-        company: 'Innovation Corp'
+        numeroFacture: 'CON-2024-002',
+        montant: '3,280,000 FCFA',
+        dateFacture: '14/01/2024',
+        entreprise: 'Innovation Corp'
       }
     },
     {
@@ -65,10 +65,10 @@ export default function Historique() {
       size: '0.9 MB',
       content: 'Devis pour projet de refonte site web...',
       extractedData: {
-        invoiceNumber: 'DEV-2024-003',
-        amount: '5,740,000 FCFA',
-        date: '12/01/2024',
-        company: 'WebDesign Pro'
+        numeroFacture: 'DEV-2024-003',
+        montant: '5,740,000 FCFA',
+        dateFacture: '12/01/2024',
+        entreprise: 'WebDesign Pro'
       }
     },
     {
@@ -79,10 +79,10 @@ export default function Historique() {
       size: '3.2 MB',
       content: 'Bon de commande pour équipements...',
       extractedData: {
-        invoiceNumber: 'BC-2024-004',
-        amount: '1,508,000 FCFA',
-        date: '11/01/2024',
-        company: 'Office Supplies Ltd'
+        numeroFacture: 'BC-2024-004',
+        montant: '1,508,000 FCFA',
+        dateFacture: '11/01/2024',
+        entreprise: 'Office Supplies Ltd'
       }
     }
   ]);
@@ -150,35 +150,35 @@ export default function Historique() {
   };
 
   const handleItemChange = (index: number, field: string, value: string | number) => {
-    if (!editedData?.items) return;
+    if (!editedData?.articles) return;
     
-    const updatedItems = [...editedData.items];
+    const updatedItems = [...editedData.articles];
     updatedItems[index] = {
       ...updatedItems[index],
-      [field]: field === 'quantity' || field === 'price' ? Number(value) : value
+      [field]: field === 'quantite' || field === 'prix' ? Number(value) : value
     };
     
     setEditedData(prev => ({
       ...prev,
-      items: updatedItems
+      articles: updatedItems
     }));
   };
 
   const addItem = () => {
-    const newItem = { description: '', quantity: 1, price: 0 };
+    const newItem = { description: '', quantite: 1, prix: 0 };
     setEditedData(prev => ({
       ...prev,
-      items: [...(prev?.items || []), newItem]
+      articles: [...(prev?.articles || []), newItem]
     }));
   };
 
   const removeItem = (index: number) => {
-    if (!editedData?.items) return;
+    if (!editedData?.articles) return;
     
-    const updatedItems = editedData.items.filter((_, i) => i !== index);
+    const updatedItems = editedData.articles.filter((_, i) => i !== index);
     setEditedData(prev => ({
       ...prev,
-      items: updatedItems
+      articles: updatedItems
     }));
   };
 
@@ -415,12 +415,12 @@ export default function Historique() {
                             {isEditMode ? (
                               <input
                                 type="text"
-                                value={editedData?.invoiceNumber || ''}
-                                onChange={(e) => handleDataChange('invoiceNumber', e.target.value)}
+                                value={editedData?.numeroFacture || ''}
+                                onChange={(e) => handleDataChange('numeroFacture', e.target.value)}
                                 className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
-                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.invoiceNumber}</p>
+                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.numeroFacture}</p>
                             )}
                           </div>
                           <div>
@@ -428,12 +428,12 @@ export default function Historique() {
                             {isEditMode ? (
                               <input
                                 type="text"
-                                value={editedData?.amount || ''}
-                                onChange={(e) => handleDataChange('amount', e.target.value)}
+                                value={editedData?.montant || ''}
+                                onChange={(e) => handleDataChange('montant', e.target.value)}
                                 className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
-                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.amount}</p>
+                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.montant}</p>
                             )}
                           </div>
                           <div>
@@ -441,12 +441,12 @@ export default function Historique() {
                             {isEditMode ? (
                               <input
                                 type="text"
-                                value={editedData?.date || ''}
-                                onChange={(e) => handleDataChange('date', e.target.value)}
+                                value={editedData?.dateFacture || ''}
+                                onChange={(e) => handleDataChange('dateFacture', e.target.value)}
                                 className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
-                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.date}</p>
+                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.dateFacture}</p>
                             )}
                           </div>
                           <div>
@@ -454,18 +454,18 @@ export default function Historique() {
                             {isEditMode ? (
                               <input
                                 type="text"
-                                value={editedData?.company || ''}
-                                onChange={(e) => handleDataChange('company', e.target.value)}
+                                value={editedData?.entreprise || ''}
+                                onChange={(e) => handleDataChange('entreprise', e.target.value)}
                                 className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
-                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.company}</p>
+                              <p className="text-gray-900 break-words">{selectedDocument.extractedData?.entreprise}</p>
                             )}
                           </div>
                         </div>
                       </div>
 
-                      {(selectedDocument.extractedData?.items || isEditMode) && (
+                      {(selectedDocument.extractedData?.articles || isEditMode) && (
                         <div className="bg-white rounded-lg p-2 sm:p-3">
                           <div className="flex justify-between items-center mb-2">
                             <h5 className="font-medium text-gray-700 text-xs">Articles</h5>
@@ -479,7 +479,7 @@ export default function Historique() {
                             )}
                           </div>
                           <div className="space-y-1">
-                            {(isEditMode ? editedData?.items : selectedDocument.extractedData?.items)?.map((item, index) => (
+                            {(isEditMode ? editedData?.articles : selectedDocument.extractedData?.articles)?.map((item, index) => (
                               <div key={index} className="flex justify-between text-xs border-b pb-1">
                                 {isEditMode ? (
                                   <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-1">
@@ -492,8 +492,8 @@ export default function Historique() {
                                     />
                                     <input
                                       type="number"
-                                      value={item.quantity}
-                                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                                      value={item.quantite}
+                                      onChange={(e) => handleItemChange(index, 'quantite', e.target.value)}
                                       className="p-1 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent"
                                       placeholder="Qté"
                                     />
@@ -501,8 +501,8 @@ export default function Historique() {
                                       <input
                                         type="number"
                                         step="0.01"
-                                        value={item.price}
-                                        onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+                                        value={item.prix}
+                                        onChange={(e) => handleItemChange(index, 'prix', e.target.value)}
                                         className="p-1 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="Prix"
                                       />
@@ -518,7 +518,7 @@ export default function Historique() {
                                   <>
                                     <span className="text-gray-900 break-words flex-1 mr-2">{item.description}</span>
                                     <span className="text-gray-700 text-xs whitespace-nowrap">
-                                      {item.quantity} × {item.price.toLocaleString()} FCFA
+                                      {item.quantite} × {item.prix.toLocaleString()} FCFA
                                     </span>
                                   </>
                                 )}

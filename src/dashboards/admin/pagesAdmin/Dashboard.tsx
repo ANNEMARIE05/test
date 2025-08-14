@@ -7,6 +7,12 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
+    // Variables pour les statistiques
+    const utilisateursActifs = "1,847";
+    const documentsTraites = "45,231";
+    const precisionMoyenne = "99.2%";
+    const serveursActifs = "12";
+
     return (
         <div className="space-y-3 sm:space-y-4">
           <div>
@@ -20,7 +26,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium text-gray-600">Utilisateurs actifs</p>
-                  <p className="text-base sm:text-xl font-bold text-gray-900">1,847</p>
+                  <p className="text-base sm:text-xl font-bold text-gray-900">{utilisateursActifs}</p>
                 </div>
                 <div className="w-6 h-6 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Users className="w-3 h-3 sm:w-5 sm:h-5 text-blue-600" />
@@ -32,7 +38,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium text-gray-600">Documents traités</p>
-                  <p className="text-base sm:text-xl font-bold text-gray-900">45,231</p>
+                  <p className="text-base sm:text-xl font-bold text-gray-900">{documentsTraites}</p>
                 </div>
                 <div className="w-6 h-6 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center">
                   <FileText className="w-3 h-3 sm:w-5 sm:h-5 text-green-600" />
@@ -44,7 +50,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium text-gray-600">Précision moyenne</p>
-                  <p className="text-base sm:text-xl font-bold text-gray-900">99.2%</p>
+                  <p className="text-base sm:text-xl font-bold text-gray-900">{precisionMoyenne}</p>
                 </div>
                 <div className="w-6 h-6 sm:w-10 sm:h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <BarChart3 className="w-3 h-3 sm:w-5 sm:h-5 text-yellow-600" />
@@ -56,7 +62,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-medium text-gray-600">Serveurs actifs</p>
-                  <p className="text-base sm:text-xl font-bold text-gray-900">12</p>
+                  <p className="text-base sm:text-xl font-bold text-gray-900">{serveursActifs}</p>
                 </div>
                 <div className="w-6 h-6 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                   <Database className="w-3 h-3 sm:w-5 sm:h-5 text-purple-600" />

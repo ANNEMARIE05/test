@@ -25,8 +25,8 @@ interface Chat {
 }
 
 export default function Assistance() {
-    const [currentView, setCurrentView] = useState<'main' | 'chat'>('main');
-    const [chats, setChats] = useState<Chat[]>([
+    const [vueActuelle, setVueActuelle] = useState<'main' | 'chat'>('main');
+    const [conversations, setConversations] = useState<Chat[]>([
         {
             id: 1,
             title: "Support Général",
@@ -38,70 +38,70 @@ export default function Assistance() {
             isActive: false
         }
     ]);
-    const [currentChatId, setCurrentChatId] = useState<number | null>(null);
-    const [newMessage, setNewMessage] = useState("");
-    const [showChatList, setShowChatList] = useState(false);
+    const [conversationActuelle, setConversationActuelle] = useState<number | null>(null);
+    const [nouveauMessage, setNouveauMessage] = useState("");
+    const [afficherListe, setAfficherListe] = useState(false);
 
-    const currentChat = chats.find(chat => chat.id === currentChatId);
+    const conversation = conversations.find(conv => conv.id === conversationActuelle);
 
-    const handleSendMessage = () => {
-        if (newMessage.trim() && currentChatId) {
-            const userMessage = {
+    const envoyerMessage = () => {
+        if (nouveauMessage.trim() && conversationActuelle) {
+            const messageUtilisateur = {
                 id: Date.now(),
-                text: newMessage,
+                text: nouveauMessage,
                 isAgent: false,
                 timestamp: new Date()
             };
 
-            setChats(prevChats => prevChats.map(chat => {
-                if (chat.id === currentChatId) {
+            setConversations(prevConversations => prevConversations.map(conv => {
+                if (conv.id === conversationActuelle) {
                     return {
-                        ...chat,
-                        messages: [...chat.messages, userMessage],
-                        lastMessage: newMessage,
+                        ...conv,
+                        messages: [...conv.messages, messageUtilisateur],
+                        lastMessage: nouveauMessage,
                         lastMessageTime: new Date()
                     };
                 }
-                return chat;
+                return conv;
             }));
 
-            setNewMessage("");
+            setNouveauMessage("");
 
             // Simuler une réponse de l'agent
             setTimeout(() => {
-                const agentMessage = {
+                const messageAgent = {
                     id: Date.now() + 1,
                     text: "Merci pour votre message. Un agent va vous répondre dans les plus brefs délais.",
                     isAgent: true,
                     timestamp: new Date()
                 };
 
-                setChats(prevChats => prevChats.map(chat => {
-                    if (chat.id === currentChatId) {
+                setConversations(prevConversations => prevConversations.map(conv => {
+                    if (conv.id === conversationActuelle) {
                         return {
-                            ...chat,
-                            messages: [...chat.messages, agentMessage],
-                            lastMessage: agentMessage.text,
+                            ...conv,
+                            messages: [...conv.messages, messageAgent],
+                            lastMessage: messageAgent.text,
                             lastMessageTime: new Date()
                         };
                     }
-                    return chat;
+                    return conv;
                 }));
             }, 1000);
         }
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
+    const gererTouche = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            handleSendMessage();
+            envoyerMessage();
         }
     };
 
-    const createNewChat = () => {
-        const newChat: Chat = {
+    const creerNouvelleConversation = () => {
+        const nouvelleConv: Chat = {
             id: Date.now(),
-            title: `Support ${chats.length + 1}`,
+            title: `Support ${conversations.length + 1}`,
             messages: [
                 { id: 1, text: "Bonjour ! Je suis votre assistant virtuel. Comment puis-je vous aider aujourd'hui ?", isAgent: true, timestamp: new Date() }
             ],
@@ -110,31 +110,31 @@ export default function Assistance() {
             isActive: true
         };
 
-        setChats(prevChats => prevChats.map(chat => ({ ...chat, isActive: false })).concat(newChat));
-        setCurrentChatId(newChat.id);
-        setShowChatList(false); // Hide chat list on mobile after creating new chat
+        setConversations(prevConversations => prevConversations.map(conv => ({ ...conv, isActive: false })).concat(nouvelleConv));
+        setConversationActuelle(nouvelleConv.id);
+        setAfficherListe(false); // Hide chat list on mobile after creating new chat
     };
 
-    const selectChat = (chatId: number) => {
-        setChats(prevChats => prevChats.map(chat => ({ ...chat, isActive: chat.id === chatId })));
-        setCurrentChatId(chatId);
-        setShowChatList(false); // Hide chat list on mobile after selecting chat
+    const selectionnerConversation = (convId: number) => {
+        setConversations(prevConversations => prevConversations.map(conv => ({ ...conv, isActive: conv.id === convId })));
+        setConversationActuelle(convId);
+        setAfficherListe(false); // Hide chat list on mobile after selecting chat
     };
 
-    const formatTime = (date: Date) => {
-        const now = new Date();
-        const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+    const formaterHeure = (date: Date) => {
+        const maintenant = new Date();
+        const diffHeures = (maintenant.getTime() - date.getTime()) / (1000 * 60 * 60);
         
-        if (diffInHours < 24) {
+        if (diffHeures < 24) {
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        } else if (diffInHours < 48) {
+        } else if (diffHeures < 48) {
             return 'Hier';
         } else {
             return date.toLocaleDateString();
         }
     };
 
-    if (currentView === 'chat') {
+    if (vueActuelle === 'chat') {
         return (
             <div className="h-[calc(100vh-80px)] md:h-[calc(100vh-120px)] bg-gray-50 rounded-lg md:rounded-xl border border-gray-200 overflow-hidden">
                 {/* Header */}
@@ -142,7 +142,7 @@ export default function Assistance() {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                             <button 
-                                onClick={() => setCurrentView('main')}
+                                onClick={() => setVueActuelle('main')}
                                 className="p-1 md:p-1.5 hover:bg-gray-100 rounded-lg"
                             >
                                 <ArrowLeft className="w-4 h-4" />
@@ -152,13 +152,13 @@ export default function Assistance() {
                         <div className="flex items-center space-x-1">
                             {/* Mobile menu button */}
                             <button 
-                                onClick={() => setShowChatList(!showChatList)}
+                                onClick={() => setAfficherListe(!afficherListe)}
                                 className="md:hidden p-1 hover:bg-gray-100 rounded-lg"
                             >
                                 <Menu className="w-4 h-4" />
                             </button>
                             <button 
-                                onClick={createNewChat}
+                                onClick={creerNouvelleConversation}
                                 className="p-1 md:p-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
                                 <Plus className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function Assistance() {
 
                 <div className="flex h-[calc(100%-50px)] md:h-[calc(100%-60px)]">
                     {/* Chat List - Mobile overlay */}
-                    <div className={`${showChatList ? 'block' : 'hidden'} md:block w-full md:w-72 bg-white border-r border-gray-200 absolute md:relative z-20 h-full shadow-lg md:shadow-none`}>
+                    <div className={`${afficherListe ? 'block' : 'hidden'} md:block w-full md:w-72 bg-white border-r border-gray-200 absolute md:relative z-20 h-full shadow-lg md:shadow-none`}>
                         <div className="p-2 md:p-3 border-b border-gray-200">
                             <div className="relative">
                                 <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -181,19 +181,19 @@ export default function Assistance() {
                             </div>
                         </div>
                         <div className="overflow-y-auto h-full">
-                            {chats.map((chat) => (
+                            {conversations.map((conv) => (
                                 <div
-                                    key={chat.id}
-                                    onClick={() => selectChat(chat.id)}
+                                    key={conv.id}
+                                    onClick={() => selectionnerConversation(conv.id)}
                                     className={`p-2 md:p-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
-                                        chat.isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''
+                                        conv.isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''
                                     }`}
                                 >
                                     <div className="flex items-center justify-between">
-                                        <h3 className="font-medium text-gray-900 text-sm">{chat.title}</h3>
-                                        <span className="text-xs text-gray-500">{formatTime(chat.lastMessageTime)}</span>
+                                        <h3 className="font-medium text-gray-900 text-sm">{conv.title}</h3>
+                                        <span className="text-xs text-gray-500">{formaterHeure(conv.lastMessageTime)}</span>
                                     </div>
-                                    <p className="text-xs text-gray-600 mt-0.5 truncate">{chat.lastMessage}</p>
+                                    <p className="text-xs text-gray-600 mt-0.5 truncate">{conv.lastMessage}</p>
                                 </div>
                             ))}
                         </div>
@@ -201,25 +201,25 @@ export default function Assistance() {
 
                     {/* Chat Messages */}
                     <div className="flex-1 flex flex-col">
-                        {currentChat ? (
+                        {conversation ? (
                             <>
                                 {/* Chat Header */}
                                 <div className="bg-white border-b border-gray-200 p-2 md:p-3">
                                     <div className="flex items-center justify-between">
                                         <button 
-                                            onClick={() => setShowChatList(true)}
+                                            onClick={() => setAfficherListe(true)}
                                             className="md:hidden p-1 hover:bg-gray-100 rounded-lg"
                                         >
                                             <ArrowLeft className="w-4 h-4" />
                                         </button>
-                                        <h2 className="font-semibold text-gray-900 text-sm">{currentChat.title}</h2>
+                                        <h2 className="font-semibold text-gray-900 text-sm">{conversation.title}</h2>
                                         <div className="md:hidden w-8"></div> {/* Spacer for centering on mobile */}
                                     </div>
                                 </div>
 
                                 {/* Messages */}
                                 <div className="flex-1 overflow-y-auto p-2 md:p-3 space-y-2">
-                                    {currentChat.messages.map((message) => (
+                                    {conversation.messages.map((message) => (
                                         <div 
                                             key={message.id} 
                                             className={`flex ${message.isAgent ? 'justify-start' : 'justify-end'}`}
@@ -247,14 +247,14 @@ export default function Assistance() {
                                     <div className="flex space-x-2">
                                         <input
                                             type="text"
-                                            value={newMessage}
-                                            onChange={(e) => setNewMessage(e.target.value)}
-                                            onKeyPress={handleKeyPress}
+                                            value={nouveauMessage}
+                                            onChange={(e) => setNouveauMessage(e.target.value)}
+                                            onKeyPress={gererTouche}
                                             placeholder="Tapez votre message..."
                                             className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                                         />
                                         <button
-                                            onClick={handleSendMessage}
+                                            onClick={envoyerMessage}
                                             className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                                         >
                                             <Send className="w-4 h-4" />
@@ -304,7 +304,7 @@ export default function Assistance() {
                   <p className="text-xs text-gray-600">Guide d'utilisation et tutoriels</p>
                 </div>
                 <button 
-                  onClick={() => setCurrentView('chat')}
+                  onClick={() => setVueActuelle('chat')}
                   className="w-full p-2 md:p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-xs md:text-sm"
                 >
                   Échanger avec un agent

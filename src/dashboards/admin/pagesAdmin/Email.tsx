@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-interface User {
+interface Utilisateur {
     id: string;
     nom: string;
     email: string;
@@ -10,20 +10,20 @@ interface User {
   }
 
 export default function Email() {
-    const [selectedUser] = useState<User | null>(null);
-    const [showUserDetails, setShowUserDetails] = useState(false);
-    const [showMessage, setShowMessage] = useState(false);
+    const [utilisateurSelectionne] = useState<Utilisateur | null>(null);
+    const [afficherDetailsUtilisateur, setAfficherDetailsUtilisateur] = useState(false);
+    const [afficherMessage, setAfficherMessage] = useState(false);
 
     // Données fictives des utilisateurs pour le select
-    const users = [
+    const utilisateurs = [
         { id: '1', nom: 'Jean Dupont', email: 'jean.dupont@example.com' },
         { id: '2', nom: 'Marie Martin', email: 'marie.martin@example.com' },
         { id: '3', nom: 'Pierre Durand', email: 'pierre.durand@example.com' },
         { id: '4', nom: 'Sophie Leroy', email: 'sophie.leroy@example.com' },
     ];
 
-    const handleRenvoyerAcces = () => {
-        setShowMessage(true);
+    const renvoyerAcces = () => {
+        setAfficherMessage(true);
     };
 
     return (
@@ -61,9 +61,9 @@ export default function Email() {
                   className="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 >
                   <option value="">Sélectionner un utilisateur</option>
-                  {users.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.nom} ({user.email})
+                  {utilisateurs.map((utilisateur) => (
+                    <option key={utilisateur.id} value={utilisateur.id}>
+                      {utilisateur.nom} ({utilisateur.email})
                     </option>
                   ))}
                 </select>
@@ -139,7 +139,7 @@ export default function Email() {
                 </div>
                 <div className="flex justify-end">
                   <button 
-                    onClick={handleRenvoyerAcces}
+                    onClick={renvoyerAcces}
                     className="px-2 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
                   >
                     Renvoyer
@@ -163,7 +163,7 @@ export default function Email() {
                 </div>
                 <div className="flex justify-end">
                   <button 
-                    onClick={handleRenvoyerAcces}
+                    onClick={renvoyerAcces}
                     className="px-2 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
                   >
                     Renvoyer
@@ -174,7 +174,7 @@ export default function Email() {
           </div>
 
           {/* User Details Modal */}
-          {showUserDetails && selectedUser && (
+          {afficherDetailsUtilisateur && utilisateurSelectionne && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-4">
               <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4">
                 <div className="px-4 py-3 border-b border-gray-200">
@@ -183,34 +183,34 @@ export default function Email() {
                 <div className="px-4 py-3 space-y-2">
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
-                    <p className="text-xs text-gray-900">{selectedUser.nom}</p>
+                    <p className="text-xs text-gray-900">{utilisateurSelectionne.nom}</p>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
-                    <p className="text-xs text-gray-900">{selectedUser.email}</p>
+                    <p className="text-xs text-gray-900">{utilisateurSelectionne.email}</p>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Mot de passe</label>
-                    <p className="text-xs text-gray-900">{selectedUser.motDePasse}</p>
+                    <p className="text-xs text-gray-900">{utilisateurSelectionne.motDePasse}</p>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Rôle</label>
                     <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
-                      selectedUser.role === 'Administrateur' ? 'bg-red-100 text-red-800' :
-                      selectedUser.role === 'Modérateur' ? 'bg-yellow-100 text-yellow-800' :
+                      utilisateurSelectionne.role === 'Administrateur' ? 'bg-red-100 text-red-800' :
+                      utilisateurSelectionne.role === 'Modérateur' ? 'bg-yellow-100 text-yellow-800' :
                       'bg-green-100 text-green-800'
                     }`}>
-                      {selectedUser.role}
+                      {utilisateurSelectionne.role}
                     </span>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Documents consommés</label>
-                    <p className="text-xs text-gray-900">{selectedUser.documentsConsommes}</p>
+                    <p className="text-xs text-gray-900">{utilisateurSelectionne.documentsConsommes}</p>
                   </div>
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end">
                   <button
-                    onClick={() => setShowUserDetails(false)}
+                    onClick={() => setAfficherDetailsUtilisateur(false)}
                     className="px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm"
                   >
                     Fermer
@@ -221,7 +221,7 @@ export default function Email() {
           )}
 
           {/* Modal de confirmation pour renvoi d'accès */}
-          {showMessage && (
+          {afficherMessage && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-4">
               <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4">
                 <div className="px-4 py-3 border-b border-gray-200">
@@ -232,7 +232,7 @@ export default function Email() {
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end">
                   <button
-                    onClick={() => setShowMessage(false)}
+                    onClick={() => setAfficherMessage(false)}
                     className="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
                   >
                     OK

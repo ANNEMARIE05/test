@@ -2,7 +2,7 @@ import {
   User,
 } from "lucide-react";
 
-export default function Profile() {
+export default function Profil() {
     
     return (
         <div className="space-y-3 sm:space-y-4">

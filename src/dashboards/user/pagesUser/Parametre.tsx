@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 export default function Parametre() {
-    const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-    const [emailNotifications, setEmailNotifications] = useState(true);
+    const [deuxFacteursActive, setDeuxFacteursActive] = useState(false);
+    const [notificationsEmail, setNotificationsEmail] = useState(true);
 
-    const handleTwoFactorToggle = () => {
-        setTwoFactorEnabled(!twoFactorEnabled);
+    const basculerDeuxFacteurs = () => {
+        setDeuxFacteursActive(!deuxFacteursActive);
         // Ici vous pouvez ajouter la logique pour activer/désactiver la 2FA
-        if (!twoFactorEnabled) {
+        if (!deuxFacteursActive) {
             // Logique pour activer la 2FA
             console.log('Activation de la 2FA...');
         } else {
@@ -34,14 +34,14 @@ export default function Parametre() {
                         <p className="text-xs text-gray-600 mt-0.5">Sécurisez votre compte avec une authentification supplémentaire</p>
                     </div>
                     <button
-                        onClick={handleTwoFactorToggle}
+                        onClick={basculerDeuxFacteurs}
                         className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex-shrink-0 ${
-                            twoFactorEnabled ? 'bg-blue-600' : 'bg-gray-200'
+                            deuxFacteursActive ? 'bg-blue-600' : 'bg-gray-200'
                         }`}
                     >
                         <span
                             className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                                twoFactorEnabled ? 'translate-x-5' : 'translate-x-0.5'
+                                deuxFacteursActive ? 'translate-x-5' : 'translate-x-0.5'
                             }`}
                         />
                     </button>
@@ -70,14 +70,14 @@ export default function Parametre() {
                             <p className="text-xs text-gray-600 mt-0.5">Recevez des notifications importantes par email</p>
                         </div>
                         <button
-                            onClick={() => setEmailNotifications(!emailNotifications)}
+                            onClick={() => setNotificationsEmail(!notificationsEmail)}
                             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex-shrink-0 ${
-                                emailNotifications ? 'bg-blue-600' : 'bg-gray-200'
+                                notificationsEmail ? 'bg-blue-600' : 'bg-gray-200'
                             }`}
                         >
                             <span
                                 className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                                    emailNotifications ? 'translate-x-5' : 'translate-x-0.5'
+                                    notificationsEmail ? 'translate-x-5' : 'translate-x-0.5'
                                 }`}
                             />
                         </button>

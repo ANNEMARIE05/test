@@ -7,8 +7,15 @@ import {
   Clock,
 } from "lucide-react";
 
-
 export default function Dashboard(){
+    // Variables pour les statistiques
+    const docsTraites = 1234;
+    const docsConsommes = 856;
+    const docsRestants = 144;
+    const precisionMoyenne = "98.5%";
+    const tempsMoyen = "2.3s";
+    const docsEnAttente = 5;
+
     return(
         <div className="space-y-3 md:space-y-4">
             <div className="hidden md:block">
@@ -22,7 +29,7 @@ export default function Dashboard(){
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-gray-600">Documents traités</p>
-                    <p className="text-base md:text-xl font-bold text-gray-900">1,234</p>
+                    <p className="text-base md:text-xl font-bold text-gray-900">{docsTraites.toLocaleString()}</p>
                   </div>
                   <div className="w-6 h-6 md:w-10 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <FileText className="w-3 h-3 md:w-5 md:h-5 text-blue-600" />
@@ -34,7 +41,7 @@ export default function Dashboard(){
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-gray-600">Documents consommés</p>
-                    <p className="text-base md:text-xl font-bold text-gray-900">856</p>
+                    <p className="text-base md:text-xl font-bold text-gray-900">{docsConsommes.toLocaleString()}</p>
                   </div>
                   <div className="w-6 h-6 md:w-10 md:h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 md:w-5 md:h-5 text-green-600" />
@@ -46,7 +53,7 @@ export default function Dashboard(){
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-gray-600">Documents restants</p>
-                    <p className="text-base md:text-xl font-bold text-gray-900">144</p>
+                    <p className="text-base md:text-xl font-bold text-gray-900">{docsRestants.toLocaleString()}</p>
                   </div>
                   <div className="w-6 h-6 md:w-10 md:h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                     <Clock className="w-3 h-3 md:w-5 md:h-5 text-orange-600" />
@@ -58,7 +65,7 @@ export default function Dashboard(){
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-gray-600">Précision moyenne</p>
-                    <p className="text-base md:text-xl font-bold text-gray-900">98.5%</p>
+                    <p className="text-base md:text-xl font-bold text-gray-900">{precisionMoyenne}</p>
                   </div>
                   <div className="w-6 h-6 md:w-10 md:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                     <BarChart3 className="w-3 h-3 md:w-5 md:h-5 text-purple-600" />
@@ -70,7 +77,7 @@ export default function Dashboard(){
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-gray-600">Temps moyen</p>
-                    <p className="text-base md:text-xl font-bold text-gray-900">2.3s</p>
+                    <p className="text-base md:text-xl font-bold text-gray-900">{tempsMoyen}</p>
                   </div>
                   <div className="w-6 h-6 md:w-10 md:h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
                     <Search className="w-3 h-3 md:w-5 md:h-5 text-yellow-600" />
@@ -82,7 +89,7 @@ export default function Dashboard(){
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-gray-600">Documents en attente</p>
-                    <p className="text-base md:text-xl font-bold text-gray-900">5</p>
+                    <p className="text-base md:text-xl font-bold text-gray-900">{docsEnAttente}</p>
                   </div>
                   <div className="w-6 h-6 md:w-10 md:h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <Upload className="w-3 h-3 md:w-5 md:h-5 text-red-600" />

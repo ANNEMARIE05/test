@@ -41,14 +41,14 @@ export default function Sidebar({
   title = "OCR"
 }: SidebarProps) {
   const defaultItems: SidebarItem[] = [
-    { id: 'dashboard', label: 'Tableau de bord', icon: <LayoutDashboard className="w-3.5 h-3.5" /> },
-    { id: 'users', label: 'Gestion utilisateurs', icon: <Users className="w-3.5 h-3.5" /> },
+    { id: 'tableau', label: 'Tableau de bord', icon: <LayoutDashboard className="w-3.5 h-3.5" /> },
+    { id: 'utilisateurs', label: 'Gestion utilisateurs', icon: <Users className="w-3.5 h-3.5" /> },
     { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-3.5 h-3.5" /> },
     { id: 'api', label: 'Gestion d\'API', icon: <Code className="w-3.5 h-3.5" /> },
     { id: 'email', label: 'Gestion d\'email', icon: <Mail className="w-3.5 h-3.5" /> },
-    { id: 'history', label: 'Historique', icon: <History className="w-3.5 h-3.5" /> },
-    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-3.5 h-3.5" /> },
-    { id: 'profile', label: 'Profile', icon: <User className="w-3.5 h-3.5" /> },
+    { id: 'historique', label: 'Historique', icon: <History className="w-3.5 h-3.5" /> },
+    { id: 'parametres', label: 'Paramètres', icon: <Settings className="w-3.5 h-3.5" /> },
+    { id: 'profil', label: 'Profile', icon: <User className="w-3.5 h-3.5" /> },
     { id: 'support', label: 'Support', icon: <MessageCircle className="w-3.5 h-3.5" /> },
   ];
 

@@ -25,24 +25,24 @@ interface UserDashboardProps {
 }
 
 export default function UserDashboard({ onLogout }: UserDashboardProps) {
-  const [activeSection, setActiveSection] = useState('dashboard');
-  const [showChatbot, setShowChatbot] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [sectionActive, setSectionActive] = useState('dashboard');
+  const [chatbotVisible, setChatbotVisible] = useState(false);
+  const [confirmationDeconnexion, setConfirmationDeconnexion] = useState(false);
 
-  const handleLogoutClick = () => {
-    setShowLogoutConfirm(true);
+  const gererClicDeconnexion = () => {
+    setConfirmationDeconnexion(true);
   };
 
-  const handleLogoutConfirm = () => {
-    setShowLogoutConfirm(false);
+  const confirmerDeconnexion = () => {
+    setConfirmationDeconnexion(false);
     onLogout();
   };
 
-  const handleLogoutCancel = () => {
-    setShowLogoutConfirm(false);
+  const annulerDeconnexion = () => {
+    setConfirmationDeconnexion(false);
   };
 
-  const userSidebarItems: SidebarItem[] = [
+  const elementsMenu: SidebarItem[] = [
     { id: 'dashboard', label: 'Tableau de bord', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-4 h-4" /> },
     { id: 'history', label: 'Historique', icon: <History className="w-4 h-4" /> },
@@ -52,8 +52,8 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
     { id: 'assistance', label: 'Assistance', icon: <MessageCircle className="w-4 h-4" /> },
   ];
 
-  const renderContent = () => {
-    switch (activeSection) {
+  const afficherContenu = () => {
+    switch (sectionActive) {
       case 'dashboard':
         return (
           <Dashboard />
@@ -94,8 +94,8 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
     }
   };
 
-  const getHeaderTitle = () => {
-    const titles: { [key: string]: string } = {
+  const obtenirTitreEnTete = () => {
+    const titres: { [key: string]: string } = {
       dashboard: 'Tableau de bord',
       documents: 'Gestion documents',
       upload: 'Upload document',
@@ -105,39 +105,39 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
       assistance: 'Assistance',
       apis: 'Gestion d\'APIs'
     };
-    return titles[activeSection] || 'Dashboard';
+    return titres[sectionActive] || 'Dashboard';
   };
 
   return (
     <>
       <Layout
-        activeSection={activeSection}
-        onSectionChange={setActiveSection}
-        onLogout={handleLogoutClick}
+        activeSection={sectionActive}
+        onSectionChange={setSectionActive}
+        onLogout={gererClicDeconnexion}
         title="OCR"
-        headerTitle={getHeaderTitle()}
+        headerTitle={obtenirTitreEnTete()}
         user={{ name: "Utilisateur" }}
-        sidebarItems={userSidebarItems}
+        sidebarItems={elementsMenu}
       >
-        {renderContent()}
+        {afficherContenu()}
         
         {/* Chatbot Icon */}
         <div className="fixed bottom-2 right-6 z-50">
           <button
-            onClick={() => setShowChatbot(!showChatbot)}
-            className={`w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 ${!showChatbot ? 'animate-bounce' : ''}`}
+            onClick={() => setChatbotVisible(!chatbotVisible)}
+            className={`w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 ${!chatbotVisible ? 'animate-bounce' : ''}`}
           >
             <MessageCircle className="w-6 h-6" />
           </button>
         </div>
 
         {/* Chatbot Interface */}
-        {showChatbot && (
+        {chatbotVisible && (
           <div className="fixed bottom-24 right-6 w-80 h-96 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Chatbot OCR</h3>
               <button
-                onClick={() => setShowChatbot(false)}
+                onClick={() => setChatbotVisible(false)}
                 className="text-gray-500 hover:text-gray-700"
               >
                 <X className="w-5 h-5" />
@@ -183,20 +183,20 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
       </Layout>
 
       {/* Logout Confirmation Modal */}
-      {showLogoutConfirm && (
+      {confirmationDeconnexion && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirmation de déconnexion</h3>
             <p className="text-gray-600 mb-6">Êtes-vous sûr de vouloir vous déconnecter ?</p>
             <div className="flex space-x-3">
               <button
-                onClick={handleLogoutCancel}
+                onClick={annulerDeconnexion}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Annuler
               </button>
               <button
-                onClick={handleLogoutConfirm}
+                onClick={confirmerDeconnexion}
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Confirmer

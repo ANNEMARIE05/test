@@ -12,170 +12,170 @@ import {
 
 interface Message {
     id: string;
-    subject: string;
-    content: string;
-    sender: {
-        name: string;
+    sujet: string;
+    contenu: string;
+    expediteur: {
+        nom: string;
         email: string;
-        phone?: string;
+        telephone?: string;
     };
-    timestamp: Date;
-    status: 'new' | 'in-progress' | 'resolved';
-    priority: 'low' | 'medium' | 'high';
-    responses?: Response[];
+    horodatage: Date;
+    statut: 'nouveau' | 'en-cours' | 'resolu';
+    priorite: 'faible' | 'moyenne' | 'elevee';
+    reponses?: Reponse[];
 }
 
-interface Response {
+interface Reponse {
     id: string;
-    content: string;
-    sender: 'admin' | 'user';
-    timestamp: Date;
+    contenu: string;
+    expediteur: 'admin' | 'utilisateur';
+    horodatage: Date;
 }
 
 export default function Support() {
     const [messages, setMessages] = useState<Message[]>([]);
-    const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-    const [replyDialogOpen, setReplyDialogOpen] = useState(false);
-    const [newMessageDialogOpen, setNewMessageDialogOpen] = useState(false);
-    const [replyContent, setReplyContent] = useState('');
-    const [newMessage, setNewMessage] = useState({
-        subject: '',
-        content: '',
-        recipient: ''
+    const [messageSelectionne, setMessageSelectionne] = useState<Message | null>(null);
+    const [dialogueReponseOuvert, setDialogueReponseOuvert] = useState(false);
+    const [dialogueNouveauOuvert, setDialogueNouveauOuvert] = useState(false);
+    const [contenuReponse, setContenuReponse] = useState('');
+    const [nouveauMessage, setNouveauMessage] = useState({
+        sujet: '',
+        contenu: '',
+        destinataire: ''
     });
-    const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [termeRecherche, setTermeRecherche] = useState('');
+    const [filtreStatut, setFiltreStatut] = useState<string>('tous');
 
     // Mock data - replace with actual API calls
     useEffect(() => {
-        const mockMessages: Message[] = [
+        const messagesSimules: Message[] = [
             {
                 id: '1',
-                subject: 'Problème avec la connexion',
-                content: 'Je n\'arrive pas à me connecter à mon compte depuis hier. Pouvez-vous m\'aider ?',
-                sender: {
-                    name: 'Jean Dupont',
+                sujet: 'Problème avec la connexion',
+                contenu: 'Je n\'arrive pas à me connecter à mon compte depuis hier. Pouvez-vous m\'aider ?',
+                expediteur: {
+                    nom: 'Jean Dupont',
                     email: 'jean.dupont@email.com',
-                    phone: '0123456789'
+                    telephone: '0123456789'
                 },
-                timestamp: new Date('2024-01-15T10:30:00'),
-                status: 'new',
-                priority: 'high',
-                responses: []
+                horodatage: new Date('2024-01-15T10:30:00'),
+                statut: 'nouveau',
+                priorite: 'elevee',
+                reponses: []
             },
             {
                 id: '2',
-                subject: 'Question sur les fonctionnalités',
-                content: 'Bonjour, j\'aimerais savoir comment utiliser la nouvelle fonctionnalité de reporting.',
-                sender: {
-                    name: 'Marie Martin',
+                sujet: 'Question sur les fonctionnalités',
+                contenu: 'Bonjour, j\'aimerais savoir comment utiliser la nouvelle fonctionnalité de reporting.',
+                expediteur: {
+                    nom: 'Marie Martin',
                     email: 'marie.martin@email.com'
                 },
-                timestamp: new Date('2024-01-14T15:45:00'),
-                status: 'in-progress',
-                priority: 'medium',
-                responses: [
+                horodatage: new Date('2024-01-14T15:45:00'),
+                statut: 'en-cours',
+                priorite: 'moyenne',
+                reponses: [
                     {
                         id: 'resp1',
-                        content: 'Bonjour Marie, je vais vous expliquer comment utiliser cette fonctionnalité...',
-                        sender: 'admin',
-                        timestamp: new Date('2024-01-14T16:00:00')
+                        contenu: 'Bonjour Marie, je vais vous expliquer comment utiliser cette fonctionnalité...',
+                        expediteur: 'admin',
+                        horodatage: new Date('2024-01-14T16:00:00')
                     }
                 ]
             },
             {
                 id: '3',
-                subject: 'Demande de modification',
-                content: 'Serait-il possible d\'ajouter une option pour exporter les données en PDF ?',
-                sender: {
-                    name: 'Pierre Durand',
+                sujet: 'Demande de modification',
+                contenu: 'Serait-il possible d\'ajouter une option pour exporter les données en PDF ?',
+                expediteur: {
+                    nom: 'Pierre Durand',
                     email: 'pierre.durand@email.com',
-                    phone: '0987654321'
+                    telephone: '0987654321'
                 },
-                timestamp: new Date('2024-01-13T09:15:00'),
-                status: 'resolved',
-                priority: 'low',
-                responses: [
+                horodatage: new Date('2024-01-13T09:15:00'),
+                statut: 'resolu',
+                priorite: 'faible',
+                reponses: [
                     {
                         id: 'resp2',
-                        content: 'Merci pour votre suggestion. Cette fonctionnalité est en cours de développement.',
-                        sender: 'admin',
-                        timestamp: new Date('2024-01-13T10:00:00')
+                        contenu: 'Merci pour votre suggestion. Cette fonctionnalité est en cours de développement.',
+                        expediteur: 'admin',
+                        horodatage: new Date('2024-01-13T10:00:00')
                     }
                 ]
             }
         ];
-        setMessages(mockMessages);
+        setMessages(messagesSimules);
     }, []);
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'new': return 'bg-red-500';
-            case 'in-progress': return 'bg-yellow-500';
-            case 'resolved': return 'bg-green-500';
+    const obtenirCouleurStatut = (statut: string) => {
+        switch (statut) {
+            case 'nouveau': return 'bg-red-500';
+            case 'en-cours': return 'bg-yellow-500';
+            case 'resolu': return 'bg-green-500';
             default: return 'bg-gray-500';
         }
     };
 
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case 'new': return '🆕';
-            case 'in-progress': return '⏳';
-            case 'resolved': return '✅';
+    const obtenirIconeStatut = (statut: string) => {
+        switch (statut) {
+            case 'nouveau': return '🆕';
+            case 'en-cours': return '⏳';
+            case 'resolu': return '✅';
             default: return '📧';
         }
     };
 
-    const filteredMessages = messages.filter(message => {
-        const matchesSearch = message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            message.sender.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStatus = statusFilter === 'all' || message.status === statusFilter;
-        return matchesSearch && matchesStatus;
+    const messagesFiltres = messages.filter(message => {
+        const correspondRecherche = message.sujet.toLowerCase().includes(termeRecherche.toLowerCase()) ||
+                            message.expediteur.nom.toLowerCase().includes(termeRecherche.toLowerCase());
+        const correspondStatut = filtreStatut === 'tous' || message.statut === filtreStatut;
+        return correspondRecherche && correspondStatut;
     });
 
-    const handleReply = () => {
-        if (selectedMessage && replyContent.trim()) {
-            const newResponse: Response = {
+    const gererReponse = () => {
+        if (messageSelectionne && contenuReponse.trim()) {
+            const nouvelleReponse: Reponse = {
                 id: Date.now().toString(),
-                content: replyContent,
-                sender: 'admin',
-                timestamp: new Date()
+                contenu: contenuReponse,
+                expediteur: 'admin',
+                horodatage: new Date()
             };
 
-            const updatedMessage = {
-                ...selectedMessage,
-                status: 'in-progress' as const,
-                responses: [...(selectedMessage.responses || []), newResponse]
+            const messageMisAJour = {
+                ...messageSelectionne,
+                statut: 'en-cours' as const,
+                reponses: [...(messageSelectionne.reponses || []), nouvelleReponse]
             };
 
             setMessages(messages.map(msg => 
-                msg.id === selectedMessage.id ? updatedMessage : msg
+                msg.id === messageSelectionne.id ? messageMisAJour : msg
             ));
-            setSelectedMessage(updatedMessage);
-            setReplyContent('');
-            setReplyDialogOpen(false);
+            setMessageSelectionne(messageMisAJour);
+            setContenuReponse('');
+            setDialogueReponseOuvert(false);
         }
     };
 
-    const handleSendNewMessage = () => {
-        if (newMessage.subject.trim() && newMessage.content.trim() && newMessage.recipient.trim()) {
+    const gererEnvoiNouveau = () => {
+        if (nouveauMessage.sujet.trim() && nouveauMessage.contenu.trim() && nouveauMessage.destinataire.trim()) {
             const message: Message = {
                 id: Date.now().toString(),
-                subject: newMessage.subject,
-                content: newMessage.content,
-                sender: {
-                    name: 'Administrateur',
+                sujet: nouveauMessage.sujet,
+                contenu: nouveauMessage.contenu,
+                expediteur: {
+                    nom: 'Administrateur',
                     email: 'admin@company.com'
                 },
-                timestamp: new Date(),
-                status: 'new',
-                priority: 'medium',
-                responses: []
+                horodatage: new Date(),
+                statut: 'nouveau',
+                priorite: 'moyenne',
+                reponses: []
             };
 
             setMessages([message, ...messages]);
-            setNewMessage({ subject: '', content: '', recipient: '' });
-            setNewMessageDialogOpen(false);
+            setNouveauMessage({ sujet: '', contenu: '', destinataire: '' });
+            setDialogueNouveauOuvert(false);
         }
     };
 
@@ -187,7 +187,7 @@ export default function Support() {
                 <p className="text-xs sm:text-sm md:text-base text-gray-600">Gérez les demandes de support de vos utilisateurs</p>
                 </div>
                 <button 
-                    onClick={() => setNewMessageDialogOpen(true)}
+                    onClick={() => setDialogueNouveauOuvert(true)}
                     className="flex items-center justify-center space-x-1 sm:space-x-1.5 px-1.5 sm:px-2.5 md:px-3 py-1 sm:py-1.5 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm md:text-base">
                 <Plus className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                     <span className="hidden sm:inline">Nouveau Message</span>
@@ -205,20 +205,20 @@ export default function Support() {
                     <input
                         type="text"
                         placeholder="Rechercher..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={termeRecherche}
+                        onChange={(e) => setTermeRecherche(e.target.value)}
                         className="w-full py-1 sm:py-1.5 pl-5 sm:pl-6 pr-2 border border-gray-200 rounded-md text-xs sm:text-sm bg-white transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     />
                 </div>
                 <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
+                    value={filtreStatut}
+                    onChange={(e) => setFiltreStatut(e.target.value)}
                     className="py-1 sm:py-1.5 px-1.5 sm:px-2 border border-gray-200 rounded-md text-xs sm:text-sm bg-white cursor-pointer min-w-[70px] sm:min-w-[80px] transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 >
-                    <option value="all">Tous</option>
-                    <option value="new">Nouveau</option>
-                    <option value="in-progress">En cours</option>
-                    <option value="resolved">Résolu</option>
+                    <option value="tous">Tous</option>
+                    <option value="nouveau">Nouveau</option>
+                    <option value="en-cours">En cours</option>
+                    <option value="resolu">Résolu</option>
                 </select>
             </div>
 
@@ -227,49 +227,49 @@ export default function Support() {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     <div className="p-1.5 sm:p-2 border-b border-gray-200 bg-gray-50">
                         <h3 className="m-0 text-xs sm:text-sm font-semibold text-gray-700">
-                            Messages ({filteredMessages.length})
+                            Messages ({messagesFiltres.length})
                         </h3>
                     </div>
                     <div className="overflow-auto h-[calc(100%-35px)] sm:h-[calc(100%-40px)]">
-                        {filteredMessages.length === 0 ? (
+                        {messagesFiltres.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-16 sm:h-20 text-gray-400">
                                 <MessageIcon size={16} className="sm:w-5 sm:h-5" />
                                 <p className="mt-1 sm:mt-1.5 mb-0 text-xs sm:text-sm">Aucun message trouvé</p>
                             </div>
                         ) : (
-                            filteredMessages.map((message) => (
+                            messagesFiltres.map((message) => (
                                 <div
                                     key={message.id}
                                     className={`p-1.5 sm:p-2 border-b border-gray-100 cursor-pointer transition-all duration-200 border-l-3 ${
-                                        selectedMessage?.id === message.id 
+                                        messageSelectionne?.id === message.id 
                                             ? 'bg-blue-50 border-l-blue-500' 
                                             : 'border-l-transparent hover:bg-gray-50'
                                     }`}
-                                    onClick={() => setSelectedMessage(message)}
+                                    onClick={() => setMessageSelectionne(message)}
                                 >
                                     <div className="flex items-start gap-1.5 sm:gap-2">
                                         <div className="relative w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-md flex items-center justify-center text-white text-xs sm:text-sm">
-                                            {getStatusIcon(message.status)}
-                                            {message.responses && message.responses.length > 0 && (
+                                            {obtenirIconeStatut(message.statut)}
+                                            {message.reponses && message.reponses.length > 0 && (
                                                 <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white rounded-full w-2.5 h-2.5 sm:w-3 sm:h-3 text-[8px] sm:text-[9px] flex items-center justify-center font-semibold border border-white">
-                                                    {message.responses.length}
+                                                    {message.reponses.length}
                                                 </span>
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-0.5 mb-0.5 flex-wrap">
                                                 <span className="text-xs sm:text-sm font-semibold text-gray-900 overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
-                                                    {message.subject}
+                                                    {message.sujet}
                                                 </span>
-                                                <span className={`${getStatusColor(message.status)} text-white px-0.5 py-0.5 rounded text-[8px] sm:text-[9px] font-semibold uppercase`}>
-                                                    {message.status}
+                                                <span className={`${obtenirCouleurStatut(message.statut)} text-white px-0.5 py-0.5 rounded text-[8px] sm:text-[9px] font-semibold uppercase`}>
+                                                    {message.statut}
                                                 </span>
                                             </div>
                                             <div className="text-[10px] sm:text-[11px] text-gray-500 mb-0.5 font-medium">
-                                                {message.sender.name}
+                                                {message.expediteur.nom}
                                             </div>
                                             <div className="text-[9px] sm:text-[10px] text-gray-400">
-                                                {message.timestamp.toLocaleDateString('fr-FR', {
+                                                {message.horodatage.toLocaleDateString('fr-FR', {
                                                     day: '2-digit',
                                                     month: '2-digit',
                                                     year: 'numeric',
@@ -287,32 +287,32 @@ export default function Support() {
 
                 {/* Détails du message sélectionné */}
                 <div className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col overflow-hidden">
-                    {selectedMessage ? (
+                    {messageSelectionne ? (
                         <>
                             <div className="p-1.5 sm:p-2 border-b border-gray-200 bg-gray-50">
                                 <div className="flex justify-between items-start">
                                     <div className="flex-1">
                                         <h3 className="m-0 mb-1 sm:mb-1.5 text-sm sm:text-base font-bold text-gray-900">
-                                            {selectedMessage.subject}
+                                            {messageSelectionne.sujet}
                                         </h3>
                                         <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
                                             <div className="flex items-center gap-0.5 px-1 sm:px-1.5 py-0.5 bg-white rounded border border-gray-200">
                                                 <PersonIcon size={8} className="text-gray-500 sm:w-2.5 sm:h-2.5" />
                                                 <span className="text-[10px] sm:text-[11px] text-gray-700 font-medium">
-                                                    {selectedMessage.sender.name}
+                                                    {messageSelectionne.expediteur.nom}
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-0.5 px-1 sm:px-1.5 py-0.5 bg-white rounded border border-gray-200">
                                                 <EmailIcon size={8} className="text-gray-500 sm:w-2.5 sm:h-2.5" />
                                                 <span className="text-[10px] sm:text-[11px] text-gray-700 font-medium">
-                                                    {selectedMessage.sender.email}
+                                                    {messageSelectionne.expediteur.email}
                                                 </span>
                                             </div>
-                                            {selectedMessage.sender.phone && (
+                                            {messageSelectionne.expediteur.telephone && (
                                                 <div className="flex items-center gap-0.5 px-1 sm:px-1.5 py-0.5 bg-white rounded border border-gray-200">
                                                     <PhoneIcon size={8} className="text-gray-500 sm:w-2.5 sm:h-2.5" />
                                                     <span className="text-[10px] sm:text-[11px] text-gray-700 font-medium">
-                                                        {selectedMessage.sender.phone}
+                                                        {messageSelectionne.expediteur.telephone}
                                                     </span>
                                                 </div>
                                             )}
@@ -320,7 +320,7 @@ export default function Support() {
                                     </div>
                                     <button
                                         className="bg-transparent border-none cursor-pointer p-0.5 rounded text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
-                                        onClick={() => setSelectedMessage(null)}
+                                        onClick={() => setMessageSelectionne(null)}
                                     >
                                         <CloseIcon size={10} className="sm:w-3 sm:h-3" />
                                     </button>
@@ -332,54 +332,54 @@ export default function Support() {
                                 <div className="bg-white p-1.5 sm:p-2 rounded-md mb-1.5 sm:mb-2 border border-gray-200 shadow-sm">
                                     <div className="flex items-center gap-1 sm:gap-1.5 mb-1 sm:mb-1.5">
                                         <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-xs sm:text-sm">
-                                            {selectedMessage.sender.name.charAt(0)}
+                                            {messageSelectionne.expediteur.nom.charAt(0)}
                                         </div>
                                         <div>
                                             <div className="font-semibold text-gray-900 text-xs sm:text-sm">
-                                                {selectedMessage.sender.name}
+                                                {messageSelectionne.expediteur.nom}
                                             </div>
                                             <div className="text-[10px] sm:text-[11px] text-gray-500">
-                                                {selectedMessage.timestamp.toLocaleString('fr-FR')}
+                                                {messageSelectionne.horodatage.toLocaleString('fr-FR')}
                                             </div>
                                         </div>
                                     </div>
                                     <p className="m-0 text-sm sm:text-base leading-relaxed text-gray-700">
-                                        {selectedMessage.content}
+                                        {messageSelectionne.contenu}
                                     </p>
                                 </div>
 
                                 {/* Réponses */}
-                                {selectedMessage.responses?.map((response) => (
+                                {messageSelectionne.reponses?.map((reponse) => (
                                     <div 
-                                        key={response.id} 
+                                        key={reponse.id} 
                                         className={`${
-                                            response.sender === 'admin' ? 'bg-white ml-2 sm:ml-3' : 'bg-gray-100 mr-2 sm:mr-3'
+                                            reponse.expediteur === 'admin' ? 'bg-white ml-2 sm:ml-3' : 'bg-gray-100 mr-2 sm:mr-3'
                                         } p-1.5 sm:p-2 rounded-md mb-1.5 sm:mb-2 border border-gray-200 shadow-sm relative`}
                                     >
-                                        {response.sender === 'admin' && (
+                                        {reponse.expediteur === 'admin' && (
                                             <div className="absolute -top-0.5 left-1 sm:left-2 bg-blue-500 text-white px-0.5 sm:px-1 py-0.5 rounded text-[8px] sm:text-[9px] font-semibold">
                                                 Admin
                                             </div>
                                         )}
                                         <div className="flex items-center gap-1 sm:gap-1.5 mb-1 sm:mb-1.5">
                                             <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
-                                                response.sender === 'admin' 
+                                                reponse.expediteur === 'admin' 
                                                     ? 'bg-blue-500 text-white'
                                                     : 'bg-gray-100 text-gray-600 border border-gray-200'
                                             }`}>
-                                                {response.sender === 'admin' ? 'A' : selectedMessage.sender.name.charAt(0)}
+                                                {reponse.expediteur === 'admin' ? 'A' : messageSelectionne.expediteur.nom.charAt(0)}
                                             </div>
                                             <div>
                                                 <div className="font-semibold text-gray-900 text-xs sm:text-sm">
-                                                    {response.sender === 'admin' ? 'Administrateur' : selectedMessage.sender.name}
+                                                    {reponse.expediteur === 'admin' ? 'Administrateur' : messageSelectionne.expediteur.nom}
                                                 </div>
                                                 <div className="text-[10px] sm:text-[11px] text-gray-500">
-                                                    {response.timestamp.toLocaleString('fr-FR')}
+                                                    {reponse.horodatage.toLocaleString('fr-FR')}
                                                 </div>
                                             </div>
                                         </div>
                                         <p className="m-0 text-sm sm:text-base leading-relaxed text-gray-700">
-                                            {response.content}
+                                            {reponse.contenu}
                                         </p>
                                     </div>
                                 ))}
@@ -388,7 +388,7 @@ export default function Support() {
                             <div className="p-1.5 sm:p-2 border-t border-gray-200 bg-gray-50">
                                 <button
                                     className="bg-blue-500 text-white border-none py-1.5 sm:py-2 px-2 sm:px-3 rounded-md cursor-pointer w-full flex items-center justify-center gap-0.5 text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-                                    onClick={() => setReplyDialogOpen(true)}
+                                    onClick={() => setDialogueReponseOuvert(true)}
                                 >
                                     <ReplyIcon size={10} className="sm:w-3 sm:h-3" />
                                     Répondre
@@ -410,7 +410,7 @@ export default function Support() {
             </div>
 
             {/* Dialog de réponse */}
-            {replyDialogOpen && (
+            {dialogueReponseOuvert && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm p-1.5 sm:p-3">
                     <div className="bg-white rounded-xl p-2.5 sm:p-4 w-full max-w-[350px] sm:max-w-[400px] max-h-[50vh] sm:max-h-[45vh] overflow-auto shadow-xl border border-gray-200">
                         <h2 className="m-0 mb-1.5 sm:mb-2 text-sm sm:text-base font-bold text-gray-900">
@@ -419,20 +419,20 @@ export default function Support() {
                         <textarea
                             className="w-full min-h-[70px] sm:min-h-[80px] p-1.5 sm:p-2 border border-gray-200 rounded-md text-sm sm:text-base font-inherit resize-y transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="Votre réponse..."
-                            value={replyContent}
-                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setReplyContent(e.target.value)}
+                            value={contenuReponse}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContenuReponse(e.target.value)}
                             autoFocus
                         />
                         <div className="flex gap-1 justify-end mt-1.5 sm:mt-2">
                             <button
                                 className="py-0.5 sm:py-1 px-1.5 sm:px-2 border border-gray-200 bg-white rounded-md cursor-pointer text-xs sm:text-sm font-semibold text-gray-700 transition-all duration-300 hover:border-gray-300 hover:bg-gray-50"
-                                onClick={() => setReplyDialogOpen(false)}
+                                onClick={() => setDialogueReponseOuvert(false)}
                             >
                                 Annuler
                             </button>
                             <button
                                 className="py-0.5 sm:py-1 px-1.5 sm:px-2 border-none bg-blue-500 text-white rounded-md cursor-pointer text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-                                onClick={handleReply}
+                                onClick={gererReponse}
                             >
                                 Envoyer
                             </button>
@@ -442,7 +442,7 @@ export default function Support() {
             )}
 
             {/* Dialog nouveau message */}
-            {newMessageDialogOpen && (
+            {dialogueNouveauOuvert && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm p-1.5 sm:p-3">
                     <div className="bg-white rounded-xl p-2.5 sm:p-4 w-full max-w-[350px] sm:max-w-[400px] max-h-[50vh] sm:max-h-[45vh] overflow-auto shadow-xl border border-gray-200">
                         <h2 className="m-0 mb-1.5 sm:mb-2 text-sm sm:text-base font-bold text-gray-900">
@@ -451,32 +451,32 @@ export default function Support() {
                         <input
                             className="w-full p-1.5 sm:p-2 border border-gray-200 rounded-md text-xs sm:text-sm mb-1.5 sm:mb-2 transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="Destinataire"
-                            value={newMessage.recipient}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage({...newMessage, recipient: e.target.value})}
+                            value={nouveauMessage.destinataire}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNouveauMessage({...nouveauMessage, destinataire: e.target.value})}
                             autoFocus
                         />
                         <input
                             className="w-full p-1.5 sm:p-2 border border-gray-200 rounded-md text-xs sm:text-sm mb-1.5 sm:mb-2 transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="Sujet"
-                            value={newMessage.subject}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage({...newMessage, subject: e.target.value})}
+                            value={nouveauMessage.sujet}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNouveauMessage({...nouveauMessage, sujet: e.target.value})}
                         />
                         <textarea
                             className="w-full min-h-[70px] sm:min-h-[80px] p-1.5 sm:p-2 border border-gray-200 rounded-md text-sm sm:text-base font-inherit resize-y mb-1.5 sm:mb-2 transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="Message"
-                            value={newMessage.content}
-                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMessage({...newMessage, content: e.target.value})}
+                            value={nouveauMessage.contenu}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNouveauMessage({...nouveauMessage, contenu: e.target.value})}
                         />
                         <div className="flex gap-1 justify-end">
                             <button
                                 className="py-0.5 sm:py-1 px-1.5 sm:px-2 border border-gray-200 bg-white rounded-md cursor-pointer text-xs sm:text-sm font-semibold text-gray-700 transition-all duration-300 hover:border-gray-300 hover:bg-gray-50"
-                                onClick={() => setNewMessageDialogOpen(false)}
+                                onClick={() => setDialogueNouveauOuvert(false)}
                             >
                                 Annuler
                             </button>
                             <button
                                 className="py-0.5 sm:py-1 px-1.5 sm:px-2 border-none bg-blue-500 text-white rounded-md cursor-pointer text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-                                onClick={handleSendNewMessage}
+                                onClick={gererEnvoiNouveau}
                             >
                                 Envoyer
                             </button>

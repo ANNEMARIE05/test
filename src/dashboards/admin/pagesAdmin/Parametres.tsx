@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
 
-interface Settings {
-  twoFactorAuth: boolean;
-  notifications: {
+interface Parametres {
+  auth2F: boolean;
+  notifs: {
     email: boolean;
     sms: boolean;
   };
 }
 
 export default function Parametres() {
-  const [settings, setSettings] = useState<Settings>({
-    twoFactorAuth: false,
-    notifications: {
+  const [parametres, setParametres] = useState<Parametres>({
+    auth2F: false,
+    notifs: {
       email: true,
       sms: false,
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [chargement, setChargement] = useState(false);
 
   // Simuler le chargement des paramètres depuis l'API
   useEffect(() => {
@@ -25,25 +25,25 @@ export default function Parametres() {
     console.log('Chargement des paramètres...');
   }, []);
 
-  const handleSettingChange = (key: string, value: any) => {
-    setSettings(prev => ({
+  const changerParametre = (cle: string, valeur: any) => {
+    setParametres(prev => ({
       ...prev,
-      [key]: value
+      [cle]: valeur
     }));
   };
 
-  const handleNotificationChange = (key: string, value: boolean) => {
-    setSettings(prev => ({
+  const changerNotif = (cle: string, valeur: boolean) => {
+    setParametres(prev => ({
       ...prev,
-      notifications: {
-        ...prev.notifications,
-        [key]: value
+      notifs: {
+        ...prev.notifs,
+        [cle]: valeur
       }
     }));
   };
 
-  const saveSettings = async () => {
-    setIsLoading(true);
+  const sauvegarder = async () => {
+    setChargement(true);
     try {
       // Simuler un appel API
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -53,7 +53,7 @@ export default function Parametres() {
       // Simuler une notification toast
       console.error('Erreur lors de la sauvegarde des paramètres');
     } finally {
-      setIsLoading(false);
+      setChargement(false);
     }
   };
 
@@ -65,10 +65,10 @@ export default function Parametres() {
         <p className="text-xs sm:text-sm text-gray-600">Gérez les paramètres de sécurité et de configuration de votre application</p>
       </div>
       <button 
-        onClick={saveSettings} 
-        disabled={isLoading}
+        onClick={sauvegarder} 
+        disabled={chargement}
         className="flex items-center justify-center space-x-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
-        {isLoading ? 'Sauvegarde...' : 'Sauvegarder'}
+        {chargement ? 'Sauvegarde...' : 'Sauvegarder'}
       </button>
     </div>
 
@@ -93,20 +93,20 @@ export default function Parametres() {
               </div>
               <button
                 id="2fa-toggle"
-                onClick={() => handleSettingChange('twoFactorAuth', !settings.twoFactorAuth)}
+                onClick={() => changerParametre('auth2F', !parametres.auth2F)}
                 className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors flex-shrink-0 ${
-                  settings.twoFactorAuth ? 'bg-blue-600' : 'bg-gray-200'
+                  parametres.auth2F ? 'bg-blue-600' : 'bg-gray-200'
                 }`}
               >
                 <span
                   className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                    settings.twoFactorAuth ? 'translate-x-5' : 'translate-x-1'
+                    parametres.auth2F ? 'translate-x-5' : 'translate-x-1'
                   }`}
                 />
               </button>
             </div>
             
-            {settings.twoFactorAuth && (
+            {parametres.auth2F && (
               <div className="space-y-1.5 p-2 bg-gray-50 rounded-lg sm:space-y-2 sm:p-3">
                 <div className="flex items-center gap-2">
                   <span className="px-1.5 py-0.5 text-xs font-medium bg-gray-200 text-gray-800 rounded-full">Recommandé</span>
@@ -135,14 +135,14 @@ export default function Parametres() {
               <div className="flex items-center justify-between">
                 <label htmlFor="email-notif" className="text-xs font-medium sm:text-sm">Notifications par email</label>
                 <button
-                  onClick={() => handleNotificationChange('email', !settings.notifications.email)}
+                  onClick={() => changerNotif('email', !parametres.notifs.email)}
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors flex-shrink-0 ${
-                    settings.notifications.email ? 'bg-blue-600' : 'bg-gray-200'
+                    parametres.notifs.email ? 'bg-blue-600' : 'bg-gray-200'
                   }`}
                 >
                   <span
                     className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                      settings.notifications.email ? 'translate-x-5' : 'translate-x-1'
+                      parametres.notifs.email ? 'translate-x-5' : 'translate-x-1'
                     }`}
                   />
                 </button>
@@ -151,14 +151,14 @@ export default function Parametres() {
               <div className="flex items-center justify-between">
                 <label htmlFor="sms-notif" className="text-xs font-medium sm:text-sm">Notifications par SMS</label>
                 <button
-                  onClick={() => handleNotificationChange('sms', !settings.notifications.sms)}
+                  onClick={() => changerNotif('sms', !parametres.notifs.sms)}
                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors flex-shrink-0 ${
-                    settings.notifications.sms ? 'bg-blue-600' : 'bg-gray-200'
+                    parametres.notifs.sms ? 'bg-blue-600' : 'bg-gray-200'
                   }`}
                 >
                   <span
                     className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                      settings.notifications.sms ? 'translate-x-5' : 'translate-x-1'
+                      parametres.notifs.sms ? 'translate-x-5' : 'translate-x-1'
                     }`}
                   />
                 </button>

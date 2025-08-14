@@ -8,6 +8,7 @@ import Profile from './pagesAdmin/Profile';
 import Dashboard from './pagesAdmin/Dashboard';
 import Support from './pagesAdmin/Support';
 import Parametres from './pagesAdmin/Parametres';
+import Historique from './pagesAdmin/Historique';
 
 
 interface AdminDashboardProps {
@@ -42,6 +43,11 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       case 'email':
         return (
           <Email />
+        );
+
+      case 'historique':
+        return (
+          <Historique />
         );
 
       case 'settings':

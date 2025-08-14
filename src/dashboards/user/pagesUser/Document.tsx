@@ -117,34 +117,34 @@ export default function Document() {
     };
 
     return (
-        <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
+        <div className="space-y-3 sm:space-y-4 px-4 sm:px-0">
             <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Upload document</h2>
-                <p className="text-sm sm:text-base text-gray-600">Téléchargez un nouveau document pour traitement OCR</p>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">Upload document</h2>
+                <p className="text-xs sm:text-sm text-gray-600">Téléchargez un nouveau document pour traitement OCR</p>
             </div>
             
-            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
                 {/* Zone de drop */}
                 <div
                     {...getRootProps()}
-                    className={`border-2 border-dashed rounded-lg p-4 sm:p-8 text-center transition-colors ${
+                    className={`border-2 border-dashed rounded-lg p-3 sm:p-6 text-center transition-colors ${
                         isDragActive
                             ? 'border-blue-500 bg-blue-50'
                             : 'border-gray-300 hover:border-gray-400'
                     }`}
                 >
                     <input {...getInputProps()} />
-                    <div className="space-y-2 sm:space-y-4">
-                        <div className="mx-auto w-8 h-8 sm:w-12 sm:h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                            <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="space-y-2 sm:space-y-3">
+                        <div className="mx-auto w-6 h-6 sm:w-10 sm:h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
                         </div>
                         <div>
-                            <p className="text-base sm:text-lg font-medium text-gray-900">
+                            <p className="text-sm sm:text-base font-medium text-gray-900">
                                 {isDragActive ? 'Déposez les fichiers ici' : 'Glissez-déposez vos fichiers ici'}
                             </p>
-                            <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 mt-1">
                                 ou cliquez pour sélectionner des fichiers
                             </p>
                         </div>
@@ -156,19 +156,19 @@ export default function Document() {
 
                 {/* Liste des fichiers */}
                 {uploadedFiles.length > 0 && (
-                    <div className="mt-4 sm:mt-6">
-                        <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4">Fichiers sélectionnés</h3>
-                        <div className="space-y-2">
+                    <div className="mt-3 sm:mt-4">
+                        <h3 className="text-sm sm:text-base font-medium text-gray-900 mb-2 sm:mb-3">Fichiers sélectionnés</h3>
+                        <div className="space-y-1.5">
                             {uploadedFiles.map((file, index) => (
-                                <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg">
+                                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
                                     <div className="flex items-center space-x-2 sm:space-x-3">
-                                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded flex items-center justify-center">
-                                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-100 rounded flex items-center justify-center">
+                                            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{file.name}</p>
+                                            <p className="text-xs font-medium text-gray-900 truncate">{file.name}</p>
                                             <p className="text-xs text-gray-500">
                                                 {(file.size / 1024 / 1024).toFixed(2)} MB
                                             </p>
@@ -178,7 +178,7 @@ export default function Document() {
                                         onClick={() => removeFile(index)}
                                         className="text-red-500 hover:text-red-700 p-1 ml-2"
                                     >
-                                        <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
@@ -190,14 +190,14 @@ export default function Document() {
 
                 {/* Barre de progression */}
                 {uploading && (
-                    <div className="mt-4 sm:mt-6">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs sm:text-sm font-medium text-gray-700">Upload en cours...</span>
-                            <span className="text-xs sm:text-sm text-gray-500">{uploadProgress}%</span>
+                    <div className="mt-3 sm:mt-4">
+                        <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-xs font-medium text-gray-700">Upload en cours...</span>
+                            <span className="text-xs text-gray-500">{uploadProgress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5">
                             <div
-                                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
                                 style={{ width: `${uploadProgress}%` }}
                             ></div>
                         </div>
@@ -206,10 +206,10 @@ export default function Document() {
 
                 {/* Bouton d'upload */}
                 {uploadedFiles.length > 0 && !uploading && (
-                    <div className="mt-4 sm:mt-6">
+                    <div className="mt-3 sm:mt-4">
                         <button
                             onClick={handleUpload}
-                            className="w-full bg-blue-600 text-white py-2 sm:py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                         >
                             Traiter {uploadedFiles.length} document{uploadedFiles.length > 1 ? 's' : ''}
                         </button>
@@ -219,24 +219,24 @@ export default function Document() {
 
             {/* Section des documents traités */}
             {processedDocuments.length > 0 && (
-                <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-6">
-                    <h3 className="text-base sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Documents traités</h3>
-                    <div className="space-y-2 sm:space-y-4">
+                <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
+                    <h3 className="text-sm sm:text-lg font-bold text-gray-900 mb-2 sm:mb-3">Documents traités</h3>
+                    <div className="space-y-2 sm:space-y-3">
                         {processedDocuments.map((doc) => (
-                            <div key={doc.id} className="border border-gray-200 rounded-lg p-2 sm:p-4">
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 sm:mb-3 space-y-2 sm:space-y-0">
+                            <div key={doc.id} className="border border-gray-200 rounded-lg p-2 sm:p-3">
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 space-y-1.5 sm:space-y-0">
                                     <div className="flex items-start space-x-2 sm:space-x-3 min-w-0 flex-1">
-                                        <div className="w-6 h-6 sm:w-10 sm:h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
-                                            <svg className="w-3 h-3 sm:w-5 sm:h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="w-5 h-5 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
+                                            <svg className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <h4 className="text-sm sm:text-lg font-medium text-gray-900 truncate">{doc.name}</h4>
-                                            <p className="text-xs sm:text-sm text-gray-500 leading-tight">
+                                            <h4 className="text-xs sm:text-base font-medium text-gray-900 truncate">{doc.name}</h4>
+                                            <p className="text-xs text-gray-500 leading-tight">
                                                 Type: {doc.type}
                                             </p>
-                                            <p className="text-xs sm:text-sm text-gray-500 leading-tight">
+                                            <p className="text-xs text-gray-500 leading-tight">
                                                 Traité le {doc.processedAt.toLocaleDateString('fr-FR')} à {doc.processedAt.toLocaleTimeString('fr-FR')}
                                             </p>
                                         </div>
@@ -246,17 +246,17 @@ export default function Document() {
                                             {/* Bouton Modifier pour mobile */}
                                             <button
                                                 onClick={() => startEditing(doc)}
-                                                className="sm:hidden px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
+                                                className="sm:hidden px-2.5 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
                                             >
                                                 Modifier
                                             </button>
                                             {/* Icône pour desktop */}
                                             <button
                                                 onClick={() => startEditing(doc)}
-                                                className="hidden sm:block text-blue-600 hover:text-blue-800 p-1.5 sm:p-2 rounded-lg hover:bg-blue-50 transition-colors flex-shrink-0 self-start sm:self-center"
+                                                className="hidden sm:block text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-50 transition-colors flex-shrink-0 self-start sm:self-center"
                                                 title="Modifier le contenu"
                                             >
-                                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
@@ -265,31 +265,31 @@ export default function Document() {
                                 </div>
                                 
                                 {editingDocumentId === doc.id ? (
-                                    <div className="space-y-2 sm:space-y-4">
-                                        <div className="bg-gray-50 rounded-lg p-2 sm:p-4">
-                                            <h5 className="text-xs sm:text-sm font-medium text-gray-700 mb-2">Modifier le contenu extrait:</h5>
+                                    <div className="space-y-2 sm:space-y-3">
+                                        <div className="bg-gray-50 rounded-lg p-2 sm:p-3">
+                                            <h5 className="text-xs font-medium text-gray-700 mb-1.5">Modifier le contenu extrait:</h5>
                                             <textarea
                                                 value={editContent}
                                                 onChange={(e) => setEditContent(e.target.value)}
-                                                className="w-full h-32 sm:h-64 p-2 sm:p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm"
+                                                className="w-full h-24 sm:h-48 p-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                                                 placeholder="Modifiez le contenu extrait ici..."
                                             />
                                         </div>
-                                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                                        <div className="flex flex-col sm:flex-row space-y-1.5 sm:space-y-0 sm:space-x-2">
                                             <button
                                                 onClick={saveEdit}
-                                                className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2 text-sm"
+                                                className="px-2.5 sm:px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-1.5 text-xs"
                                             >
-                                                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                 </svg>
                                                 <span>Sauvegarder</span>
                                             </button>
                                             <button
                                                 onClick={cancelEdit}
-                                                className="px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center space-x-2 text-sm"
+                                                className="px-2.5 sm:px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center space-x-1.5 text-xs"
                                             >
-                                                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
                                                 <span>Annuler</span>
@@ -297,9 +297,9 @@ export default function Document() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="bg-gray-50 rounded-lg p-2 sm:p-4">
-                                        <h5 className="text-xs sm:text-sm font-medium text-gray-700 mb-2">Informations extraites:</h5>
-                                        <pre className="text-xs sm:text-sm text-gray-600 whitespace-pre-wrap font-sans max-h-24 sm:max-h-48 overflow-y-auto leading-relaxed">{doc.content}</pre>
+                                    <div className="bg-gray-50 rounded-lg p-2 sm:p-3">
+                                        <h5 className="text-xs font-medium text-gray-700 mb-1.5">Informations extraites:</h5>
+                                        <pre className="text-xs text-gray-600 whitespace-pre-wrap font-sans max-h-20 sm:max-h-32 overflow-y-auto leading-relaxed">{doc.content}</pre>
                                     </div>
                                 )}
                             </div>

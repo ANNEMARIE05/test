@@ -10,7 +10,8 @@ import {
   X,
   Shield,
   MessageCircle,
-  Settings
+  Settings,
+  History
 } from "lucide-react";
 
 export type SidebarItem = {
@@ -40,14 +41,15 @@ export default function Sidebar({
   title = "OCR"
 }: SidebarProps) {
   const defaultItems: SidebarItem[] = [
-    { id: 'dashboard', label: 'Tableau de bord', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { id: 'users', label: 'Gestion utilisateurs', icon: <Users className="w-5 h-5" /> },
-    { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-5 h-5" /> },
-    { id: 'api', label: 'Gestion d\'API', icon: <Code className="w-5 h-5" /> },
-    { id: 'email', label: 'Gestion d\'email', icon: <Mail className="w-5 h-5" /> },
-    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-5 h-5" /> },
-    { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
-    { id: 'support', label: 'Support', icon: <MessageCircle className="w-5 h-5" /> },
+    { id: 'dashboard', label: 'Tableau de bord', icon: <LayoutDashboard className="w-3.5 h-3.5" /> },
+    { id: 'users', label: 'Gestion utilisateurs', icon: <Users className="w-3.5 h-3.5" /> },
+    { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-3.5 h-3.5" /> },
+    { id: 'api', label: 'Gestion d\'API', icon: <Code className="w-3.5 h-3.5" /> },
+    { id: 'email', label: 'Gestion d\'email', icon: <Mail className="w-3.5 h-3.5" /> },
+    { id: 'history', label: 'Historique', icon: <History className="w-3.5 h-3.5" /> },
+    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-3.5 h-3.5" /> },
+    { id: 'profile', label: 'Profile', icon: <User className="w-3.5 h-3.5" /> },
+    { id: 'support', label: 'Support', icon: <MessageCircle className="w-3.5 h-3.5" /> },
   ];
 
   const sidebarItems = items.length > 0 ? items : defaultItems;
@@ -86,7 +88,7 @@ export default function Sidebar({
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+          <nav className="flex-1 px-2.5 py-4 space-y-0.5 overflow-y-auto">
             {sidebarItems.map((item) => (
               <button
                 key={item.id}
@@ -94,32 +96,32 @@ export default function Sidebar({
                   onSectionChange(item.id);
                   onClose();
                 }}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-200 ${
+                className={`w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-lg text-left transition-all duration-200 ${
                   activeSection === item.id
                     ? 'bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 border-r-2 border-blue-500 shadow-sm'
                     : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
                 }`}
               >
-                <div className={`p-1 rounded-lg ${
+                <div className={`p-1 rounded-md ${
                   activeSection === item.id ? 'bg-blue-100' : 'bg-gray-100'
                 }`}>
                   {item.icon}
                 </div>
-                <span className="font-medium">{item.label}</span>
+                <span className="font-medium text-sm">{item.label}</span>
               </button>
             ))}
           </nav>
 
           {/* Logout */}
-          <div className="p-4 border-t border-gray-200 bg-white shadow-sm">
+          <div className="p-2.5 border-t border-gray-200 bg-white shadow-sm">
             <button
               onClick={onLogout}
-              className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left text-red-600 hover:bg-red-50 transition-all duration-200 hover:shadow-sm"
+              className="w-full flex items-center space-x-2.5 px-2.5 py-2 rounded-lg text-left text-red-600 hover:bg-red-50 transition-all duration-200 hover:shadow-sm"
             >
-              <div className="p-1 rounded-lg bg-red-100">
-                <LogOut className="w-5 h-5" />
+              <div className="p-1 rounded-md bg-red-100">
+                <LogOut className="w-3.5 h-3.5" />
               </div>
-              <span className="font-medium">Déconnexion</span>
+              <span className="font-medium text-sm">Déconnexion</span>
             </button>
           </div>
         </div>

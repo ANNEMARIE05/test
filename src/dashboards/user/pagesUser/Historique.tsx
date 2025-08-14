@@ -209,53 +209,53 @@ export default function Historique() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Historique</h2>
-        <p className="text-gray-600">Consultez l'historique de vos traitements OCR</p>
+        <h2 className="text-xl font-bold text-gray-900 mb-1">Historique</h2>
+        <p className="text-sm text-gray-600">Consultez l'historique de vos traitements OCR</p>
       </div>
       
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-2 sm:space-y-0">
-          <h3 className="text-lg font-semibold text-gray-900">Documents traités</h3>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-1 sm:space-y-0">
+          <h3 className="text-base font-semibold text-gray-900">Documents traités</h3>
           <div className="flex space-x-2">
-            <span className="text-sm text-gray-500">Total: {documents.length} documents</span>
+            <span className="text-xs text-gray-500">Total: {documents.length} documents</span>
           </div>
         </div>
 
         {/* Mobile view - Cards */}
-        <div className="block sm:hidden space-y-4">
+        <div className="block sm:hidden space-y-3">
           {documents.map((doc) => (
-            <div key={doc.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center justify-between mb-3">
+            <div key={doc.id} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+              <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center flex-1 min-w-0">
-                  <div className="h-8 w-8 rounded bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0">
+                  <div className="h-6 w-6 rounded bg-blue-100 flex items-center justify-center mr-2 flex-shrink-0">
                     <span className="text-blue-600 text-xs font-medium">PDF</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-gray-900 truncate">{doc.name}</div>
+                    <div className="text-xs font-medium text-gray-900 truncate">{doc.name}</div>
                     <div className="text-xs text-gray-500">ID: {doc.id}</div>
                   </div>
                 </div>
-                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(doc.status)} ml-2 flex-shrink-0`}>
+                <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(doc.status)} ml-2 flex-shrink-0`}>
                   <span className="mr-1">{getStatusIcon(doc.status)}</span>
                   {doc.status}
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs text-gray-600">
-                <div className="flex space-x-4">
+                <div className="flex space-x-3">
                   <span><span className="font-medium">Date:</span> {new Date(doc.date).toLocaleDateString('fr-FR')}</span>
                   <span><span className="font-medium">Taille:</span> {doc.size}</span>
                 </div>
                 <div className="flex space-x-2">
                   <button 
-                    className="text-blue-600 hover:text-blue-900 text-sm"
+                    className="text-blue-600 hover:text-blue-900 text-xs"
                     onClick={() => handleViewDocument(doc)}
                   >
                     Voir
                   </button>
                   {doc.status === 'terminé' && (
-                    <button className="text-green-600 hover:text-green-900 text-sm">
+                    <button className="text-green-600 hover:text-green-900 text-xs">
                       Télécharger
                     </button>
                   )}
@@ -270,19 +270,19 @@ export default function Historique() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Document
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Taille
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Statut
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -290,32 +290,32 @@ export default function Historique() {
             <tbody className="bg-white divide-y divide-gray-200">
               {documents.map((doc) => (
                 <tr key={doc.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-8 w-8">
-                        <div className="h-8 w-8 rounded bg-blue-100 flex items-center justify-center">
-                          <span className="text-blue-600 text-sm font-medium">PDF</span>
+                      <div className="flex-shrink-0 h-6 w-6">
+                        <div className="h-6 w-6 rounded bg-blue-100 flex items-center justify-center">
+                          <span className="text-blue-600 text-xs font-medium">PDF</span>
                         </div>
                       </div>
-                      <div className="ml-4">
+                      <div className="ml-3">
                         <div className="text-sm font-medium text-gray-900">{doc.name}</div>
-                        <div className="text-sm text-gray-500">ID: {doc.id}</div>
+                        <div className="text-xs text-gray-500">ID: {doc.id}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                     {new Date(doc.date).toLocaleDateString('fr-FR')}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                     {doc.size}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(doc.status)}`}>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(doc.status)}`}>
                       <span className="mr-1">{getStatusIcon(doc.status)}</span>
                       {doc.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
                       <button 
                         className="text-blue-600 hover:text-blue-900 text-sm"
@@ -337,10 +337,10 @@ export default function Historique() {
         </div>
 
         {documents.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">📄</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun document</h3>
-            <p className="text-gray-500">Vous n'avez pas encore traité de documents OCR.</p>
+          <div className="text-center py-8">
+            <div className="text-gray-400 text-4xl mb-3">📄</div>
+            <h3 className="text-base font-medium text-gray-900 mb-1">Aucun document</h3>
+            <p className="text-sm text-gray-500">Vous n'avez pas encore traité de documents OCR.</p>
           </div>
         )}
       </div>
@@ -348,25 +348,25 @@ export default function Historique() {
       {/* Modal pour afficher les détails du document */}
       {showModal && selectedDocument && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-4 sm:top-20 mx-auto p-4 sm:p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
+          <div className="relative top-4 sm:top-20 mx-auto p-3 sm:p-4 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
             <div className="mt-3">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-2 sm:space-y-0">
-                <h3 className="text-lg font-semibold text-gray-900">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-1 sm:space-y-0">
+                <h3 className="text-base font-semibold text-gray-900">
                   Détails du document
                 </h3>
                 <div className="flex items-center space-x-2">
                   {selectedDocument.status === 'terminé' && !isEditMode && (
                     <button
                       onClick={handleEdit}
-                      className="px-3 py-1 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
+                      className="px-2 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors"
                     >
                       Modifier
                     </button>
                   )}
                   <button
                     onClick={closeModal}
-                    className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+                    className="text-gray-400 hover:text-gray-600 text-lg font-bold"
                   >
                     ×
                   </button>
@@ -374,29 +374,29 @@ export default function Historique() {
               </div>
 
               {/* Document Info */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                 {/* File Preview */}
-                <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
-                  <h4 className="text-md font-semibold text-gray-900 mb-4">Aperçu du fichier</h4>
-                  <div className="bg-white border rounded-lg p-3 sm:p-4 min-h-[200px] sm:min-h-[300px]">
-                    <div className="flex items-center mb-4">
-                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded bg-blue-100 flex items-center justify-center mr-3">
-                        <span className="text-blue-600 text-sm sm:text-lg font-medium">PDF</span>
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Aperçu du fichier</h4>
+                  <div className="bg-white border rounded-lg p-2 sm:p-3 min-h-[150px] sm:min-h-[250px]">
+                    <div className="flex items-center mb-3">
+                      <div className="h-8 w-8 sm:h-10 sm:w-10 rounded bg-blue-100 flex items-center justify-center mr-2">
+                        <span className="text-blue-600 text-xs sm:text-sm font-medium">PDF</span>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium text-gray-900 truncate">{selectedDocument.name}</div>
-                        <div className="text-sm text-gray-500">{selectedDocument.size}</div>
+                        <div className="text-xs font-medium text-gray-900 truncate">{selectedDocument.name}</div>
+                        <div className="text-xs text-gray-500">{selectedDocument.size}</div>
                       </div>
                     </div>
                     {isEditMode ? (
                       <textarea
                         value={editedContent}
                         onChange={(e) => setEditedContent(e.target.value)}
-                        className="w-full h-48 sm:h-64 p-3 border border-gray-300 rounded-md text-sm text-gray-700 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full h-32 sm:h-48 p-2 border border-gray-300 rounded-md text-xs text-gray-700 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="Contenu du document..."
                       />
                     ) : (
-                      <div className="text-sm text-gray-700 leading-relaxed max-h-48 sm:max-h-64 overflow-y-auto">
+                      <div className="text-xs text-gray-700 leading-relaxed max-h-32 sm:max-h-48 overflow-y-auto">
                         {selectedDocument.content || "Aperçu non disponible pour ce document..."}
                       </div>
                     )}
@@ -404,12 +404,12 @@ export default function Historique() {
                 </div>
 
                 {/* Extracted Data */}
-                <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
-                  <h4 className="text-md font-semibold text-gray-900 mb-4">Données extraites</h4>
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Données extraites</h4>
                   {selectedDocument.extractedData || isEditMode ? (
-                    <div className="space-y-4">
-                      <div className="bg-white rounded-lg p-3 sm:p-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
+                    <div className="space-y-3">
+                      <div className="bg-white rounded-lg p-2 sm:p-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs">
                           <div>
                             <span className="font-medium text-gray-700">Numéro:</span>
                             {isEditMode ? (
@@ -417,7 +417,7 @@ export default function Historique() {
                                 type="text"
                                 value={editedData?.invoiceNumber || ''}
                                 onChange={(e) => handleDataChange('invoiceNumber', e.target.value)}
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
                               <p className="text-gray-900 break-words">{selectedDocument.extractedData?.invoiceNumber}</p>
@@ -430,7 +430,7 @@ export default function Historique() {
                                 type="text"
                                 value={editedData?.amount || ''}
                                 onChange={(e) => handleDataChange('amount', e.target.value)}
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
                               <p className="text-gray-900 break-words">{selectedDocument.extractedData?.amount}</p>
@@ -443,7 +443,7 @@ export default function Historique() {
                                 type="text"
                                 value={editedData?.date || ''}
                                 onChange={(e) => handleDataChange('date', e.target.value)}
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
                               <p className="text-gray-900 break-words">{selectedDocument.extractedData?.date}</p>
@@ -456,7 +456,7 @@ export default function Historique() {
                                 type="text"
                                 value={editedData?.company || ''}
                                 onChange={(e) => handleDataChange('company', e.target.value)}
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full mt-1 p-1 border border-gray-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               />
                             ) : (
                               <p className="text-gray-900 break-words">{selectedDocument.extractedData?.company}</p>
@@ -466,23 +466,23 @@ export default function Historique() {
                       </div>
 
                       {(selectedDocument.extractedData?.items || isEditMode) && (
-                        <div className="bg-white rounded-lg p-3 sm:p-4">
-                          <div className="flex justify-between items-center mb-3">
-                            <h5 className="font-medium text-gray-700">Articles</h5>
+                        <div className="bg-white rounded-lg p-2 sm:p-3">
+                          <div className="flex justify-between items-center mb-2">
+                            <h5 className="font-medium text-gray-700 text-xs">Articles</h5>
                             {isEditMode && (
                               <button
                                 onClick={addItem}
-                                className="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
+                                className="px-1.5 py-0.5 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
                               >
                                 + Ajouter
                               </button>
                             )}
                           </div>
-                          <div className="space-y-2">
+                          <div className="space-y-1">
                             {(isEditMode ? editedData?.items : selectedDocument.extractedData?.items)?.map((item, index) => (
-                              <div key={index} className="flex justify-between text-sm border-b pb-2">
+                              <div key={index} className="flex justify-between text-xs border-b pb-1">
                                 {isEditMode ? (
-                                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-1">
                                     <input
                                       type="text"
                                       value={item.description}
@@ -508,7 +508,7 @@ export default function Historique() {
                                       />
                                       <button
                                         onClick={() => removeItem(index)}
-                                        className="px-1 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+                                        className="px-1 py-0.5 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
                                       >
                                         ×
                                       </button>
@@ -517,7 +517,7 @@ export default function Historique() {
                                 ) : (
                                   <>
                                     <span className="text-gray-900 break-words flex-1 mr-2">{item.description}</span>
-                                    <span className="text-gray-700 text-xs sm:text-sm whitespace-nowrap">
+                                    <span className="text-gray-700 text-xs whitespace-nowrap">
                                       {item.quantity} × {item.price.toLocaleString()} FCFA
                                     </span>
                                   </>
@@ -529,9 +529,9 @@ export default function Historique() {
                       )}
                     </div>
                   ) : (
-                    <div className="bg-white rounded-lg p-4 text-center">
-                      <div className="text-gray-400 text-4xl mb-2">📄</div>
-                      <p className="text-gray-500 text-sm">
+                    <div className="bg-white rounded-lg p-3 text-center">
+                      <div className="text-gray-400 text-3xl mb-1">📄</div>
+                      <p className="text-gray-500 text-xs">
                         {selectedDocument.status === 'non traité' 
                           ? "Document en attente de traitement OCR"
                           : "Données extraites non disponibles"
@@ -543,18 +543,18 @@ export default function Historique() {
               </div>
 
               {/* Footer */}
-              <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 mt-6 pt-4 border-t">
+              <div className="flex flex-col sm:flex-row sm:justify-end space-y-1 sm:space-y-0 sm:space-x-2 mt-4 pt-3 border-t">
                 {isEditMode ? (
                   <>
                     <button
                       onClick={handleCancel}
-                      className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+                      className="w-full sm:w-auto px-3 py-1.5 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors text-sm"
                     >
                       Annuler
                     </button>
                     <button
                       onClick={handleSave}
-                      className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                      className="w-full sm:w-auto px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
                     >
                       Enregistrer
                     </button>
@@ -563,12 +563,12 @@ export default function Historique() {
                   <>
                     <button
                       onClick={closeModal}
-                      className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+                      className="w-full sm:w-auto px-3 py-1.5 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors text-sm"
                     >
                       Fermer
                     </button>
                     {selectedDocument.status === 'terminé' && (
-                      <button className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                      <button className="w-full sm:w-auto px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm">
                         Télécharger
                       </button>
                     )}

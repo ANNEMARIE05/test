@@ -43,13 +43,13 @@ export default function UserDashboard({ onLogout }: UserDashboardProps) {
   };
 
   const userSidebarItems: SidebarItem[] = [
-    { id: 'dashboard', label: 'Tableau de bord', icon: <BarChart3 className="w-5 h-5" /> },
-    { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-5 h-5" /> },
-    { id: 'history', label: 'Historique', icon: <History className="w-5 h-5" /> },
-    { id: 'apis', label: 'Gestion d\'APIs', icon: <Code className="w-5 h-5" /> },
-    { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
-    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-5 h-5" /> },
-    { id: 'assistance', label: 'Assistance', icon: <MessageCircle className="w-5 h-5" /> },
+    { id: 'dashboard', label: 'Tableau de bord', icon: <BarChart3 className="w-4 h-4" /> },
+    { id: 'documents', label: 'Gestion documents', icon: <FileText className="w-4 h-4" /> },
+    { id: 'history', label: 'Historique', icon: <History className="w-4 h-4" /> },
+    { id: 'apis', label: 'Gestion d\'APIs', icon: <Code className="w-4 h-4" /> },
+    { id: 'profile', label: 'Profile', icon: <User className="w-4 h-4" /> },
+    { id: 'settings', label: 'Paramètres', icon: <Settings className="w-4 h-4" /> },
+    { id: 'assistance', label: 'Assistance', icon: <MessageCircle className="w-4 h-4" /> },
   ];
 
   const renderContent = () => {

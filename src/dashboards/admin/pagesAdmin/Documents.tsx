@@ -413,17 +413,17 @@ export default function Documents() {
     const statusCounts = getStatusCounts();
 
     return (
-        <div className="space-y-4 sm:space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Gestion documents</h2>
-              <p className="text-sm sm:text-base text-gray-600">Gérez les documents traités par l'OCR</p>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">Gestion documents</h2>
+              <p className="text-xs sm:text-sm text-gray-600">Gérez les documents traités par l'OCR</p>
             </div>
-            <div className="flex flex-wrap items-center gap-2 sm:space-x-2">
+            <div className="flex flex-wrap items-center gap-1 sm:space-x-2">
               {selectedDocuments.length > 0 && (
                 <button 
                   onClick={() => setShowAssignModal(true)}
-                  className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                  className="flex items-center space-x-1 px-2 sm:px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm"
                 >
                   <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>Assigner ({selectedDocuments.length})</span>
@@ -431,14 +431,14 @@ export default function Documents() {
               )}
               <button 
                 onClick={() => setShowClientStats(true)}
-                className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                className="flex items-center space-x-1 px-2 sm:px-3 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-xs sm:text-sm"
               >
                 <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Statistiques clients</span>
               </button>
               <button 
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                className="flex items-center space-x-1 px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
               >
                 <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span>Ajouter un document</span>
@@ -447,47 +447,47 @@ export default function Documents() {
           </div>
 
           {/* Status Overview */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            <div className="bg-white p-2 sm:p-3 rounded-lg border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Non traités</p>
-                  <p className="text-xl sm:text-2xl font-bold text-gray-900">{statusCounts.nonTraite}</p>
+                  <p className="text-xs text-gray-600">Non traités</p>
+                  <p className="text-lg sm:text-xl font-bold text-gray-900">{statusCounts.nonTraite}</p>
                 </div>
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-100 rounded-lg flex items-center justify-center">
                   <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                 </div>
               </div>
             </div>
-            <div className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200">
+            <div className="bg-white p-2 sm:p-3 rounded-lg border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs sm:text-sm text-gray-600">En cours</p>
-                  <p className="text-xl sm:text-2xl font-bold text-yellow-600">{statusCounts.enCours}</p>
+                  <p className="text-xs text-gray-600">En cours</p>
+                  <p className="text-lg sm:text-xl font-bold text-yellow-600">{statusCounts.enCours}</p>
                 </div>
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
                 </div>
               </div>
             </div>
-            <div className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200">
+            <div className="bg-white p-2 sm:p-3 rounded-lg border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Terminés</p>
-                  <p className="text-xl sm:text-2xl font-bold text-green-600">{statusCounts.termine}</p>
+                  <p className="text-xs text-gray-600">Terminés</p>
+                  <p className="text-lg sm:text-xl font-bold text-green-600">{statusCounts.termine}</p>
                 </div>
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-100 rounded-lg flex items-center justify-center">
                   <CheckSquare className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                 </div>
               </div>
             </div>
-            <div className="bg-white p-3 sm:p-4 rounded-lg border border-gray-200">
+            <div className="bg-white p-2 sm:p-3 rounded-lg border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Erreurs</p>
-                  <p className="text-xl sm:text-2xl font-bold text-red-600">{statusCounts.erreur}</p>
+                  <p className="text-xs text-gray-600">Erreurs</p>
+                  <p className="text-lg sm:text-xl font-bold text-red-600">{statusCounts.erreur}</p>
                 </div>
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-red-100 rounded-lg flex items-center justify-center">
                   <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-red-600" />
                 </div>
               </div>
@@ -502,7 +502,7 @@ export default function Documents() {
               placeholder="Rechercher un document..."
               value={searchDocuments}
               onChange={(e) => setSearchDocuments(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
           </div>
 
@@ -513,7 +513,7 @@ export default function Documents() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       <button 
                         onClick={handleSelectAll}
                         className="flex items-center"
@@ -525,19 +525,19 @@ export default function Documents() {
                         )}
                       </button>
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Nom
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Date upload
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Statut
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Client assigné
                     </th>
-                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -545,7 +545,7 @@ export default function Documents() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredDocuments.map((doc) => (
                     <tr key={doc.id} className="hover:bg-gray-50">
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 sm:px-4 py-2 whitespace-nowrap">
                         <button 
                           onClick={() => handleSelectDocument(doc.id)}
                           className="flex items-center"
@@ -557,13 +557,13 @@ export default function Documents() {
                           )}
                         </button>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 sm:px-4 py-2 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{doc.nom}</div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 sm:px-4 py-2 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{doc.dateUpload}</div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 sm:px-4 py-2 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           doc.statut === 'Traité' ? 'bg-green-100 text-green-800' :
                           doc.statut === 'En cours' ? 'bg-yellow-100 text-yellow-800' :
@@ -573,11 +573,11 @@ export default function Documents() {
                           {doc.statut}
                         </span>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                      <td className="px-3 sm:px-4 py-2 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{doc.clientName || '-'}</div>
                       </td>
-                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-2">
+                      <td className="px-3 sm:px-4 py-2 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center space-x-1 sm:space-x-2">
                           <button 
                             onClick={() => openProcessModal(doc)}
                             className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50" 
@@ -613,9 +613,9 @@ export default function Documents() {
             {/* Mobile Cards */}
             <div className="md:hidden">
               {filteredDocuments.map((doc) => (
-                <div key={doc.id} className="border-b border-gray-200 p-4 hover:bg-gray-50">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center space-x-3 flex-1">
+                <div key={doc.id} className="border-b border-gray-200 p-3 hover:bg-gray-50">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center space-x-2 flex-1">
                       <button 
                         onClick={() => handleSelectDocument(doc.id)}
                         className="flex-shrink-0"
@@ -628,7 +628,7 @@ export default function Documents() {
                       </button>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-medium text-gray-900 truncate">{doc.nom}</h3>
-                        <p className="text-xs text-gray-500 mt-1">{doc.dateUpload}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{doc.dateUpload}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
@@ -676,9 +676,9 @@ export default function Documents() {
           {/* Add Document Modal */}
           {showAddModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Ajouter un document</h3>
+              <div className="bg-white rounded-lg p-3 sm:p-4 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold">Ajouter un document</h3>
                   <button
                     onClick={() => {
                       setShowAddModal(false);
@@ -690,14 +690,14 @@ export default function Documents() {
                     }}
                     className="text-gray-400 hover:text-gray-600"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
 
                 {/* Zone de drag & drop */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div
-                    className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center transition-colors ${
+                    className={`border-2 border-dashed rounded-lg p-3 sm:p-4 text-center transition-colors ${
                       isDragOver 
                         ? 'border-blue-500 bg-blue-50' 
                         : uploadedFile 
@@ -709,8 +709,8 @@ export default function Documents() {
                     onDrop={handleDrop}
                   >
                     {uploadedFile ? (
-                      <div className="space-y-2">
-                        <File className="w-8 h-8 mx-auto text-green-600" />
+                      <div className="space-y-1 sm:space-y-2">
+                        <File className="w-6 h-6 sm:w-8 sm:h-8 mx-auto text-green-600" />
                         <p className="text-sm font-medium text-gray-900">{uploadedFile.name}</p>
                         <p className="text-xs text-gray-500">
                           {(uploadedFile.size / (1024 * 1024)).toFixed(1)} MB
@@ -726,8 +726,8 @@ export default function Documents() {
                         </button>
                       </div>
                     ) : (
-                      <div className="space-y-2">
-                        <Upload className="w-8 h-8 mx-auto text-gray-400" />
+                      <div className="space-y-1 sm:space-y-2">
+                        <Upload className="w-6 h-6 sm:w-8 sm:h-8 mx-auto text-gray-400" />
                         <p className="text-sm text-gray-600">
                           Glissez-déposez votre fichier ici ou
                         </p>
@@ -751,7 +751,7 @@ export default function Documents() {
 
                   {/* Barre de progression */}
                   {isUploading && (
-                    <div className="space-y-2">
+                    <div className="space-y-1 sm:space-y-2">
                       <div className="flex justify-between text-sm">
                         <span>Upload en cours...</span>
                         <span>{uploadProgress}%</span>
@@ -766,7 +766,7 @@ export default function Documents() {
                   )}
                 </div>
 
-                <div className="flex justify-end space-x-2 mt-6">
+                <div className="flex justify-end space-x-2 mt-4">
                   <button
                     onClick={() => {
                       setShowAddModal(false);
@@ -776,14 +776,14 @@ export default function Documents() {
                       setUploadProgress(0);
                       setIsUploading(false);
                     }}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="px-3 sm:px-4 py-1.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleAddDocument}
                     disabled={(!uploadedFile && !newDocument.nom) || isUploading}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {isUploading ? 'Upload...' : 'Ajouter'}
                   </button>
@@ -795,68 +795,68 @@ export default function Documents() {
           {/* Edit Document Modal */}
           {showEditModal && editingDocument && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Modifier le document</h3>
+              <div className="bg-white rounded-lg p-3 sm:p-4 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold">Modifier le document</h3>
                   <button
                     onClick={() => setShowEditModal(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
                 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                   {/* Informations du document */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900">Informations du document</h4>
-                    <div className="space-y-4">
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Informations du document</h4>
+                    <div className="space-y-3">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Nom du document
                         </label>
                         <input
                           type="text"
                           value={editingDocument.nom}
                           onChange={(e) => setEditingDocument(prev => prev ? { ...prev, nom: e.target.value } : null)}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Type
                         </label>
                         <input
                           type="text"
                           value={editingDocument.type}
                           disabled
-                          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600"
+                          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Taille
                         </label>
                         <input
                           type="text"
                           value={editingDocument.taille}
                           disabled
-                          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600"
+                          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Statut
                         </label>
                         <input
                           type="text"
                           value={editingDocument.statut}
                           disabled
-                          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600"
+                          className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Client assigné
                         </label>
                         <select
@@ -866,7 +866,7 @@ export default function Documents() {
                             clientId: e.target.value,
                             clientName: e.target.value ? clients.find(c => c.id === e.target.value)?.nom || '' : ''
                           } : null)}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                         >
                           <option value="">Aucun client assigné</option>
                           {clients.map(client => (
@@ -880,33 +880,33 @@ export default function Documents() {
                   </div>
 
                   {/* Contenu du document */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900">Contenu du document</h4>
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Contenu du document</h4>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
                         Texte extrait par OCR
                       </label>
                       <textarea
                         value={editingDocument.ocrText || ''}
                         onChange={(e) => setEditingDocument(prev => prev ? { ...prev, ocrText: e.target.value } : null)}
-                        className="w-full h-[250px] sm:h-[300px] p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm resize-none"
+                        className="w-full h-[200px] sm:h-[250px] p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm resize-none"
                         placeholder="Modifiez le contenu du document..."
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-2 mt-6">
+                <div className="flex justify-end space-x-2 mt-4">
                   <button
                     onClick={() => setShowEditModal(false)}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="px-3 sm:px-4 py-1.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleEditDocument}
                     disabled={!editingDocument.nom}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 sm:px-4 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     Modifier
                   </button>
@@ -918,34 +918,34 @@ export default function Documents() {
           {/* Delete Document Modal */}
           {showDeleteModal && deletingDocument && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-md">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Supprimer le document</h3>
+              <div className="bg-white rounded-lg p-3 sm:p-4 w-full max-w-md">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold">Supprimer le document</h3>
                   <button
                     onClick={() => setShowDeleteModal(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
-                <div className="mb-4">
-                  <p className="text-gray-600">
+                <div className="mb-3">
+                  <p className="text-gray-600 text-sm">
                     Êtes-vous sûr de vouloir supprimer le document <strong>"{deletingDocument.nom}"</strong> ?
                   </p>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500 mt-1">
                     Cette action est irréversible.
                   </p>
                 </div>
                 <div className="flex justify-end space-x-2">
                   <button
                     onClick={() => setShowDeleteModal(false)}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="px-3 sm:px-4 py-1.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleDeleteDocument}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    className="px-3 sm:px-4 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
                   >
                     Supprimer
                   </button>
@@ -957,16 +957,16 @@ export default function Documents() {
           {/* Assign Modal */}
           {showAssignModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-md">
-                <h3 className="text-lg font-semibold mb-4">Assigner des documents à un client</h3>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="bg-white rounded-lg p-3 sm:p-4 w-full max-w-md">
+                <h3 className="text-base sm:text-lg font-semibold mb-3">Assigner des documents à un client</h3>
+                <div className="mb-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Sélectionner un client
                   </label>
                   <select
                     value={selectedClient}
                     onChange={(e) => setSelectedClient(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                   >
                     <option value="">Choisir un client...</option>
                     {clients.map(client => (
@@ -976,7 +976,7 @@ export default function Documents() {
                     ))}
                   </select>
                 </div>
-                <div className="mb-4">
+                <div className="mb-3">
                   <p className="text-sm text-gray-600">
                     Documents sélectionnés: {selectedDocuments.length}
                   </p>
@@ -984,14 +984,14 @@ export default function Documents() {
                 <div className="flex justify-end space-x-2">
                   <button
                     onClick={() => setShowAssignModal(false)}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="px-3 sm:px-4 py-1.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={() => assignDocumentsToClient(selectedClient, selectedDocuments)}
                     disabled={!selectedClient}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     Assigner
                   </button>
@@ -1003,9 +1003,9 @@ export default function Documents() {
           {/* Client Statistics Modal */}
           {showClientStats && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Statistiques des clients</h3>
+              <div className="bg-white rounded-lg p-3 sm:p-4 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold">Statistiques des clients</h3>
                   <button
                     onClick={() => setShowClientStats(false)}
                     className="text-gray-400 hover:text-gray-600"
@@ -1013,34 +1013,34 @@ export default function Documents() {
                     ✕
                   </button>
                 </div>
-                <div className="space-y-3 sm:space-y-4">
+                <div className="space-y-2 sm:space-y-3">
                   {clients.map(client => (
-                    <div key={client.id} className="border border-gray-200 rounded-lg p-3 sm:p-4">
-                      <div className="flex justify-between items-start mb-3">
+                    <div key={client.id} className="border border-gray-200 rounded-lg p-2 sm:p-3">
+                      <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{client.nom}</h4>
-                          <p className="text-xs sm:text-sm text-gray-600">{client.email}</p>
+                          <h4 className="font-semibold text-gray-900 text-sm">{client.nom}</h4>
+                          <p className="text-xs text-gray-600">{client.email}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs sm:text-sm text-gray-600">Limite mensuelle</p>
-                          <p className="font-semibold text-gray-900 text-sm sm:text-base">{client.limiteMensuelle} documents</p>
+                          <p className="text-xs text-gray-600">Limite mensuelle</p>
+                          <p className="font-semibold text-gray-900 text-sm">{client.limiteMensuelle} documents</p>
                         </div>
                       </div>
-                      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                      <div className="grid grid-cols-3 gap-2 sm:gap-3">
                         <div>
-                          <p className="text-xs sm:text-sm text-gray-600">Consommés ce mois</p>
-                          <p className="font-semibold text-blue-600 text-sm sm:text-base">{client.documentsConsommes}</p>
+                          <p className="text-xs text-gray-600">Consommés ce mois</p>
+                          <p className="font-semibold text-blue-600 text-sm">{client.documentsConsommes}</p>
                         </div>
                         <div>
-                          <p className="text-xs sm:text-sm text-gray-600">Attribués</p>
-                          <p className="font-semibold text-green-600 text-sm sm:text-base">{client.documentsAttribues}</p>
+                          <p className="text-xs text-gray-600">Attribués</p>
+                          <p className="font-semibold text-green-600 text-sm">{client.documentsAttribues}</p>
                         </div>
                         <div>
-                          <p className="text-xs sm:text-sm text-gray-600">Restants</p>
-                          <p className="font-semibold text-gray-900 text-sm sm:text-base">{client.limiteMensuelle - client.documentsConsommes}</p>
+                          <p className="text-xs text-gray-600">Restants</p>
+                          <p className="font-semibold text-gray-900 text-sm">{client.limiteMensuelle - client.documentsConsommes}</p>
                         </div>
                       </div>
-                      <div className="mt-3">
+                      <div className="mt-2">
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div 
                             className="bg-blue-600 h-2 rounded-full" 
@@ -1061,31 +1061,31 @@ export default function Documents() {
           {/* Process Document Modal */}
           {showProcessModal && processingDocument && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Traitement du document: {processingDocument.nom}</h3>
+              <div className="bg-white rounded-lg p-3 sm:p-4 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold">Traitement du document: {processingDocument.nom}</h3>
                   <button
                     onClick={() => setShowProcessModal(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                   {/* Document Original */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 flex items-center">
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-gray-900 flex items-center text-sm sm:text-base">
                       <File className="w-4 h-4 mr-2" />
                       Document original
                     </h4>
-                    <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 min-h-[300px] sm:min-h-[400px] flex items-center justify-center">
+                    <div className="border border-gray-200 rounded-lg p-3 bg-gray-50 min-h-[250px] sm:min-h-[300px] flex items-center justify-center">
                       <div className="text-center">
-                        <FileText className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-400 mb-4" />
-                        <p className="text-gray-600 mb-2 text-sm sm:text-base">Aperçu du document</p>
-                        <p className="text-xs sm:text-sm text-gray-500">{processingDocument.nom}</p>
-                        <p className="text-xs sm:text-sm text-gray-500">{processingDocument.taille}</p>
-                        <button className="mt-4 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                        <FileText className="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-400 mb-3" />
+                        <p className="text-gray-600 mb-1 text-sm">Aperçu du document</p>
+                        <p className="text-xs text-gray-500">{processingDocument.nom}</p>
+                        <p className="text-xs text-gray-500">{processingDocument.taille}</p>
+                        <button className="mt-3 px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs sm:text-sm">
                           Télécharger l'original
                         </button>
                       </div>
@@ -1093,25 +1093,25 @@ export default function Documents() {
                   </div>
 
                   {/* Texte OCR */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-semibold text-gray-900 flex items-center">
+                      <h4 className="font-semibold text-gray-900 flex items-center text-sm sm:text-base">
                         <FileText className="w-4 h-4 mr-2" />
                         Texte extrait par OCR
                       </h4>
-                      <div className="flex items-center space-x-1 sm:space-x-2">
+                      <div className="flex items-center space-x-1">
                         {isEditingOcr ? (
                           <>
                             <button
                               onClick={handleSaveOcrText}
-                              className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-green-600 text-white rounded text-xs sm:text-sm hover:bg-green-700"
+                              className="flex items-center space-x-1 px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
                             >
                               <Save className="w-3 h-3" />
                               <span>Sauvegarder</span>
                             </button>
                             <button
                               onClick={handleCancelEdit}
-                              className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-gray-600 text-white rounded text-xs sm:text-sm hover:bg-gray-700"
+                              className="flex items-center space-x-1 px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700"
                             >
                               <X className="w-3 h-3" />
                               <span>Annuler</span>
@@ -1121,14 +1121,14 @@ export default function Documents() {
                           <>
                             <button
                               onClick={() => setIsEditingOcr(true)}
-                              className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-blue-600 text-white rounded text-xs sm:text-sm hover:bg-blue-700"
+                              className="flex items-center space-x-1 px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
                             >
                               <Edit className="w-3 h-3" />
                               <span>Modifier</span>
                             </button>
                             <button
                               onClick={handleResetOcrText}
-                              className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-yellow-600 text-white rounded text-xs sm:text-sm hover:bg-yellow-700"
+                              className="flex items-center space-x-1 px-2 py-1 bg-yellow-600 text-white rounded text-xs hover:bg-yellow-700"
                             >
                               <RotateCcw className="w-3 h-3" />
                               <span>Réinitialiser</span>
@@ -1142,11 +1142,11 @@ export default function Documents() {
                       <textarea
                         value={ocrText}
                         onChange={(e) => setOcrText(e.target.value)}
-                        className="w-full h-[300px] sm:h-[400px] p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm resize-none"
+                        className="w-full h-[250px] sm:h-[300px] p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm resize-none"
                         placeholder="Modifiez le texte extrait par OCR..."
                       />
                     ) : (
-                      <div className="border border-gray-200 rounded-lg p-4 bg-white min-h-[300px] sm:min-h-[400px] overflow-y-auto">
+                      <div className="border border-gray-200 rounded-lg p-3 bg-white min-h-[250px] sm:min-h-[300px] overflow-y-auto">
                         <pre className="whitespace-pre-wrap font-mono text-sm text-gray-900">
                           {ocrText || 'Aucun texte extrait disponible'}
                         </pre>
@@ -1156,24 +1156,24 @@ export default function Documents() {
                 </div>
 
                 {/* Informations du document */}
-                <div className="mt-6 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                  <h5 className="font-semibold text-gray-900 mb-3">Informations du document</h5>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
+                <div className="mt-4 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                  <h5 className="font-semibold text-gray-900 mb-2 text-sm">Informations du document</h5>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 text-xs">
                     <div>
                       <span className="text-gray-600">Type:</span>
-                      <span className="ml-2 font-medium">{processingDocument.type}</span>
+                      <span className="ml-1 font-medium">{processingDocument.type}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Taille:</span>
-                      <span className="ml-2 font-medium">{processingDocument.taille}</span>
+                      <span className="ml-1 font-medium">{processingDocument.taille}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Date d'upload:</span>
-                      <span className="ml-2 font-medium">{processingDocument.dateUpload}</span>
+                      <span className="ml-1 font-medium">{processingDocument.dateUpload}</span>
                     </div>
                     <div>
                       <span className="text-gray-600">Statut:</span>
-                      <span className={`ml-2 font-medium px-2 py-1 rounded-full text-xs ${
+                      <span className={`ml-1 font-medium px-1.5 py-0.5 rounded-full text-xs ${
                         processingDocument.statut === 'Traité' ? 'bg-green-100 text-green-800' :
                         processingDocument.statut === 'En cours' ? 'bg-yellow-100 text-yellow-800' :
                         processingDocument.statut === 'Non traité' ? 'bg-gray-100 text-gray-800' :
@@ -1185,17 +1185,17 @@ export default function Documents() {
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-2 mt-6">
+                <div className="flex justify-end space-x-2 mt-4">
                   <button
                     onClick={() => setShowProcessModal(false)}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="px-3 sm:px-4 py-1.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
                   >
                     Fermer
                   </button>
                   {isEditingOcr && (
                     <button
                       onClick={handleSaveOcrText}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      className="px-3 sm:px-4 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm"
                     >
                       Sauvegarder les modifications
                     </button>

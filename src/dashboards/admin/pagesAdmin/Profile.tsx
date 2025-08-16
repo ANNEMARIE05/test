@@ -1,5 +1,9 @@
 import { 
   User,
+  LogIn,
+  Clock,
+  Activity,
+  Calendar,
 } from "lucide-react";
 
 export default function Profil() {
@@ -112,19 +116,31 @@ export default function Profil() {
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3">Statistiques</h3>
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">Connexions</span>
+                    <div className="flex items-center space-x-2">
+                      <LogIn className="w-3 h-3 text-gray-500" />
+                      <span className="text-xs text-gray-600">Connexions</span>
+                    </div>
                     <span className="text-xs font-medium text-gray-900">1,247</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">Dernière connexion</span>
+                    <div className="flex items-center space-x-2">
+                      <Clock className="w-3 h-3 text-gray-500" />
+                      <span className="text-xs text-gray-600">Dernière connexion</span>
+                    </div>
                     <span className="text-xs font-medium text-gray-900">Aujourd'hui</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">Actions effectuées</span>
+                    <div className="flex items-center space-x-2">
+                      <Activity className="w-3 h-3 text-gray-500" />
+                      <span className="text-xs text-gray-600">Actions effectuées</span>
+                    </div>
                     <span className="text-xs font-medium text-gray-900">456</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">Membre depuis</span>
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="w-3 h-3 text-gray-500" />
+                      <span className="text-xs text-gray-600">Membre depuis</span>
+                    </div>
                     <span className="text-xs font-medium text-gray-900">2023-01-15</span>
                   </div>
                 </div>

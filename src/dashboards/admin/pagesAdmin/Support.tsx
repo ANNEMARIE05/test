@@ -7,7 +7,11 @@ import {
     Phone as PhoneIcon,
     X as CloseIcon,
     Search as SearchIcon,
-    Plus
+    Plus,
+    AlertCircle,
+    Clock,
+    CheckCircle,
+    Mail
 } from 'lucide-react';
 
 interface Message {
@@ -119,10 +123,10 @@ export default function Support() {
 
     const obtenirIconeStatut = (statut: string) => {
         switch (statut) {
-            case 'nouveau': return '🆕';
-            case 'en-cours': return '⏳';
-            case 'resolu': return '✅';
-            default: return '📧';
+            case 'nouveau': return <AlertCircle size={12} className="sm:w-3 sm:h-3" />;
+            case 'en-cours': return <Clock size={12} className="sm:w-3 sm:h-3" />;
+            case 'resolu': return <CheckCircle size={12} className="sm:w-3 sm:h-3" />;
+            default: return <Mail size={12} className="sm:w-3 sm:h-3" />;
         }
     };
 

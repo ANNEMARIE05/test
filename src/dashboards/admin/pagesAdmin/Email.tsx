@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Mail, Send, Eye, RefreshCw, CheckCircle, XCircle, Settings } from 'lucide-react';
 
 interface Utilisateur {
     id: string;
@@ -29,13 +30,19 @@ export default function Email() {
     return (
         <div className="space-y-3 sm:space-y-4">
           <div>
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">Gestion d'email</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 flex items-center gap-2">
+              <Mail className="w-5 h-5" />
+              Gestion d'email
+            </h2>
             <p className="text-xs sm:text-sm text-gray-600">Configurez les paramètres email</p>
           </div>
 
           {/* Génération d'email automatique */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3">Génération d'email automatique</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3 flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Génération d'email automatique
+            </h3>
             <div className="space-y-2 sm:space-y-3">
               <div className="grid grid-cols-1 gap-2 sm:gap-3">
                 <div>
@@ -77,10 +84,12 @@ export default function Email() {
                 />
               </div>
               <div className="flex flex-col sm:flex-row gap-2">
-                <button className="flex-1 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm">
+                <button className="flex-1 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm flex items-center justify-center gap-2">
+                  <Send className="w-4 h-4" />
                   Générer et envoyer l'email
                 </button>
-                <button className="flex-1 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs sm:text-sm">
+                <button className="flex-1 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs sm:text-sm flex items-center justify-center gap-2">
+                  <Eye className="w-4 h-4" />
                   Prévisualiser l'email
                 </button>
               </div>
@@ -89,7 +98,10 @@ export default function Email() {
 
           {/* Historique des emails */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3">Historique des emails</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3 flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              Historique des emails
+            </h3>
             <div className="space-y-3">
               {/* Email 1 */}
               <div className="border border-gray-200 rounded-md p-3">
@@ -98,7 +110,8 @@ export default function Email() {
                     <h4 className="font-medium text-gray-900 text-sm">jean.dupont@example.com</h4>
                     <p className="text-xs text-gray-600">Bienvenue sur OCR Platform</p>
                   </div>
-                  <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 self-start sm:self-auto">
+                  <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 self-start sm:self-auto gap-1">
+                    <CheckCircle className="w-3 h-3" />
                     Envoyé
                   </span>
                 </div>
@@ -114,7 +127,8 @@ export default function Email() {
                     <h4 className="font-medium text-gray-900 text-sm">marie.martin@example.com</h4>
                     <p className="text-xs text-gray-600">Document traité avec succès</p>
                   </div>
-                  <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 self-start sm:self-auto">
+                  <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 self-start sm:self-auto gap-1">
+                    <CheckCircle className="w-3 h-3" />
                     Envoyé
                   </span>
                 </div>
@@ -130,7 +144,8 @@ export default function Email() {
                     <h4 className="font-medium text-gray-900 text-sm">pierre.durand@example.com</h4>
                     <p className="text-xs text-gray-600">Accès à la plateforme OCR</p>
                   </div>
-                  <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-800 self-start sm:self-auto">
+                  <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-800 self-start sm:self-auto gap-1">
+                    <XCircle className="w-3 h-3" />
                     Non traité
                   </span>
                 </div>
@@ -140,8 +155,9 @@ export default function Email() {
                 <div className="flex justify-end">
                   <button 
                     onClick={renvoyerAcces}
-                    className="px-2 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors flex items-center gap-1"
                   >
+                    <RefreshCw className="w-3 h-3" />
                     Renvoyer
                   </button>
                 </div>
@@ -154,7 +170,8 @@ export default function Email() {
                     <h4 className="font-medium text-gray-900 text-sm">sophie.leroy@example.com</h4>
                     <p className="text-xs text-gray-600">Nouveaux identifiants</p>
                   </div>
-                  <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-800 self-start sm:self-auto">
+                  <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-800 self-start sm:self-auto gap-1">
+                    <XCircle className="w-3 h-3" />
                     Non traité
                   </span>
                 </div>
@@ -164,8 +181,9 @@ export default function Email() {
                 <div className="flex justify-end">
                   <button 
                     onClick={renvoyerAcces}
-                    className="px-2 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors flex items-center gap-1"
                   >
+                    <RefreshCw className="w-3 h-3" />
                     Renvoyer
                   </button>
                 </div>

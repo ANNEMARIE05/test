@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Shield, Lock, Bell, Save } from 'lucide-react';
 
 export default function Parametre() {
     const [deuxFacteursActive, setDeuxFacteursActive] = useState(false);
@@ -25,7 +26,10 @@ export default function Parametre() {
 
             {/* Section Sécurité */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
-                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3">Sécurité</h3>
+                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3 flex items-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    Sécurité
+                </h3>
                 
                 {/* 2FA */}
                 <div className="flex items-center justify-between py-2 sm:py-3 border-b border-gray-100">
@@ -53,7 +57,8 @@ export default function Parametre() {
                         <h4 className="font-medium text-gray-900 text-sm">Changer le mot de passe</h4>
                         <p className="text-xs text-gray-600 mt-0.5">Mettez à jour votre mot de passe</p>
                     </div>
-                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex-shrink-0">
+                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex-shrink-0 flex items-center gap-1">
+                        <Lock className="w-3 h-3" />
                         Modifier
                     </button>
                 </div>
@@ -61,7 +66,10 @@ export default function Parametre() {
 
             {/* Section Notifications */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
-                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3">Notifications</h3>
+                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-3 flex items-center gap-2">
+                    <Bell className="w-4 h-4" />
+                    Notifications
+                </h3>
                 
                 <div className="space-y-2 sm:space-y-3">
                     <div className="flex items-center justify-between">
@@ -87,7 +95,8 @@ export default function Parametre() {
 
             {/* Bouton de sauvegarde */}
             <div className="flex justify-end pt-1 sm:pt-0">
-                <button className="bg-blue-600 text-white px-3 sm:px-4 py-1.5 rounded-lg hover:bg-blue-700 transition-colors text-sm w-full sm:w-auto">
+                <button className="bg-blue-600 text-white px-3 sm:px-4 py-1.5 rounded-lg hover:bg-blue-700 transition-colors text-sm w-full sm:w-auto flex items-center gap-2 justify-center">
+                    <Save className="w-4 h-4" />
                     Sauvegarder les paramètres
                 </button>
             </div>

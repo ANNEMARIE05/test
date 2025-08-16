@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { AlertTriangle, Copy, Check, RotateCcw, Eye, EyeOff } from 'lucide-react';
 
 interface CleApi {
   id: string;
@@ -186,9 +187,7 @@ export default function Apis() {
         <div className="bg-red-50 border border-red-200 rounded-lg p-2">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-3 w-3 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
+              <AlertTriangle className="h-3 w-3 text-red-400" />
             </div>
             <div className="ml-2">
               <h3 className="text-xs font-medium text-red-800">Alerte de quota</h3>
@@ -244,13 +243,9 @@ export default function Apis() {
                               title="Copier la clé"
                             >
                               {cleCopiee === cleApi.id ? (
-                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
+                                <Check className="h-3 w-3" />
                               ) : (
-                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
+                                <Copy className="h-3 w-3" />
                               )}
                             </button>
                           </div>
@@ -294,15 +289,26 @@ export default function Apis() {
                     <div className="flex flex-row lg:flex-col space-x-1 lg:space-x-0 lg:space-y-1">
                       <button
                         onClick={() => regenererCleApi(cleApi.id)}
-                        className="px-1.5 py-0.5 text-xs bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors"
+                        className="px-1.5 py-0.5 text-xs bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors flex items-center gap-1"
                       >
+                        <RotateCcw className="h-3 w-3" />
                         Régénérer
                       </button>
                       <button
                         onClick={() => basculerLogs(cleApi.id)}
-                        className="px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                        className="px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors flex items-center gap-1"
                       >
-                        {clesEtendues.has(cleApi.id) ? 'Masquer les logs' : 'Voir les logs'}
+                        {clesEtendues.has(cleApi.id) ? (
+                          <>
+                            <EyeOff className="h-3 w-3" />
+                            Masquer les logs
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="h-3 w-3" />
+                            Voir les logs
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

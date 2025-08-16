@@ -1,4 +1,16 @@
 import { useState } from 'react';
+import { 
+  User, 
+  Edit, 
+  Save, 
+  X, 
+  Lock, 
+  Trash2, 
+  Calendar, 
+  Mail, 
+  Shield,
+  AlertTriangle
+} from 'lucide-react';
 
 interface ProfilUtilisateur {
   id: string;
@@ -135,12 +147,16 @@ export default function Profile() {
       {/* Informations du profil */}
       <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-2 sm:gap-3">
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900">Informations personnelles</h3>
+          <div className="flex items-center gap-2">
+            <User className="w-4 h-4 text-gray-600" />
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900">Informations personnelles</h3>
+          </div>
           {!enModification && (
             <button
               onClick={gererModification}
-              className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto text-xs sm:text-sm"
+              className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto text-xs sm:text-sm flex items-center gap-1.5"
             >
+              <Edit className="w-3 h-3" />
               Modifier
             </button>
           )}
@@ -187,15 +203,17 @@ export default function Profile() {
               <button
                 onClick={gererSauvegarde}
                 disabled={enSoumission}
-                className="px-2 sm:px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-xs sm:text-sm flex items-center gap-1.5"
               >
+                <Save className="w-3 h-3" />
                 {enSoumission ? 'Enregistrement...' : 'Enregistrer'}
               </button>
               <button
                 onClick={gererAnnulation}
                 disabled={enSoumission}
-                className="px-2 sm:px-3 py-1.5 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1.5 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 text-xs sm:text-sm flex items-center gap-1.5"
               >
+                <X className="w-3 h-3" />
                 Annuler
               </button>
             </div>
@@ -222,40 +240,52 @@ export default function Profile() {
             </div>
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                value={profilUtilisateur.email}
-                readOnly
-                className="w-full px-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
-              />
+              <div className="relative">
+                <Mail className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
+                <input
+                  type="email"
+                  value={profilUtilisateur.email}
+                  readOnly
+                  className="w-full pl-7 pr-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Rôle</label>
-              <input
-                type="text"
-                value={profilUtilisateur.role}
-                readOnly
-                className="w-full px-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
-              />
+              <div className="relative">
+                <Shield className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
+                <input
+                  type="text"
+                  value={profilUtilisateur.role}
+                  readOnly
+                  className="w-full pl-7 pr-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Membre depuis</label>
-              <input
-                type="text"
-                value={new Date(profilUtilisateur.dateCreation).toLocaleDateString('fr-FR')}
-                readOnly
-                className="w-full px-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
-              />
+              <div className="relative">
+                <Calendar className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
+                <input
+                  type="text"
+                  value={new Date(profilUtilisateur.dateCreation).toLocaleDateString('fr-FR')}
+                  readOnly
+                  className="w-full pl-7 pr-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
+                />
+              </div>
             </div>
             {profilUtilisateur.derniereConnexion && (
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Dernière connexion</label>
-                <input
-                  type="text"
-                  value={new Date(profilUtilisateur.derniereConnexion).toLocaleDateString('fr-FR')}
-                  readOnly
-                  className="w-full px-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
-                />
+                <div className="relative">
+                  <Calendar className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
+                  <input
+                    type="text"
+                    value={new Date(profilUtilisateur.derniereConnexion).toLocaleDateString('fr-FR')}
+                    readOnly
+                    className="w-full pl-7 pr-2 py-1.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-default text-xs sm:text-sm"
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -265,16 +295,20 @@ export default function Profile() {
       {/* Section changement de mot de passe */}
       <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-2 sm:gap-3">
-          <div>
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900">Modification du mot de passe</h3>
-            <p className="text-xs text-gray-600 mt-0.5">
-              Changez votre mot de passe pour sécuriser votre compte.
-            </p>
+          <div className="flex items-center gap-2">
+            <Lock className="w-4 h-4 text-gray-600" />
+            <div>
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900">Modification du mot de passe</h3>
+              <p className="text-xs text-gray-600 mt-0.5">
+                Changez votre mot de passe pour sécuriser votre compte.
+              </p>
+            </div>
           </div>
           <button
             onClick={() => setAfficherModalMotDePasse(true)}
-            className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto text-xs sm:text-sm"
+            className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto text-xs sm:text-sm flex items-center gap-1.5"
           >
+            <Lock className="w-3 h-3" />
             Changer le mot de passe
           </button>
         </div>
@@ -283,16 +317,20 @@ export default function Profile() {
       {/* Section suppression de compte */}
       <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 gap-2 sm:gap-3">
-          <div>
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900">Suppression de compte</h3>
-            <p className="text-xs text-gray-600 mt-0.5">
-              Demandez la suppression de votre compte. Cette action nécessite l'approbation de l'administrateur.
-            </p>
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-red-600" />
+            <div>
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900">Suppression de compte</h3>
+              <p className="text-xs text-gray-600 mt-0.5">
+                Demandez la suppression de votre compte. Cette action nécessite l'approbation de l'administrateur.
+              </p>
+            </div>
           </div>
           <button
             onClick={() => setAfficherModalSuppression(true)}
-            className="px-2 sm:px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors w-full sm:w-auto text-xs sm:text-sm"
+            className="px-2 sm:px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors w-full sm:w-auto text-xs sm:text-sm flex items-center gap-1.5"
           >
+            <Trash2 className="w-3 h-3" />
             Demander la suppression
           </button>
         </div>
@@ -325,8 +363,9 @@ export default function Profile() {
               <button
                 onClick={gererDemandeSuppression}
                 disabled={enSoumission || !raisonSuppression.trim()}
-                className="px-2 sm:px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm flex items-center gap-1.5"
               >
+                <Trash2 className="w-3 h-3" />
                 {enSoumission ? 'Envoi...' : 'Envoyer la demande'}
               </button>
               <button
@@ -335,8 +374,9 @@ export default function Profile() {
                   setRaisonSuppression('');
                 }}
                 disabled={enSoumission}
-                className="px-2 sm:px-3 py-1.5 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1.5 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm flex items-center gap-1.5"
               >
+                <X className="w-3 h-3" />
                 Annuler
               </button>
             </div>
@@ -398,8 +438,9 @@ export default function Profile() {
               <button
                 onClick={gererChangementMotDePasse}
                 disabled={enSoumission || !formulaireMotDePasse.motDePasseActuel || !formulaireMotDePasse.nouveauMotDePasse || !formulaireMotDePasse.confirmerMotDePasse}
-                className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm flex items-center gap-1.5"
               >
+                <Lock className="w-3 h-3" />
                 {enSoumission ? 'Modification...' : 'Modifier le mot de passe'}
               </button>
               <button
@@ -413,8 +454,9 @@ export default function Profile() {
                   setErreurMotDePasse('');
                 }}
                 disabled={enSoumission}
-                className="px-2 sm:px-3 py-1.5 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1.5 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 flex-1 text-xs sm:text-sm flex items-center gap-1.5"
               >
+                <X className="w-3 h-3" />
                 Annuler
               </button>
             </div>

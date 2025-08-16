@@ -35,28 +35,28 @@ interface User {
   }
 
 export default function Utilisateurs() {
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [showUserDetails, setShowUserDetails] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [editingUser, setEditingUser] = useState<User | null>(null);
-    const [newUser, setNewUser] = useState<Omit<User, 'id' | 'documentsConsommes'>>({
+    const [utilisateurSelectionne, setUtilisateurSelectionne] = useState<User | null>(null);
+    const [afficherDetails, setAfficherDetails] = useState(false);
+    const [afficherModifier, setAfficherModifier] = useState(false);
+    const [afficherSupprimer, setAfficherSupprimer] = useState(false);
+    const [afficherCreer, setAfficherCreer] = useState(false);
+    const [utilisateurEnModification, setUtilisateurEnModification] = useState<User | null>(null);
+    const [nouvelUtilisateur, setNouvelUtilisateur] = useState<Omit<User, 'id' | 'documentsConsommes'>>({
       nom: '',
       email: '',
       role: 'Utilisateur',
       motDePasse: '',
       limiteDocuments: 100
     });
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showInvitationModal, setShowInvitationModal] = useState(false);
-    const [invitationEmail, setInvitationEmail] = useState('');
-    const [invitationPassword, setInvitationPassword] = useState('');
-    const [isSendingInvitation, setIsSendingInvitation] = useState(false);
-    const [passwordVisibility, setPasswordVisibility] = useState<{[key: string]: boolean}>({});
-    const [apiKeyVisibility, setApiKeyVisibility] = useState<{[key: string]: boolean}>({});
-    const [isGeneratingApiKey, setIsGeneratingApiKey] = useState(false);
-    const [apiKeyExpirationDays] = useState(30);
+    const [termeRecherche, setTermeRecherche] = useState('');
+    const [afficherInvitation, setAfficherInvitation] = useState(false);
+    const [emailInvitation, setEmailInvitation] = useState('');
+    const [motDePasseInvitation, setMotDePasseInvitation] = useState('');
+    const [envoiEnCours, setEnvoiEnCours] = useState(false);
+    const [visibiliteMotDePasse, setVisibiliteMotDePasse] = useState<{[key: string]: boolean}>({});
+    const [visibiliteCleApi, setVisibiliteCleApi] = useState<{[key: string]: boolean}>({});
+    const [generationCleApi, setGenerationCleApi] = useState(false);
+    const [dureeExpirationCleApi] = useState(30);
 
     const [users, setUsers] = useState<User[]>([
         {
@@ -171,49 +171,49 @@ export default function Utilisateurs() {
       ]);
 
       const filteredUsers = users.filter(user =>
-        user.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.role.toLowerCase().includes(searchTerm.toLowerCase())
+        user.nom.toLowerCase().includes(termeRecherche.toLowerCase()) ||
+        user.email.toLowerCase().includes(termeRecherche.toLowerCase()) ||
+        user.role.toLowerCase().includes(termeRecherche.toLowerCase())
       );
 
       const handleEditUser = (user: User) => {
-        setEditingUser({ ...user });
-        setShowEditModal(true);
+        setUtilisateurEnModification({ ...user });
+        setAfficherModifier(true);
       };
     
       const handleSaveUser = () => {
-        if (editingUser) {
+        if (utilisateurEnModification) {
           setUsers(users.map(user => 
-            user.id === editingUser.id ? editingUser : user
+            user.id === utilisateurEnModification.id ? utilisateurEnModification : user
           ));
-          setShowEditModal(false);
-          setEditingUser(null);
+          setAfficherModifier(false);
+          setUtilisateurEnModification(null);
         }
       };
 
       const handleDeleteUser = (user: User) => {
-        setSelectedUser(user);
-        setShowDeleteModal(true);
+        setUtilisateurSelectionne(user);
+        setAfficherSupprimer(true);
       };
     
       const confirmDeleteUser = () => {
-        if (selectedUser) {
-          setUsers(users.filter(user => user.id !== selectedUser.id));
-          setShowDeleteModal(false);
-          setSelectedUser(null);
+        if (utilisateurSelectionne) {
+          setUsers(users.filter(user => user.id !== utilisateurSelectionne.id));
+          setAfficherSupprimer(false);
+          setUtilisateurSelectionne(null);
         }
       };
     
       const handleViewDetails = (user: User) => {
-        setSelectedUser(user);
-        setShowUserDetails(true);
+        setUtilisateurSelectionne(user);
+        setAfficherDetails(true);
         // Initialize password visibility for this user if not already set
-        if (!passwordVisibility[user.id]) {
-          setPasswordVisibility(prev => ({...prev, [user.id]: false}));
+        if (!visibiliteMotDePasse[user.id]) {
+          setVisibiliteMotDePasse(prev => ({...prev, [user.id]: false}));
         }
         // Initialize API key visibility for this user if not already set
-        if (!apiKeyVisibility[user.id]) {
-          setApiKeyVisibility(prev => ({...prev, [user.id]: false}));
+        if (!visibiliteCleApi[user.id]) {
+          setVisibiliteCleApi(prev => ({...prev, [user.id]: false}));
         }
       };
     
@@ -229,7 +229,7 @@ export default function Utilisateurs() {
 
       // Fonction pour envoyer l'email d'invitation
       const sendInvitationEmail = async (email: string, password: string) => {
-        setIsSendingInvitation(true);
+        setEnvoiEnCours(true);
         
         try {
           // Simulation d'envoi d'email (remplacer par votre API d'envoi d'email)
@@ -252,9 +252,9 @@ export default function Utilisateurs() {
               : user
           ));
           
-          setShowInvitationModal(false);
-          setInvitationEmail('');
-          setInvitationPassword('');
+          setAfficherInvitation(false);
+          setEmailInvitation('');
+          setMotDePasseInvitation('');
           
           // Afficher une notification de succès
           alert('Email d\'invitation envoyé avec succès !');
@@ -263,7 +263,7 @@ export default function Utilisateurs() {
           console.error('Erreur lors de l\'envoi de l\'email:', error);
           alert('Erreur lors de l\'envoi de l\'email d\'invitation');
         } finally {
-          setIsSendingInvitation(false);
+          setEnvoiEnCours(false);
         }
       };
 
@@ -271,7 +271,7 @@ export default function Utilisateurs() {
       const handleCreateUserWithInvitation = () => {
         const tempPassword = generateTemporaryPassword();
         const userToCreate: User = {
-          ...newUser,
+          ...nouvelUtilisateur,
           id: (users.length + 1).toString(),
           documentsConsommes: 0,
           motDePasse: tempPassword,
@@ -279,13 +279,13 @@ export default function Utilisateurs() {
         };
         
         setUsers([...users, userToCreate]);
-        setInvitationEmail(newUser.email);
-        setInvitationPassword(tempPassword);
-        setShowCreateModal(false);
-        setShowInvitationModal(true);
+        setEmailInvitation(nouvelUtilisateur.email);
+        setMotDePasseInvitation(tempPassword);
+        setAfficherCreer(false);
+        setAfficherInvitation(true);
         
         // Réinitialiser le formulaire
-        setNewUser({
+        setNouvelUtilisateur({
           nom: '',
           email: '',
           role: 'Utilisateur',
@@ -306,7 +306,7 @@ export default function Utilisateurs() {
 
       // Fonction pour générer une nouvelle clé API pour un utilisateur
       const handleGenerateApiKey = async (userId: string) => {
-        setIsGeneratingApiKey(true);
+        setGenerationCleApi(true);
         
         try {
           // Simulation d'une requête API
@@ -314,7 +314,7 @@ export default function Utilisateurs() {
           
           const newApiKey = generateApiKey();
           const now = new Date();
-          const expiresAt = new Date(now.getTime() + apiKeyExpirationDays * 24 * 60 * 60 * 1000);
+          const expiresAt = new Date(now.getTime() + dureeExpirationCleApi * 24 * 60 * 60 * 1000);
           
           setUsers(users.map(user => 
             user.id === userId 
@@ -323,12 +323,12 @@ export default function Utilisateurs() {
           ));
           
           // Mettre à jour l'utilisateur sélectionné si c'est le même
-          if (selectedUser && selectedUser.id === userId) {
-            setSelectedUser({ ...selectedUser, apiKey: newApiKey, apiKeyGeneratedAt: now, apiKeyExpiresAt: expiresAt });
+          if (utilisateurSelectionne && utilisateurSelectionne.id === userId) {
+            setUtilisateurSelectionne({ ...utilisateurSelectionne, apiKey: newApiKey, apiKeyGeneratedAt: now, apiKeyExpiresAt: expiresAt });
           }
           
           // Afficher la nouvelle clé API
-          setApiKeyVisibility(prev => ({...prev, [userId]: true}));
+          setVisibiliteCleApi(prev => ({...prev, [userId]: true}));
           
           alert('Nouvelle clé API générée avec succès !');
           
@@ -336,7 +336,7 @@ export default function Utilisateurs() {
           console.error('Erreur lors de la génération de la clé API:', error);
           alert('Erreur lors de la génération de la clé API');
         } finally {
-          setIsGeneratingApiKey(false);
+          setGenerationCleApi(false);
         }
       };
 
@@ -354,7 +354,7 @@ export default function Utilisateurs() {
               <p className="text-xs sm:text-sm text-gray-600">Gérez les utilisateurs de la plateforme</p>
             </div>
             <button 
-              onClick={() => setShowCreateModal(true)}
+              onClick={() => setAfficherCreer(true)}
               className="flex items-center justify-center space-x-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
             >
               <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -369,8 +369,8 @@ export default function Utilisateurs() {
             <input
               type="text"
               placeholder="Rechercher un utilisateur..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={termeRecherche}
+              onChange={(e) => setTermeRecherche(e.target.value)}
               className="w-full pl-8 pr-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm"
             />
           </div>
@@ -445,9 +445,9 @@ export default function Utilisateurs() {
                     <div className="mt-2 pt-2 border-t border-gray-100">
                       <button
                         onClick={() => {
-                          setInvitationEmail(user.email);
-                          setInvitationPassword(user.motDePasse);
-                          setShowInvitationModal(true);
+                          setEmailInvitation(user.email);
+                          setMotDePasseInvitation(user.motDePasse);
+                          setAfficherInvitation(true);
                         }}
                         className="w-full text-purple-600 hover:text-purple-900 p-1.5 rounded hover:bg-purple-50 text-xs flex items-center justify-center space-x-1"
                       >
@@ -540,9 +540,9 @@ export default function Utilisateurs() {
                           {!user.invitationSent ? (
                             <button
                               onClick={() => {
-                                setInvitationEmail(user.email);
-                                setInvitationPassword(user.motDePasse);
-                                setShowInvitationModal(true);
+                                setEmailInvitation(user.email);
+                                setMotDePasseInvitation(user.motDePasse);
+                                setAfficherInvitation(true);
                               }}
                               className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
                               title="Envoyer invitation"
@@ -552,9 +552,9 @@ export default function Utilisateurs() {
                           ) : (
                             <button
                               onClick={() => {
-                                setInvitationEmail(user.email);
-                                setInvitationPassword(user.motDePasse);
-                                setShowInvitationModal(true);
+                                setEmailInvitation(user.email);
+                                setMotDePasseInvitation(user.motDePasse);
+                                setAfficherInvitation(true);
                               }}
                               className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-orange-50"
                               title="Renvoyer les accès"
@@ -579,7 +579,7 @@ export default function Utilisateurs() {
           </div>
 
           {/* User Details Modal */}
-          {showUserDetails && selectedUser && (
+          {afficherDetails && utilisateurSelectionne && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-2 sm:p-4">
               <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
                 <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
@@ -590,7 +590,7 @@ export default function Utilisateurs() {
                     <h3 className="text-base font-semibold text-gray-900">Détails de l'utilisateur</h3>
                   </div>
                   <button
-                    onClick={() => setShowUserDetails(false)}
+                    onClick={() => setAfficherDetails(false)}
                     className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
                   >
                     <X className="w-4 h-4" />
@@ -604,7 +604,7 @@ export default function Utilisateurs() {
                           <User className="w-3 h-3 text-gray-500" />
                           <label className="text-xs font-medium text-gray-700">Nom complet</label>
                         </div>
-                        <p className="text-xs text-gray-900 font-medium">{selectedUser.nom}</p>
+                        <p className="text-xs text-gray-900 font-medium">{utilisateurSelectionne.nom}</p>
                       </div>
                       
                       <div className="bg-gray-50 rounded-lg p-3">
@@ -614,7 +614,7 @@ export default function Utilisateurs() {
                           </svg>
                           <label className="text-xs font-medium text-gray-700">Adresse email</label>
                         </div>
-                        <p className="text-xs text-gray-900 font-medium">{selectedUser.email}</p>
+                        <p className="text-xs text-gray-900 font-medium">{utilisateurSelectionne.email}</p>
                       </div>
                     </div>
                     
@@ -627,11 +627,11 @@ export default function Utilisateurs() {
                           <label className="text-xs font-medium text-gray-700">Rôle</label>
                         </div>
                         <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
-                          selectedUser.role === 'Administrateur' ? 'bg-red-100 text-red-800' :
-                          selectedUser.role === 'Modérateur' ? 'bg-yellow-100 text-yellow-800' :
+                          utilisateurSelectionne.role === 'Administrateur' ? 'bg-red-100 text-red-800' :
+                          utilisateurSelectionne.role === 'Modérateur' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-green-100 text-green-800'
                         }`}>
-                          {selectedUser.role}
+                          {utilisateurSelectionne.role}
                         </span>
                       </div>
                       
@@ -643,7 +643,7 @@ export default function Utilisateurs() {
                           <label className="text-xs font-medium text-gray-700">Documents consommés</label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-lg font-bold text-blue-600">{selectedUser.documentsConsommes}</span>
+                          <span className="text-lg font-bold text-blue-600">{utilisateurSelectionne.documentsConsommes}</span>
                           <span className="text-xs text-gray-500">documents</span>
                         </div>
                       </div>
@@ -659,19 +659,19 @@ export default function Utilisateurs() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-xs text-gray-900 font-mono break-all">
-                        {passwordVisibility[selectedUser.id] ? selectedUser.motDePasse : '********'}
+                        {visibiliteMotDePasse[utilisateurSelectionne.id] ? utilisateurSelectionne.motDePasse : '********'}
                       </span>
                       <button 
-                        onClick={() => setPasswordVisibility(prev => ({...prev, [selectedUser.id]: !prev[selectedUser.id]}))}
+                        onClick={() => setVisibiliteMotDePasse(prev => ({...prev, [utilisateurSelectionne.id]: !prev[utilisateurSelectionne.id]}))}
                         className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-100 transition-colors flex-shrink-0"
-                        title={passwordVisibility[selectedUser.id] ? "Masquer le mot de passe" : "Voir le mot de passe"}
+                        title={visibiliteMotDePasse[utilisateurSelectionne.id] ? "Masquer le mot de passe" : "Voir le mot de passe"}
                       >
-                        {passwordVisibility[selectedUser.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                        {visibiliteMotDePasse[utilisateurSelectionne.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                       </button>
                     </div>
                   </div>
 
-                  {selectedUser.apiKey && (
+                  {utilisateurSelectionne.apiKey && (
                     <div className="mt-3 bg-purple-50 rounded-lg p-3">
                       <div className="flex items-center space-x-2 mb-1">
                         <svg className="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -681,30 +681,30 @@ export default function Utilisateurs() {
                       </div>
                       <div className="flex flex-wrap items-center gap-1">
                         <span className="text-xs text-gray-900 font-mono bg-white px-2 py-1 rounded border break-all">
-                          {apiKeyVisibility[selectedUser.id] ? selectedUser.apiKey : '********'}
+                          {visibiliteCleApi[utilisateurSelectionne.id] ? utilisateurSelectionne.apiKey : '********'}
                         </span>
                         <div className="flex items-center space-x-1">
                           <button 
-                            onClick={() => setApiKeyVisibility(prev => ({...prev, [selectedUser.id]: !prev[selectedUser.id]}))}
+                            onClick={() => setVisibiliteCleApi(prev => ({...prev, [utilisateurSelectionne.id]: !prev[utilisateurSelectionne.id]}))}
                             className="text-purple-600 hover:text-purple-800 p-1 rounded hover:bg-purple-100 transition-colors"
-                            title={apiKeyVisibility[selectedUser.id] ? "Masquer la clé API" : "Voir la clé API"}
+                            title={visibiliteCleApi[utilisateurSelectionne.id] ? "Masquer la clé API" : "Voir la clé API"}
                           >
-                            {apiKeyVisibility[selectedUser.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                            {visibiliteCleApi[utilisateurSelectionne.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                           </button>
                           <button 
-                            onClick={() => copyApiKeyToClipboard(selectedUser.apiKey || '')}
+                            onClick={() => copyApiKeyToClipboard(utilisateurSelectionne.apiKey || '')}
                             className="text-purple-600 hover:text-purple-800 p-1 rounded hover:bg-purple-100 transition-colors"
                             title="Copier la clé API"
                           >
                             <Copy className="w-3 h-3" />
                           </button>
                           <button 
-                            onClick={() => handleGenerateApiKey(selectedUser.id)}
-                            disabled={isGeneratingApiKey}
+                            onClick={() => handleGenerateApiKey(utilisateurSelectionne.id)}
+                            disabled={generationCleApi}
                             className="text-purple-600 hover:text-purple-800 p-1 rounded hover:bg-purple-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Régénérer la clé API"
                           >
-                            <RefreshCw className={`w-3 h-3 ${isGeneratingApiKey ? 'animate-spin' : ''}`} />
+                            <RefreshCw className={`w-3 h-3 ${generationCleApi ? 'animate-spin' : ''}`} />
                           </button>
                         </div>
                       </div>
@@ -716,7 +716,7 @@ export default function Utilisateurs() {
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end space-x-2">
                   <button
-                    onClick={() => setShowUserDetails(false)}
+                    onClick={() => setAfficherDetails(false)}
                     className="px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2 text-xs"
                   >
                     <X className="w-3 h-3" />
@@ -728,13 +728,13 @@ export default function Utilisateurs() {
           )}
 
           {/* Edit User Modal */}
-          {showEditModal && editingUser && (
+          {afficherModifier && utilisateurEnModification && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-2 sm:p-4">
               <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
                 <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
                   <h3 className="text-base font-semibold text-gray-900">Modifier l'utilisateur</h3>
                   <button
-                    onClick={() => setShowEditModal(false)}
+                    onClick={() => setAfficherModifier(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
                     <X className="w-4 h-4" />
@@ -745,8 +745,8 @@ export default function Utilisateurs() {
                     <label className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
                     <input
                       type="text"
-                      value={editingUser.nom}
-                      onChange={(e) => setEditingUser({...editingUser, nom: e.target.value})}
+                      value={utilisateurEnModification.nom}
+                      onChange={(e) => setUtilisateurEnModification({...utilisateurEnModification, nom: e.target.value})}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     />
                   </div>
@@ -754,16 +754,16 @@ export default function Utilisateurs() {
                     <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
                     <input
                       type="email"
-                      value={editingUser.email}
-                      onChange={(e) => setEditingUser({...editingUser, email: e.target.value})}
+                      value={utilisateurEnModification.email}
+                      onChange={(e) => setUtilisateurEnModification({...utilisateurEnModification, email: e.target.value})}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Rôle</label>
                     <select
-                      value={editingUser.role}
-                      onChange={(e) => setEditingUser({...editingUser, role: e.target.value})}
+                      value={utilisateurEnModification.role}
+                      onChange={(e) => setUtilisateurEnModification({...utilisateurEnModification, role: e.target.value})}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     >
                       <option value="Utilisateur">Utilisateur</option>
@@ -775,7 +775,7 @@ export default function Utilisateurs() {
                     <label className="block text-xs font-medium text-gray-700 mb-1">Documents consommés</label>
                     <input
                       type="number"
-                      value={editingUser.documentsConsommes}
+                      value={utilisateurEnModification.documentsConsommes}
                       disabled
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 text-xs"
                     />
@@ -783,7 +783,7 @@ export default function Utilisateurs() {
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end space-x-2">
                   <button
-                    onClick={() => setShowEditModal(false)}
+                    onClick={() => setAfficherModifier(false)}
                     className="px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs"
                   >
                     Annuler
@@ -801,13 +801,13 @@ export default function Utilisateurs() {
           )}
 
           {/* Create User Modal */}
-          {showCreateModal && (
+          {afficherCreer && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-2 sm:p-4">
               <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
                 <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
                   <h3 className="text-base font-semibold text-gray-900">Créer un utilisateur</h3>
                   <button
-                    onClick={() => setShowCreateModal(false)}
+                    onClick={() => setAfficherCreer(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
                     <X className="w-4 h-4" />
@@ -818,8 +818,8 @@ export default function Utilisateurs() {
                     <label className="block text-xs font-medium text-gray-700 mb-1">Nom</label>
                     <input
                       type="text"
-                      value={newUser.nom}
-                      onChange={(e) => setNewUser({...newUser, nom: e.target.value})}
+                      value={nouvelUtilisateur.nom}
+                      onChange={(e) => setNouvelUtilisateur({...nouvelUtilisateur, nom: e.target.value})}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Entrez le nom"
                     />
@@ -828,8 +828,8 @@ export default function Utilisateurs() {
                     <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
                     <input
                       type="email"
-                      value={newUser.email}
-                      onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                      value={nouvelUtilisateur.email}
+                      onChange={(e) => setNouvelUtilisateur({...nouvelUtilisateur, email: e.target.value})}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                       placeholder="Entrez l'email"
                     />
@@ -837,8 +837,8 @@ export default function Utilisateurs() {
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Rôle</label>
                     <select
-                      value={newUser.role}
-                      onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                      value={nouvelUtilisateur.role}
+                      onChange={(e) => setNouvelUtilisateur({...nouvelUtilisateur, role: e.target.value})}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
                     >
                       <option value="Utilisateur">Utilisateur</option>
@@ -858,14 +858,14 @@ export default function Utilisateurs() {
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end space-x-2">
                   <button
-                    onClick={() => setShowCreateModal(false)}
+                    onClick={() => setAfficherCreer(false)}
                     className="px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleCreateUserWithInvitation}
-                    disabled={!newUser.nom || !newUser.email}
+                    disabled={!nouvelUtilisateur.nom || !nouvelUtilisateur.email}
                     className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs"
                   >
                     <Plus className="w-3 h-3" />
@@ -877,7 +877,7 @@ export default function Utilisateurs() {
           )}
 
           {/* Invitation Modal */}
-          {showInvitationModal && (
+          {afficherInvitation && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-2 sm:p-4">
               <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
                 <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
@@ -888,7 +888,7 @@ export default function Utilisateurs() {
                     <h3 className="text-base font-semibold text-gray-900">Envoyer l'invitation</h3>
                   </div>
                   <button
-                    onClick={() => setShowInvitationModal(false)}
+                    onClick={() => setAfficherInvitation(false)}
                     className="text-gray-400 hover:text-gray-600"
                   >
                     <X className="w-4 h-4" />
@@ -900,7 +900,7 @@ export default function Utilisateurs() {
                       <Mail className="w-3 h-3 text-purple-500" />
                       <label className="text-xs font-medium text-purple-700">Email de destination</label>
                     </div>
-                    <p className="text-xs text-gray-900 font-medium break-all">{invitationEmail}</p>
+                    <p className="text-xs text-gray-900 font-medium break-all">{emailInvitation}</p>
                   </div>
                   
                   <div className="bg-yellow-50 rounded-lg p-3">
@@ -910,11 +910,11 @@ export default function Utilisateurs() {
                     </div>
                     <div className="flex flex-wrap items-center gap-1">
                       <span className="text-xs text-gray-900 font-mono bg-white px-2 py-1 rounded border break-all">
-                        {invitationPassword}
+                        {motDePasseInvitation}
                       </span>
                       <button 
                         onClick={() => {
-                          navigator.clipboard.writeText(invitationPassword).then(() => {
+                          navigator.clipboard.writeText(motDePasseInvitation).then(() => {
                             // Afficher une notification de succès
                             const button = event?.target as HTMLButtonElement;
                             const originalText = button.textContent;
@@ -953,8 +953,8 @@ export default function Utilisateurs() {
                         <p>Bonjour,</p>
                         <p>Vous avez été invité à rejoindre notre plateforme.</p>
                         <p>Vos identifiants de connexion :</p>
-                        <p>Email : {invitationEmail}</p>
-                        <p>Mot de passe temporaire : {invitationPassword}</p>
+                        <p>Email : {emailInvitation}</p>
+                        <p>Mot de passe temporaire : {motDePasseInvitation}</p>
                         <p>Veuillez changer votre mot de passe lors de votre première connexion.</p>
                         <p>Cordialement,<br/>L'équipe de la plateforme</p>
                       </div>
@@ -963,17 +963,17 @@ export default function Utilisateurs() {
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end space-x-2">
                   <button
-                    onClick={() => setShowInvitationModal(false)}
+                    onClick={() => setAfficherInvitation(false)}
                     className="px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs"
                   >
                     Annuler
                   </button>
                   <button
-                    onClick={() => sendInvitationEmail(invitationEmail, invitationPassword)}
-                    disabled={isSendingInvitation}
+                    onClick={() => sendInvitationEmail(emailInvitation, motDePasseInvitation)}
+                    disabled={envoiEnCours}
                     className="px-3 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs"
                   >
-                    {isSendingInvitation ? (
+                    {envoiEnCours ? (
                       <>
                         <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                         <span>Envoi en cours...</span>
@@ -991,7 +991,7 @@ export default function Utilisateurs() {
           )}
 
           {/* Delete Confirmation Modal */}
-          {showDeleteModal && selectedUser && (
+          {afficherSupprimer && utilisateurSelectionne && (
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75 z-50 flex items-center justify-center p-2 sm:p-4">
               <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
                 <div className="px-4 py-3 border-b border-gray-200 flex items-center space-x-2">
@@ -1002,13 +1002,13 @@ export default function Utilisateurs() {
                 </div>
                 <div className="px-4 py-3">
                   <p className="text-xs text-gray-600">
-                    Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{selectedUser.nom}</strong> ? 
+                    Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{utilisateurSelectionne.nom}</strong> ? 
                     Cette action est irréversible.
                   </p>
                 </div>
                 <div className="px-4 py-3 border-t border-gray-200 flex justify-end space-x-2">
                   <button
-                    onClick={() => setShowDeleteModal(false)}
+                    onClick={() => setAfficherSupprimer(false)}
                     className="px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs"
                   >
                     Annuler

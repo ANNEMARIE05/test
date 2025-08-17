@@ -105,47 +105,48 @@ export default function Historique() {
 
             {/* Tableau d'historique */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              <div className="overflow-x-auto">
+              {/* Version desktop - Tableau */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-2 sm:px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Date & Heure
                       </th>
-                      <th className="px-2 sm:px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Action
                       </th>
-                      <th className="px-2 sm:px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Type
                       </th>
-                      <th className="hidden sm:table-cell px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Détails
                       </th>
-                      <th className="px-2 sm:px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Statut
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         <div>
                           <div className="font-medium">15/12/2024</div>
                           <div className="text-gray-500">14:32</div>
                         </div>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         Création d'un nouvel utilisateur
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Gestion utilisateurs
                         </span>
                       </td>
-                      <td className="hidden sm:table-cell px-3 py-2 text-xs text-gray-900">
+                      <td className="px-3 py-2 text-xs text-gray-900">
                         Nouvel utilisateur créé: Jean Dupont (jean.dupont@example.com)
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Réussi
                         </span>
@@ -153,24 +154,24 @@ export default function Historique() {
                     </tr>
                     
                     <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         <div>
                           <div className="font-medium">14/12/2024</div>
                           <div className="text-gray-500">16:45</div>
                         </div>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         Attribution de 50 documents
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                           Gestion des allocations clients
                         </span>
                       </td>
-                      <td className="hidden sm:table-cell px-3 py-2 text-xs text-gray-900">
+                      <td className="px-3 py-2 text-xs text-gray-900">
                         Attribution de 50 documents à l'utilisateur Marie Martin (marie.martin@example.com)
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Réussi
                         </span>
@@ -178,24 +179,24 @@ export default function Historique() {
                     </tr>
                     
                     <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         <div>
                           <div className="font-medium">13/12/2024</div>
                           <div className="text-gray-500">11:20</div>
                         </div>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         Modification du profil
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                           Profil administrateur
                         </span>
                       </td>
-                      <td className="hidden sm:table-cell px-3 py-2 text-xs text-gray-900">
+                      <td className="px-3 py-2 text-xs text-gray-900">
                         Mise à jour des informations de contact et des préférences de notification
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Réussi
                         </span>
@@ -203,24 +204,24 @@ export default function Historique() {
                     </tr>
                     
                     <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         <div>
                           <div className="font-medium">12/12/2024</div>
                           <div className="text-gray-500">09:15</div>
                         </div>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         Dernière connexion
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                           Système
                         </span>
                       </td>
-                      <td className="hidden sm:table-cell px-3 py-2 text-xs text-gray-900">
+                      <td className="px-3 py-2 text-xs text-gray-900">
                         Connexion réussie depuis l'adresse IP 192.168.1.100
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Réussi
                         </span>
@@ -228,24 +229,24 @@ export default function Historique() {
                     </tr>
                     
                     <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         <div>
                           <div className="font-medium">11/12/2024</div>
                           <div className="text-gray-500">15:30</div>
                         </div>
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap text-xs text-gray-900">
+                      <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
                         Suppression d'utilisateur
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Gestion utilisateurs
                         </span>
                       </td>
-                      <td className="hidden sm:table-cell px-3 py-2 text-xs text-gray-900">
+                      <td className="px-3 py-2 text-xs text-gray-900">
                         Suppression de l'utilisateur Pierre Durand (pierre.durand@example.com)
                       </td>
-                      <td className="px-2 sm:px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Réussi
                         </span>
@@ -253,6 +254,119 @@ export default function Historique() {
                     </tr>
                   </tbody>
                 </table>
+              </div>
+
+              {/* Version mobile - Cards */}
+              <div className="sm:hidden space-y-2 p-2">
+                {/* Card 1 */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">15/12/2024</div>
+                      <div className="text-xs text-gray-500">14:32</div>
+                    </div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Réussi
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <div className="font-medium text-sm text-gray-900">Création d'un nouvel utilisateur</div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                      Gestion utilisateurs
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Nouvel utilisateur créé: Jean Dupont (jean.dupont@example.com)
+                  </div>
+                </div>
+
+                {/* Card 2 */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">14/12/2024</div>
+                      <div className="text-xs text-gray-500">16:45</div>
+                    </div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Réussi
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <div className="font-medium text-sm text-gray-900">Attribution de 50 documents</div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1">
+                      Gestion des allocations clients
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Attribution de 50 documents à l'utilisateur Marie Martin (marie.martin@example.com)
+                  </div>
+                </div>
+
+                {/* Card 3 */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">13/12/2024</div>
+                      <div className="text-xs text-gray-500">11:20</div>
+                    </div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Réussi
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <div className="font-medium text-sm text-gray-900">Modification du profil</div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mt-1">
+                      Profil administrateur
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Mise à jour des informations de contact et des préférences de notification
+                  </div>
+                </div>
+
+                {/* Card 4 */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">12/12/2024</div>
+                      <div className="text-xs text-gray-500">09:15</div>
+                    </div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Réussi
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <div className="font-medium text-sm text-gray-900">Dernière connexion</div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 mt-1">
+                      Système
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Connexion réussie depuis l'adresse IP 192.168.1.100
+                  </div>
+                </div>
+
+                {/* Card 5 */}
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">11/12/2024</div>
+                      <div className="text-xs text-gray-500">15:30</div>
+                    </div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Réussi
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <div className="font-medium text-sm text-gray-900">Suppression d'utilisateur</div>
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                      Gestion utilisateurs
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Suppression de l'utilisateur Pierre Durand (pierre.durand@example.com)
+                  </div>
+                </div>
               </div>
               
               {/* Pagination */}

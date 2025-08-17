@@ -112,6 +112,13 @@ export default function Support() {
         setMessages(messagesSimules);
     }, []);
 
+    // Liste des utilisateurs disponibles
+    const utilisateurs = [
+        { nom: 'Jean Dupont', email: 'jean.dupont@email.com' },
+        { nom: 'Marie Martin', email: 'marie.martin@email.com' },
+        { nom: 'Pierre Durand', email: 'pierre.durand@email.com' }
+    ];
+
     const obtenirCouleurStatut = (statut: string) => {
         switch (statut) {
             case 'nouveau': return 'bg-red-500';
@@ -452,13 +459,19 @@ export default function Support() {
                         <h2 className="m-0 mb-1.5 sm:mb-2 text-sm sm:text-base font-bold text-gray-900">
                             Nouveau Message
                         </h2>
-                        <input
-                            className="w-full p-1.5 sm:p-2 border border-gray-200 rounded-md text-xs sm:text-sm mb-1.5 sm:mb-2 transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                            placeholder="Destinataire"
+                        <select
+                            className="w-full p-1.5 sm:p-2 border border-gray-200 rounded-md text-xs sm:text-sm mb-1.5 sm:mb-2 transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 cursor-pointer"
                             value={nouveauMessage.destinataire}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNouveauMessage({...nouveauMessage, destinataire: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNouveauMessage({...nouveauMessage, destinataire: e.target.value})}
                             autoFocus
-                        />
+                        >
+                            <option value="">Sélectionner un destinataire</option>
+                            {utilisateurs.map((utilisateur, index) => (
+                                <option key={index} value={utilisateur.email}>
+                                    {utilisateur.nom} - {utilisateur.email}
+                                </option>
+                            ))}
+                        </select>
                         <input
                             className="w-full p-1.5 sm:p-2 border border-gray-200 rounded-md text-xs sm:text-sm mb-1.5 sm:mb-2 transition-all duration-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="Sujet"

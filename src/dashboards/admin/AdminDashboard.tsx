@@ -77,6 +77,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       'documents': 'Gestion documents',
       'api': 'Gestion d\'API',
       'email': 'Gestion d\'email',
+      'historique': 'Historique',
       'profil': 'Profile',
       'support': 'Support',
       'parametres': 'Paramètres'
